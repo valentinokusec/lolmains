@@ -62,9 +62,9 @@ $('.tooltip_guide').hover(function() {
 		getToolTipData("spell", this.id);
 
 	}
-	$(".details").show();
+	
 }, function() {
-	 //$(".details").hide();
+	//$(".details").hide();
 });
 function hoverTooltip(id) {
 
@@ -147,28 +147,29 @@ function getToolTipData(type, data) {
 function getToolTip(message) {
 	console.log(message);
 	if (message.type == 0) {
-		$(".details").text("");
+		
 		$(".details")
 				.append(
-						"	<img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/"
-								+ message.image + "'></img>");
+						"	<div style='height:50px;'><img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/"
+								+ message.image + "'></img></div>");
 
-		$(".details").append("<h2 class='name'>" + message.name + "</h2>");
+		$(".details").append("<h3 class='name animeate_details'>" + message.name + "</h3>");
 		$(".details").append(
-				"<h3 class='name'>" + message.description + "</h3>");
+				"<p class='name animeate_details'>" + message.description + "</p>");
 
-		$(".details").append("<div class='data' id='stats'>" +
+		$(".details").append("<div class='data animeate_details' id='stats'>" +
 
-		"<p class='col-md-3'>Cost</p><p class='col-md-1'>:</p><p class='col-md-3'> " + message.gold + "</p>" +
+		"<p class='col-md-3 col-md-offset-2'>Cost</p><p class='col-md-1'>:</p><p class='col-md-3'> " + message.gold + "</p>" +
 		// "<p>Points:</p>" +
 		"</div>");
 		for (k = 0; k < message.stats.length; k++) {
 
 			$("#stats").append(
-					"" + "<p class='col-md-4'>" + message.stats[k].name + "</p><p class='col-md-2'>:</p><p class='col-md-4'>"
+					"" + "<p class='col-md-3 col-md-offset-2'>" + message.stats[k].name + "</p><p class='col-md-1'>:</p><p class='col-md-3'>"
 							+ message.stats[k].value + "</p>");
 
 		}
+	
 		console.log(message.stats);
 		var diff = 0;
 		var height = $(".details").css("height").replace("px", "");
@@ -409,6 +410,15 @@ function getToolTip(message) {
 		$(".details").css("top", top + "px");
 
 	}
+	console.log("dsdsa");
+	$(".details").show();
+	  $( ".animeate_details" ).animate({
+		    opacity: 1,
+		    top: "-=20"
+		  }, 200, function() {
+		    // Animation complete.
+		  });
+	$(".details_img").addClass("details_img_scale");
 }
 
 /* ]]> */

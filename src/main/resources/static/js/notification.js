@@ -14,10 +14,10 @@ if($("#notificationcounter").text()==0)
 	{
 	$(".last_li").css({"background-color": "#5f6f81"});
 	}
-connectNotification()
+
+setTimeout(function(){ connectNotification()}, 1000);
 function connectNotification() {
-	var socket = new SockJS('/gs-guide-websocket');
-	stompClient = Stomp.over(socket);
+	
 	stompClient.connect({}, function(frame) {
 
 		console.log('Connected: ' + frame);

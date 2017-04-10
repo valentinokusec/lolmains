@@ -32,7 +32,7 @@ public class Item implements Serializable {
 
 
 	
-	 private Double FlatArmorMod, FlatAttackSpeedMod, FlatBlockMod, FlatCritChanceMod, FlatCritDamageMod, FlatEXPBonus, FlatEnergyPoolMod, FlatEnergyRegenMod,
+	 private Double Armor, FlatAttackSpeedMod, FlatBlockMod, FlatCritChanceMod, FlatCritDamageMod, FlatEXPBonus, FlatEnergyPoolMod, FlatEnergyRegenMod,
      HP, FlatHPRegenMod, FlatMPPoolMod, FlatMPRegenMod, FlatMagicDamageMod, FlatMovementSpeedMod, FlatPhysicalDamageMod, FlatSpellBlockMod,
      PercentArmorMod, PercentAttackSpeedMod, PercentBlockMod, PercentCritChanceMod, PercentCritDamageMod, PercentDodgeMod, PercentEXPBonus,
      PercentHPPoolMod, HPRegen, PercentLifeStealMod, PercentMPPoolMod, PercentMPRegenMod, PercentMagicDamageMod, PercentMovementSpeedMod,
@@ -51,7 +51,7 @@ public class Item implements Serializable {
 		 
 	 }
 	public Item(int itemId,int type,  int gold, String imageId, String name, String description, 
-			Double flatArmorMod, Double flatAttackSpeedMod, Double flatBlockMod, Double flatCritChanceMod,
+			Double Armor, Double flatAttackSpeedMod, Double flatBlockMod, Double flatCritChanceMod,
 			Double flatCritDamageMod, Double flatEXPBonus, Double flatEnergyPoolMod, Double flatEnergyRegenMod,
 			Double HP, Double flatHPRegenMod, Double flatMPPoolMod, Double flatMPRegenMod,
 			Double flatMagicDamageMod, Double flatMovementSpeedMod, Double flatPhysicalDamageMod,
@@ -80,7 +80,7 @@ public class Item implements Serializable {
 		this.name = name;
 		this.description = description;
 		
-		FlatArmorMod = flatArmorMod;
+		this.Armor = Armor;
 		FlatAttackSpeedMod = flatAttackSpeedMod;
 		FlatBlockMod = flatBlockMod;
 		FlatCritChanceMod = flatCritChanceMod;
@@ -183,11 +183,11 @@ public class Item implements Serializable {
 		this.description = description;
 	}
 
-	public Double getFlatArmorMod() {
-		return FlatArmorMod;
+	public Double getFArmor() {
+		return Armor;
 	}
-	public void setFlatArmorMod(Double flatArmorMod) {
-		FlatArmorMod = flatArmorMod;
+	public void setArmor(Double flatArmorMod) {
+		this.Armor = Armor;
 	}
 	public Double getFlatAttackSpeedMod() {
 		return FlatAttackSpeedMod;
@@ -583,7 +583,7 @@ public class Item implements Serializable {
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", itemId=" + itemId + ", gold=" + gold + ", type=" + type + ", imageId=" + imageId
-				+ ", name=" + name + ", description=" + description + ", FlatArmorMod=" + FlatArmorMod
+				+ ", name=" + name + ", description=" + description + ", Armor=" + Armor
 				+ ", FlatAttackSpeedMod=" + FlatAttackSpeedMod + ", FlatBlockMod=" + FlatBlockMod
 				+ ", FlatCritChanceMod=" + FlatCritChanceMod + ", FlatCritDamageMod=" + FlatCritDamageMod
 				+ ", FlatEXPBonus=" + FlatEXPBonus + ", FlatEnergyPoolMod=" + FlatEnergyPoolMod
