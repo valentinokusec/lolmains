@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Card Expansion Effect - Demo 1</title>
+<meta name="description"
+	content="Card Expansion Effect with SVG clipPath" />
+<meta name="keywords"
+	content="clipPath, svg, effect, layout, expansion, images, grid, polygon" />
+<meta name="author" content="Claudio Calautti for Codrops" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="../css/normalize.css" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="../css/demo.css" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous" />
+<link rel="stylesheet" type="text/css" href="../css/tabs.css" />
+<link rel="stylesheet" type="text/css" href="../css/tabstyles.css" />
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<link rel="stylesheet" type="text/css" href="../css/newguide.css" />
+<!--[if IE]>
+	  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+<script>
+	if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+		var root = document.getElementsByTagName('html')[0];
+		root.setAttribute('class', 'ff');
+	};
+</script>
+</head>
+<body class="demo-1">
+	<div class="container">
+		<header class="codrops-header">
+
+
+			<nav class="top_nav">
+				<a href="/index">Lol Mains</a>
+				<div class="controls" style="float: right;">
+					<div sec:authorize="isAuthenticated()">
+						<div id="auth" hidden="hidden">true</div>
+						<button>
+							<i class="fa fa-user" aria-hidden="true"></i>
+						</button>
+					</div>
+
+					<div sec:authorize="isAnonymous()">
+						<div id="auth" hidden="hidden">false</div>
+						<button>
+							<i class="fa fa-sign-out" data-dialog="login_dialog" id="login_b"
+								aria-hidden="true"></i> Login
+						</button>
+						<button>
+							<i class="fa fa-sign-in" data-dialog="register_dialog"
+								id="register_b" aria-hidden="true"></i> Sign Up
+						</button>
+					</div>
+
+
+
+				</div>
+			</nav>
+
+		</header>
+		<h2 class="header">Create new guide</h2>
+		<div class="guide_content">
+
+			<form role="form" action="#" th:action="@{/newbestof}"
+				th:object="${CreateGuide}" method="post">
+				<input type="hidden" class="form-control"  th:field="*{param1}" value="0"
+					 /> <input type="hidden" class="form-control"
+					value="0" th:field="*{param2}"  /> <input type="hidden"
+					class="form-control" value="0" th:field="*{param3}" /> 
+					<input
+					type="hidden" class="form-control" value="0" th:field="*{param4}" /> 
+					<input type="hidden" class="form-control"
+					value="0" th:field="*{param5}" /> <input type="hidden"
+					class="form-control" value="0" th:field="*{param6}" /> 
+					<input
+					type="hidden" class="form-control" value="0" th:field="*{param7}" /> 
+					<input type="hidden" class="form-control"
+					value="0" th:field="*{param8}" /> 
+					<input type="hidden"
+					class="form-control" value="0" th:field="*{param9}" />
+					 <input
+					type="hidden" class="form-control" value="0" th:field="*{param10}" /> 
+					<input type="hidden" class="form-control"
+					value="0" th:field="*{param11}" /> 
+				
+					<input type="hidden" class="form-control" value="0" th:field="*{param12}" /> 					
+					<input type="hidden" class="form-control" value="0" th:field="*{param13}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param14}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param15}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param16}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param17}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param18}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param19}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param20}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param21}" /> 
+					
+					<input type="hidden" class="form-control" value="0" th:field="*{param22}" /> 					
+					<input type="hidden" class="form-control" value="0" th:field="*{param23}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param24}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param25}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param26}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param27}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param28}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param29}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param30}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param31}" /> 
+					
+					<input type="hidden" class="form-control" value="0" th:field="*{param32}" /> 					
+					<input type="hidden" class="form-control" value="0" th:field="*{param33}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param34}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param35}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param36}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param37}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param38}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param39}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param40}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param41}" /> 
+					
+					<input type="hidden" class="form-control" value="0" th:field="*{param42}" /> 					
+					<input type="hidden" class="form-control" value="0" th:field="*{param43}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param44}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param45}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param46}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param47}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param48}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param49}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param50}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param51}" /> 
+					
+					<input type="hidden" class="form-control" value="0" th:field="*{param62}" /> 					
+					<input type="hidden" class="form-control" value="0" th:field="*{param63}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param64}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param65}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param66}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param67}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param68}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param69}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param70}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param71}" /> 
+					
+					<input type="hidden" class="form-control" value="0" th:field="*{param72}" /> 					
+					<input type="hidden" class="form-control" value="0" th:field="*{param73}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param74}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param75}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param76}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param77}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param78}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param79}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param80}" /> 
+					<input type="hidden" class="form-control" value="0" th:field="*{param81}" /> 
+					
+					<input type="hidden" class="form-control" value="0" th:field="*{param82}" /> 					
+					<input type="hidden" class="form-control" value="0" th:field="*{param83}" /> 
+					<input type="hidden" class="form-control"  th:field="*{guide}" /> 
+		
+					
+					 <input type="hidden" class="form-control"
+					value="0" th:field="*{param84}" /> <input type="hidden"
+					class="form-control"  th:field="*{main}" />
+
+				<div class="row">
+					<div class="col-md-1 col-md-offset-2">
+
+						<img class="profile"
+							th:src="@{http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/}+${user.summoner.image} + @{.png}"></img>
+					</div>
+					<div class="col-md-3 ">
+						<h1 th:text="${user.summoner.name}"></h1>
+						<div class="row">
+							<div class="col-md-3 ">
+								<img class="league tier tier_img"
+									th:src="@{/img/tiers/}+${user.summoner.tier} + @{.png}"></img>
+							</div>
+							<div class="col-md-3 tier_text">
+								<p th:text="${user.summoner.tier}"></p>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="col-md-3 ">
+
+
+						<p th:text="@{Games : }+${user.summoner.games}"></p>
+						<p th:text="@{Winrate : }+${user.summoner.winrate}"></p>
+						<p
+							th:text="@{KDA : }+${user.summoner.kills}+@{/ }+${user.summoner.deaths}+@{ / }+${user.summoner.assists}"></p>
+
+
+
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-1 col-md-offset-2">
+
+						<img class="profile"
+							th:src="@{http://ddragon.leagueoflegends.com/cdn/6.22.1/img/champion/}+${user.summoner.champion[0].leaguechampion.image}"></img>
+					</div>
+						<div class="col-md-3 ">
+						<h2 th:text="${user.summoner.champion[0].leaguechampion.name}"></h2>
+						<p
+							th:text="@{Points : }+${user.summoner.champion[0].championPoints}"></p>
+						</div>
+					<div class="col-md-3 ">
+						<p th:text="@{Games : }+${user.summoner.champion[0].games}"></p>
+						<p th:text="@{Winrate : }+${user.summoner.champion[0].winrate}"></p>
+						<p
+							th:text="@{KDA : }+${user.summoner.champion[0].kills}+@{/ }+${user.summoner.champion[0].deaths}+@{ / }+${user.summoner.champion[0].assists}"></p>
+						
+					</div>
+			
+		</div>
+		<table class="all_table">
+			<tr>
+				<td colspan="2">
+					<h2 id="general" class="open_guide" style="margin-left: 20px;">General</h2>
+				</td>
+			</tr>
+			<tr class="general panel" id="sect_general">
+				<td>
+					<table class="guide_table">
+
+						<tr>
+							<td><label>Name</label> <input type="text"
+								class="form-control" th:field="*{name}"  required="required" /></td>
+
+						</tr>
+						<tr>
+							<td><label>Description</label></td>
+						</tr>
+						<tr>
+							<td><div contentEditable="true" class="guide_textarea"
+									id="generalDescriptiontext" name="generalDescriptiontext" 
+									placeholder="Describe your build"></div></td>
+							<input type="hidden" class="form-control" value="0" th:field="*{generalDescription}"
+								 />
+							<td><table>
+									<tr>
+										<td><a id="generalDescriptiontext_item" class="add_text">
+												<img class="add_text_img " src="/img/add.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="generalDescriptiontext_summoners"
+											class="add_text"> <img alt="" class="add_text_img  "
+												id=""
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png"></img>
+										</a></td>
+									</tr>
+
+									<tr>
+										<td><a id="generalDescriptiontext_runes" class="add_text">
+												<img alt="" class="add_text_img  " id=""
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="generalDescriptiontext_champion"
+											class="add_text"> <img alt="" class="add_text_img " id=""
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png"></img>
+										</a></td>
+									</tr>
+								</table></td>
+						</tr>
+
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<h2 id="build" class="open_guide" style="margin-left: 20px;">Build</h2>
+				</td>
+			</tr>
+			<tr class="build panel" id="sect_build">
+				<td>
+					<table class="add_build guide_table more_extra_build">
+						<tr>
+							<td><a id="add_1" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_1" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_2" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_2" src="/img/add.png"></img>
+							</a></td>
+							<td style="width: 600px;"><a id="add_3" class="add_item">
+									<img alt="" class="build_img remove" id="img_add_3"
+									src="/img/add.png"></img>
+							</a></td>
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_4" class="add_item"> <img
+									class="build_img remove" id="img_add_4" src="/img/add.png"></img></a></td>
+							<td><a id="add_5" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_5" src="/img/add.png"></img>
+							</a></td>
+							<td style="width: 600px;"><a id="add_6" class="add_item">
+									<img alt="" class="build_img remove" id="img_add_6"
+									src="/img/add.png"></img>
+							</a></td>
+
+						</tr>
+						<tr>
+							<td><label>Description</label></td>
+						</tr>
+						<tr>
+							<td colspan="2"><div contentEditable="true"
+									class="guide_textarea" id="buildDescriptiontext"
+									name="buildDescriptiontext" placeholder="Describe your build"></div></td>
+							<td><table>
+									<tr>
+										<input type="hidden" class="form-control" value="0"
+											id="buildDescription" name="buildDescription" />
+										<td><a id="buildDescriptiontext_item" class="add_text">
+												<img alt="" class="add_text_img " id="img_add_1"
+												src="/img/add.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="buildDescriptiontext_summoners"
+											class="add_text"> <img alt="" class="add_text_img  "
+												id="img_add_1"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="buildDescriptiontext_runes" class="add_text">
+												<img alt="" class="add_text_img  " id=""
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="buildDescriptiontext_champion"
+											class="add_text"> <img alt="" class="add_text_img "
+												id="img_add_1"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png"></img>
+										</a></td>
+									</tr>
+								</table></td>
+						</tr>
+						<tr>
+							<td><buton id="build_extra" class="extra">Extra data</buton></td>
+						</tr>
+
+					</table>
+				</td>
+			</tr>
+
+			<tr>
+				<td colspan="2">
+					<h2 id="summoner" class="open_guide" style="margin-left: 20px;">Summoners</h2>
+				</td>
+			</tr>
+			<tr class="summoner panel" id="sect_summoner">
+				<td>
+					<table class="add_build guide_table more_extra_summoners">
+						<tr>
+							<td><a id="add_7" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_7" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_8" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_8" src="/img/add.png"></img>
+							</a></td>
+						<tr>
+							<td><label>Description</label></td>
+						</tr>
+						<tr>
+
+							<td><div contentEditable="true" class="guide_textarea"
+									id="summonersDescriptiontext" name="summonersDescriptiontext"
+									placeholder="Describe your build"></div></td>
+							<input type="hidden" class="form-control" value="0"
+								id="summonersDescription" name="summonersDescription" />
+							<td><table>
+									<tr>
+										<td><a id="summonersDescriptiontext_item"
+											class="add_text"> <img alt="" class="add_text_img "
+												id="img_add_1" src="/img/add.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="summonersDescriptiontext_summoners"
+											class="add_text"> <img alt="" class="add_text_img  "
+												id="img_add_1"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="generalDescriptiontext_runes" class="add_text">
+												<img alt="" class="add_text_img  " id=""
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="summonersDescriptiontext_champion"
+											class="add_text"> <img alt="" class="add_text_img "
+												id="img_add_1"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png"></img>
+										</a></td>
+									</tr>
+								</table></td>
+						</tr>
+
+						</tr>
+						<!-- <tr><td><buton id="summoners_extra" class="extra">Extra data</buton></td></tr> -->
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 300px;">
+					<h2 id="masteries" class="open_guide" style="margin-left: 20px;">Masteries</h2>
+				</td>
+			</tr>
+			<tr class="masteries panel" id="sect_masteries">
+				<td>
+					<table class="add_build guide_table more_extra_masteries"
+						style="width: 400px;">
+						<tr>
+							<td><a id="add_39" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade " id="img_add_39"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6111.png"></img>
+							</a></td>
+							<td><a id="add_40" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_40"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6114.png"></img>
+							</a></td>
+
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_41" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_41"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6121.png"></img>
+							</a></td>
+							<td><a id="add_42" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_42"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6122.png"></img>
+							</a></td>
+							<td><a id="add_43" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_43"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6123.png"></img>
+							</a></td>
+
+						</tr>
+						<tr>
+							<td><a id="add_44" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_44"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6131.png"></img>
+							</a></td>
+							<td><a id="add_45" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_45"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6132.png"></img>
+							</a></td>
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_46" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_46"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6141.png"></img>
+							</a></td>
+							<td><a id="add_47" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_47"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6142.png"></img>
+							</a></td>
+							<td><a id="add_48" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_48"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6143.png"></img>
+							</a></td>
+
+						</tr>
+						<tr>
+							<td><a id="add_49" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_49"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6151.png"></img>
+							</a></td>
+							<td><a id="add_50" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_50"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6152.png"></img>
+							</a></td>
+
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_51" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_51"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6161.png"></img>
+							</a></td>
+							<td><a id="add_52" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_52"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6162.png"></img>
+							</a></td>
+							<td><a id="add_53" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_53"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6163.png"></img>
+							</a></td>
+
+						</tr>
+						<!-- <tr><td><buton id="masteries_extra" class="extra">Extra data</buton></td></tr>  -->
+					</table>
+				</td>
+				<td>
+					<table class="add_build guide_table mid_table "
+						style="width: 400px;">
+						<tr>
+							<td><a id="add_54" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_54"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6211.png"></img>
+							</a></td>
+							<td><a id="add_55" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_55"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6212.png"></img>
+							</a></td>
+
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_56" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_56"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6221.png"></img>
+							</a></td>
+							<td><a id="add_57" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_57"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6222.png"></img>
+							</a></td>
+							<td><a id="add_58" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_58"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6223.png"></img>
+							</a></td>
+
+						</tr>
+						<tr>
+							<td><a id="add_59" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_59"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6231.png"></img>
+							</a></td>
+							<td><a id="add_60" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_60"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6232.png"></img>
+							</a></td>
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_61" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_61"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6241.png"></img>
+							</a></td>
+							<td><a id="add_62" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_62"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6242.png"></img>
+							</a></td>
+							<td><a id="add_63" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_63"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6243.png"></img>
+							</a></td>
+
+						</tr>
+						<tr>
+							<td><a id="add_64" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_64"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6251.png"></img>
+							</a></td>
+							<td><a id="add_65" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_65"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6252.png"></img>
+							</a></td>
+
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_66" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_66"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6261.png"></img>
+							</a></td>
+							<td><a id="add_67" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_67"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6262.png"></img>
+							</a></td>
+							<td><a id="add_68" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_68"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6263.png"></img>
+							</a></td>
+
+						</tr>
+					</table>
+				</td>
+				<td>
+					<table class="add_build guide_table" style="width: 400px;">
+						<tr>
+							<td><a id="add_69" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_69"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6311.png"></img>
+							</a></td>
+							<td><a id="add_70" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_70"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6312.png"></img>
+							</a></td>
+
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_71" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_71"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6321.png"></img>
+							</a></td>
+							<td><a id="add_72" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_72"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6322.png"></img>
+							</a></td>
+							<td><a id="add_73" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_73"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6323.png"></img>
+							</a></td>
+
+						</tr>
+						<tr>
+							<td><a id="add_74" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_74"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6331.png"></img>
+							</a></td>
+							<td><a id="add_75" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_75"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6332.png"></img>
+							</a></td>
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_76" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_76"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6341.png"></img>
+							</a></td>
+							<td><a id="add_77" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_77"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6342.png"></img>
+							</a></td>
+							<td><a id="add_78" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_78"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6343.png"></img>
+							</a></td>
+
+						</tr>
+						<tr>
+							<td><a id="add_79" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_79"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6351.png"></img>
+							</a></td>
+							<td><a id="add_80" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_80"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6352.png"></img>
+							</a></td>
+
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_81" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_81"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6361.png"></img>
+							</a></td>
+							<td><a id="add_83" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_83"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6362.png"></img>
+							</a></td>
+							<td><a id="add_84" class="add_mastery"> <img alt=""
+									class="build_img remove mastery_shade" id="img_add_84"
+									src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6363.png"></img>
+							</a></td>
+
+						</tr>
+						<tr>
+							<td><label>Description</label></td>
+						</tr>
+						<tr>
+
+							<td><div contentEditable="true" class="guide_textarea"
+									id="masteriesDescriptiontext" name="masteriesDescriptiontext"
+									placeholder="Describe your build"></div></td>
+							<input type="hidden" class="form-control" value="0"
+								id="masteriesDescription" name="masteriesDescription" />
+							<td><table>
+									<tr>
+										<td><a id="masteriesDescriptiontext_item"
+											class="add_text"> <img alt="" class="add_text_img "
+												id="img_add_1" src="/img/add.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="masteriesDescriptiontext_summoners"
+											class="add_text"> <img alt="" class="add_text_img  "
+												id="img_add_1"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="masteriesDescriptiontext_runes"
+											class="add_text"> <img alt="" class="add_text_img  "
+												id=""
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="masteriesDescriptiontext_champion"
+											class="add_text"> <img alt="" class="add_text_img "
+												id="img_add_1"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png"></img>
+										</a></td>
+									</tr>
+								</table></td>
+						</tr>
+					</table>
+
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 300px;">
+					<h2 id="runes" class="open_guide" style="margin-left: 20px;">Runes</h2>
+				</td>
+			</tr>
+			<tr class="runes panel" id="sect_runes">
+				<td>
+					<table class="add_build guide_table more_extra_runes">
+						<tr>
+							<td><a id="add_9" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_9" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_10" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_10" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_11" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_11" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_12" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_12" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_13" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_13" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_14" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_14" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_15" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_15" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_16" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_16" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_17" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_17" src="/img/add.png"></img>
+							</a></td>
+
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_18" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_18" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_19" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_19" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_20" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_20" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_21" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_21" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_22" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_22" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_23" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_23" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_24" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_24" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_25" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_25" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_26" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_26" src="/img/add.png"></img>
+							</a></td>
+
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_27" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_27" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_28" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_28" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_29" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_29" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_30" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_30" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_31" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_31" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_32" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_32" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_33" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_33" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_34" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_34" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_35" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_35" src="/img/add.png"></img>
+							</a></td>
+
+
+
+
+						</tr>
+						<tr>
+							<td><a id="add_36" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_36" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_37" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_37" src="/img/add.png"></img>
+							</a></td>
+							<td><a id="add_38" class="add_item"> <img alt=""
+									class="build_img remove" id="img_add_38" src="/img/add.png"></img>
+							</a></td>
+
+						</tr>
+						<tr>
+							<td><label>Description</label></td>
+						</tr>
+						<tr>
+
+							<td><div contentEditable="true" class="guide_textarea"
+									id="runesDescriptiontext" name="masteriesDescriptiontext"
+									placeholder="Describe your build"></div></td>
+							<input type="hidden" class="form-control" value="0"
+								id="runesDescription" name="runesDescription" />
+							<td><table>
+									<tr>
+										<td><a id="runesDescriptiontext_item" class="add_text">
+												<img alt="" class="add_text_img " id="img_add_1"
+												src="/img/add.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="runesDescriptiontext_summoners"
+											class="add_text"> <img alt="" class="add_text_img  "
+												id="img_add_1"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="runesDescriptiontext_runes" class="add_text">
+												<img alt="" class="add_text_img  " id=""
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png"></img>
+										</a></td>
+									</tr>
+									<tr>
+										<td><a id="runesDescriptiontext_champion"
+											class="add_text"> <img alt="" class="add_text_img "
+												id="img_add_1"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png"></img>
+										</a></td>
+									</tr>
+								</table></td>
+						</tr>
+						<!-- 	<tr><td><buton id="runes_extra" class="extra">Extra data</buton></td></tr> -->
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td><buton id="notes_extra" class="extra">More data</buton></td>
+			</tr>
+			<tr>
+				<td>
+					<button type="submit" class="btn btn-default">Create</button>
+				</td>
+			</tr>
+		</table>
+		</form>
+
+	</div>
+	</div>
+	<div class="details"></div>
+	<div class="sidebar">
+		<textarea class="textarea" rows="1" cols="20"></textarea>
+		<div class="items_list"></div>
+	</div>
+	<div class="item_details">
+
+		<img alt="" class="item_img" id="img_item_1" src="/img/add.png"></img>
+		<div class="item_name"></div>
+		<div class="item_description"></div>
+		<div class="item_stats"></div>
+	</div>
+
+	<script src="../js/jquery-3.1.1.min.js"></script>
+	<script src="../js/modernizr.custom.js"></script>
+	<script src="../js/cbpFWTabs.js"></script>
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+
+	<script src="../js/guide.js"></script>
+
+
+</body>
+
+</html>

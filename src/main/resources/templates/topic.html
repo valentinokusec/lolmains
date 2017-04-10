@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title th:text="${main.name}"></title>
+<meta name="description"
+	content="Card Expansion Effect with SVG clipPath" />
+<meta name="keywords"
+	content="clipPath, svg, effect, layout, expansion, images, grid, polygon" />
+<meta name="author" content="Claudio Calautti for Codrops" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="../css/normalize.css" />
+<link rel="stylesheet"
+	href="../css/bootstrap.css"
+/>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="../css/demo.css" />
+<link rel="stylesheet" type="text/css" href="/css/component.css" />
+<link rel="stylesheet" type="text/css" href="../css/tabs.css" />
+<link rel="stylesheet" type="text/css" href="/css/dialog.css" />
+<!-- individual effect -->
+<link rel="stylesheet" type="text/css" href="/css/dialog-sandra.css" />
+<link rel="stylesheet" type="text/css" href="../css/tabstyles.css" />
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<link th:if="${main.name!='Support' and main.name!='Adc' and main.name!='Jungler' and main.name!='Mid' and main.name!='Top'}" rel="shortcut icon" th:href="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/} + ${main.champion.image}" />
+
+
+<link th:if="${main.name=='Support'}" rel="shortcut icon"
+	href="/img/support.jpg" />
+<link th:if="${main.name=='Top'}" rel="shortcut icon"
+	href="/img/top.jpg" />
+<link th:if="${main.name=='Mid'}" rel="shortcut icon"
+	href="/img/mid.jpg" />
+<link th:if="${main.name=='Adc'}" rel="shortcut icon"
+	href="/img/adc.jpg" />
+<link th:if="${main.name=='Jungler'}" rel="shortcut icon"
+	href="/img/jungle.jpg" />
+<!--[if IE]>
+	  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+<script>
+	if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+		var root = document.getElementsByTagName('html')[0];
+		root.setAttribute('class', 'ff');
+	};
+</script>
+</head>
+<body class="demo-1">
+	<div class="container">
+		<div th:include="fragments/header::head"></div>
+		<div style="display: none" id="extra_data" th:text="${extradata}"></div>
+		<div style="display: none" id="topic_content" th:text="${topiccontent}"></div>
+		<div style="display: none" id="topic_id" th:text="${topicid}"></div>
+		<div style="display: none" id="main_id" th:text="${mainid}"></div>
+		<div style="display: none" id="state" th:text="${state}"></div>
+		<div style="display: none" id="user_id" th:text="${userid}"></div>
+		<div style="display: none" id="champion" th:text="${champion}"></div>
+		<div class="content topic_content" >
+		
+		
+			<div class="author">
+				<table>
+					<tr>
+						<td></td>
+						<td><img th:id="${discussion.user.id}"
+							th:src="@{http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/}+${discussion.user.summoner.image} + @{.png}"
+							class='  tooltip_guide profile'
+							style="width: 60px; height: 60px;"></img></td>
+
+						<td>
+							<table>
+								<tr>
+									<td>
+										<p th:text="${discussion.user.summoner.name}"></p>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<p th:text="${discussion.user.summoner.tier}"></p>
+									</td>
+								</tr>
+								
+							</table>
+						</td>
+
+					</tr>
+				</table>
+			</div>
+			<div th:class="@{topic}+' color_topic_'+ ${discussion.type}">
+				<h1 style="" th:text="${discussion.header}"></h1>
+				<div th:if="${discussion.type ==2}" style='margin:10px'>
+					<table style="margin-top: 10px; margin-bottom: 17px;">
+
+						<tr>
+
+							<td><img th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
+								th:id="${discussion.item1id.itemId}"
+								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item1id.itemId} + @{.png}"></img>
+							</td>
+							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
+								th:id="${discussion.item2id.itemId}"
+								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item2id.itemId} + @{.png}"></img>
+							</td>
+							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
+								th:id="${discussion.item3id.itemId}"
+								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item3id.itemId} + @{.png}"></img>
+							</td>
+						</tr>
+						<tr>
+
+							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
+								th:id="${discussion.item4id.itemId}"
+								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item4id.itemId} + @{.png}"></img>
+							</td>
+							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
+								th:id="${discussion.item5id.itemId}"
+								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item5id.itemId} + @{.png}"></img>
+							</td>
+							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
+								th:id="${discussion.item6id.itemId}"
+								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item6id.itemId} + @{.png}"></img>
+							</td>
+						</tr>
+					</table>
+
+				</div>
+				<div th:if="${discussion.type ==3}" style='margin:10px'>
+					<table>
+
+						<tr>
+
+							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
+								style="top: 0px;" th:id="${discussion.itemvs0.itemId}"
+								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.itemvs0.itemId} + @{.png}"></img>
+							</td>
+							<td>
+								<p>VS</p>
+							</td>
+							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
+								style="top: 0px;" th:id="${discussion.itemvs1.itemId}"
+								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.itemvs1.itemId} + @{.png}"></img>
+							</td>
+
+						</tr>
+					</table>
+
+				</div>
+				<div th:if="${discussion.type ==4}" style='margin:10px'>
+					<table>
+
+						<tr>
+
+							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
+								th:id="${discussion.item.itemId}"
+								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item.imageId}"></img>
+							</td>
+
+
+						</tr>
+					</table>
+
+				</div>
+				<div th:if="${discussion.type ==5}" style='margin:10px'>
+					<table>
+
+						<tr>
+
+							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
+								th:id="${discussion.matchUp.imageIid}"
+								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/champion/}+${discussion.matchup.imageId}"></img>
+							</td>
+
+
+						</tr>
+					</table>
+
+				</div>
+				<div th:if="${discussion.type ==6}" style='margin:10px'>
+					<table>
+
+						<tr>
+
+							<td><iframe width="150" height="100"
+									th:src="@{https://www.youtube.com/embed/}+${discussion.video}">
+								</iframe></td>
+
+
+						</tr>
+					</table>
+
+				</div>
+
+				<p style="display: none;" id="topic_id"
+					th:text="${discussion.content}"></p>
+				<p id="topic_text"></p>
+				<p style="display: none" type="hidden" id="topic_id_likes"
+					th:text="${discussion.id}"></p>
+				<div class="controls_topic">
+					<table class="dis_votes_topic show_member">
+						<tr>
+							<td>
+								<button class="topic_up"
+									onclick="sendLike(this.id,1)" th:id="${discussion.id}">
+									<i class="fa fa-angle-up"></i>
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td><p style="margin-top: 0px; margin-bottom: 0px;"
+									class="main_like" th:text="${discussion.votes}"></p></td>
+						</tr>
+						<tr>
+							<td>
+								<button class="topic_down"
+									onclick="sendLike(this.id,2)" th:id="${discussion.id}">
+									<i class="fa fa-angle-down"></i>
+								</button>
+							</td>
+						</tr>
+					</table>
+					<button class="reply show_member" onclick="openComment()">
+						<i class="share-icon fa fa-reply"></i> Reply
+					</button>
+					<button class="reply show_member" data-dialog="delete_dialog" id="delete_b">
+						<i class="share-icon fa fa-trash"></i> Delete
+					</button>
+				</div>
+			</div>
+			<div class="reply_text" id="reply_text">
+
+				<table>
+					<tr>
+						<td><div contentEditable="true" class="guide_textarea_dis"
+								id="contenttext" name="contenttext"
+								style="width: 500px; height: 200px;"></div></td>
+						<td>
+							<table>
+								<tr>
+									<td><a id="contenttext_item" class="add_text"> <img
+											alt="" class="add_text_img " id="img_add_1"
+											src="/img/add.png"></img>
+									</a></td>
+								</tr>
+								<tr>
+									<td><a id="contenttext_summoners" class="add_text"> <img
+											alt="" class="add_text_img  " id="img_add_1"
+											src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png"></img>
+									</a></td>
+								</tr>
+								<tr>
+									<td><a id="contenttext_runes" class="add_text"> <img
+											class="add_text_img"
+											src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png"></img>
+									</a></td>
+								</tr>
+								<tr>
+									<td><a id="contenttext_champion" class="add_text"> <img
+											alt="" class="add_text_img " id="img_add_1"
+											src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png"></img>
+									</a></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+
+				<button class="reply post" onclick="sendComment()">
+					<i class="share-icon fa fa-reply"></i> Reply
+				</button>
+			</div>
+			<div id="comments_data" hidden="hidden" th:text="${comments}"></div>
+			<div class="show_comment" id="comments"></div>
+
+		</div>
+	</div>
+	<div id="login_dialog" class="dialog">
+		<div class="dialog__overlay"></div>
+		<div class="dialog__content">
+			<h2>
+				<strong>Login</strong>
+			</h2>
+			<form th:action="@{/login}" method="post"
+				default-target-url="/main/1">
+
+
+				<table>
+
+					<tr>
+						<td><label>UserName</label></td>
+						<td><input id="username" name="username" type="text"></input></td>
+					</tr>
+					<tr>
+						<td><label>Password</label></td>
+						<td><input id="password" name="password" type="password"></input></td>
+					</tr>
+
+					<tr>
+						<td><button type="submit">
+								Login
+								<div class="ripples buttonRipples">
+									<span class="ripplesCircle"></span>
+								</div>
+							</button></td>
+					</tr>
+				</table>
+			</form>
+			<div>
+				<button class="action" data-dialog-close="data-dialog-close">Close</button>
+			</div>
+		</div>
+	</div>
+	<div id="delete_dialog" class="dialog">
+		<div class="dialog__overlay"></div>
+		<div class="dialog__content">
+			<h2>
+				<strong>Are you sure</strong>
+			</h2>
+			<form th:action="@{/deletetopic}" method="post" th:object="${DeleteTopic}" style="padding-left: 0px !important;"
+				>
+
+
+				<table style="    margin: auto;">
+
+					
+						<input id="maind" name="mainid" type="hidden" th:value="${main.id}" ></input>
+						<input id="topicid" name="topicid" type="hidden" th:value="${discussion.id}"></input>
+					
+					
+
+					<tr>
+						<td><button type="submit">
+								Confirm
+								<div class="ripples buttonRipples">
+									<span class="ripplesCircle"></span>
+								</div>
+							</button></td>
+					</tr>
+				</table>
+			</form>
+			<div>
+				<button class="action" data-dialog-close="data-dialog-close"></button>
+			</div>
+		</div>
+	</div>
+	<div id="register_dialog" class="dialog">
+		<div class="dialog__overlay"></div>
+		<div class="dialog__content">
+			<h2>
+				<strong>Register</strong>
+			</h2>
+			<form role="form" action="#" th:action="@{/newuser}"
+				th:object="${CreateUser}" method="post">
+				<table>
+
+					<tr>
+						<td><label>UserName</label></td>
+						<td><input type="text" class="form-control"
+							th:field="*{username}" required="required" /></td>
+					</tr>
+					<tr>
+						<td><label>Password</label></td>
+						<td><input type="text" class="form-control"
+							th:field="*{password}" required="required" /></td>
+					</tr>
+					<tr>
+						<td><label>Repeat Password</label></td>
+						<td><input type="text" class="form-control"
+							th:field="*{confirmpassword}" required="required" /></td>
+					</tr>
+					<tr>
+						<td><label>Summoner name</label></td>
+						<td><input type="text" class="form-control"
+							th:field="*{summoner}" required="required" /></td>
+					</tr>
+					<tr>
+						<td>
+							<button type="submit" class="btn btn-default">Register</button>
+						</td>
+					</tr>
+				</table>
+			</form>
+
+			<div>
+				<button class="action" data-dialog-close="data-dialog-close">Close</button>
+			</div>
+		</div>
+		<p style="display: none;" id="user" name="username" th:text="${user}"></p>
+	</div>
+	<div class="sidebar">
+		<textarea class="textarea" rows="1" cols="20"></textarea>
+		<div class="items_list"></div>
+	</div>
+	<div class="details"></div>
+	<script src="/js/classie.js"></script>
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+	<script src="../js/jquery-3.1.1.min.js"></script>
+	<script src="../js/modernizr.custom.js"></script>
+	<script src="../js/cbpFWTabs.js"></script>
+	<script src="/js/dialogFx.js"></script>
+	<script src="../js/topic.js"></script>
+	<script src="../js/tooltip.js"></script>
+	<script src="/js/changeCss.js"></script>
+	<script src="/js/gnmenu.js"></script>
+	<script type="text/javascript">
+		/*<![CDATA[*/
+//new gnMenu(document.getElementById('gn-menu'));
+		/*]]>*/
+	</script>
+</body>
+
+</html>

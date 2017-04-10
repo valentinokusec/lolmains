@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>LolMains</title>
+	<meta name="description" content="Card Expansion Effect with SVG clipPath" />
+	<meta name="keywords" content="clipPath, svg, effect, layout, expansion, images, grid, polygon" />
+	<meta name="author" content="Claudio Calautti for Codrops" />
+	<link rel="shortcut icon" href="favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+	<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="../css/demo.css" />
+<link rel="stylesheet" type="text/css" href="css/layout-simple.css" />
+<link rel="stylesheet" type="text/css" href="/css/dialog.css" />
+<!-- individual effect -->
+<link rel="stylesheet" type="text/css" href="/css/dialog-sandra.css" />
+<link rel="stylesheet" type="text/css" href="/css/component.css" />
+	<link rel="stylesheet" type="text/css" href="../css/tabs.css" />
+		<link rel="stylesheet" type="text/css" href="../css/tabstyles.css" />
+		<link rel="stylesheet" type="text/css" href="../css/main.css" />
+	<!--[if IE]>
+	  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<script>
+	if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+		var root = document.getElementsByTagName('html')[0];
+		root.setAttribute('class', 'ff');
+	};
+	</script>
+</head>
+<body class="demo-1">
+	<div class="container">
+			<div th:include="fragments/header::head_index"></div>
+		
+		<div class="content form">
+		<form role="form" action="#" th:action="@{/contact}" th:object="${CreateMessage}" method="post">
+						<table>
+						<tr>
+						<td colspan="2">
+						<h2>Send  Message</h2>
+						</td>
+						</tr>
+							<tr>
+							<td>
+                                <label>Email</label>
+                                
+                            </td>
+                        	<td>
+                        	  <input type="text" class="form-control" th:field="*{email}" required="required"/>
+                        
+                                   
+                             </td>
+                            </tr> 
+                            	<tr>
+							<td>
+                                <label>Message</label>
+                                
+                            </td>
+                        	<td>
+                        	  <input type="text" class="form-control" th:field="*{message}" required="required"/>
+                        
+                                   
+                             </td>
+                             
+                            </tr> 
+                            
+                             <tr>
+							<td>
+                            <button type="submit" class="btn btn-default">Send</button>
+            				</td>
+            				</tr>
+                            </table>
+                            </form>
+	
+	</div>
+</div>
+<div class="sidebar">
+			<textarea class="textarea" rows="1" cols="20"></textarea>
+			<div class="items_list"></div>
+		</div>
+
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/modernizr.custom.js"></script>
+	<script src="js/cbpFWTabs.js"></script>
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+
+		<script>
+		/* <![CDATA[ */
+			(function() {
+				$('.add_item').click(function() {
+					var id = this.id;
+
+					console.log(id);
+					if ($(".sidebar").css("width") == "0px") {
+						$(".sidebar").animate({
+
+							width : "230px"
+						}, 500, function() {
+							getAllData("", id);
+						});
+
+					}
+
+					last_item_id = jQuery(this).attr("id").replace('add_', '');
+					$(".remove").removeClass("active");
+					$("#img_add_" + last_item_id).addClass("active");
+
+				});
+				
+				function getAllData(data, id,type) {
+				
+				
+				
+					
+						searchid = 1;
+						$(".textarea").attr("id", searchid);
+						stompClient.send("/app/getchampiondata/1", {}, JSON.stringify({
+							'data' : data
+						}));
+					
+				}
+
+				var stompClient = null;
+				connect();
+				function connect() {
+					var socket = new SockJS('/gs-guide-websocket');
+					stompClient = Stomp.over(socket);
+					stompClient.debug = null
+					stompClient.connect({}, function(frame) {
+
+					
+						stompClient.subscribe('/topic/getall/1', function(greeting) {
+
+							getAll(JSON.parse(greeting.body));
+						});
+					
+					});
+				}
+				function getAll(message) {
+					
+			
+				
+						$(".items_list").text("");
+						for (i = 0; i < message.length; i++) {
+							console.log("champion");
+
+							$(".items_list")
+									.append(
+											"<div>"
+													+ "<div class='floating_img'>"
+													+ "	<img id='img_id_"
+													+ message[i].champion_detail_id
+													+ "' class='img_item' src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/"
+													+ message[i].image + "'></img>"
+
+													+ "	<div class='description_data' id='description_id_"
+													+ message[i].champion_detail_id
+													+ "'>"
+													+ "		<div class='description_text'>"
+													+ message[i].description
+													+ "		</div>"
+
+													+ "		<div class='description_name_text' >"
+													+ message[i].name
+													+ "		</div>"
+													+ "		<div class='description_img' >"
+													+ "http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/"+message[i].image
+													+ "</div>"
+													+ "		<div class='description_id' >"
+													+ message[i].champion_detail_id
+													+ "</div>"
+													+ "	</div>"
+													+ "</div>" + "</div>");
+						}
+					
+				
+			
+
+
+					$('.img_item')
+							.hover(
+									function() {
+										
+										var contentPanelId = jQuery(this).attr("id");
+										console.log(contentPanelId);
+										var maindescription = $("#description_id_"
+												+ contentPanelId.replace('img_id_', ''));
+										var description = maindescription.find(
+												'.description_text').text();
+										var description_name = maindescription.find(
+												'.description_name_text').text();
+										description_img = maindescription.find(
+												'.description_img').text();
+										description_id = maindescription
+												.find('.description_id').text();
+										
+										var position=$(this).offset();
+									var left=+position.left-210;
+									var top=+position.top-10;
+									$(".details").css("left", left+"px");
+									$(".details").css("top", top+"px");
+									$(".details").text("");
+									$(".details").append("	<img  class='details_img' src='"+description_img+"'></img>");
+									
+									$(".details").append("<h2 class='name'>"+description_name+"</h2>" );
+									$(".details").append("<h3 class='name'>"+description+"</h3>" );
+											
+											
+									$(".details").append("<div class='data'>" +
+											"<p>Games</p>" +
+//											"<p>Winrate</p>" +
+//											"<p>Points:</p>" +
+											"</div>" );
+																			
+									
+									$(".details").show();
+										
+									}	
+									,
+									function () {
+										$(".details").hide();
+							           });
+					$('.img_item').click(
+							function() {
+
+								console.log(description_id);
+									$("#img_add_1").attr("src", description_img);
+								
+									$(".img_add_1").attr("value",
+											description_id);
+									
+								 
+							
+
+							});
+				}
+				$(".textarea").keyup(function() {
+
+					console.log(this.value);
+					getAllData(this.value, searchid);
+				});
+			})();
+			/* ]]> */
+		</script>
+</body>
+
+</html>

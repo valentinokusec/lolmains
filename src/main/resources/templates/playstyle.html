@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Card Expansion Effect - Demo 1</title>
+<meta name="description"
+	content="Card Expansion Effect with SVG clipPath" />
+<meta name="keywords"
+	content="clipPath, svg, effect, layout, expansion, images, grid, polygon" />
+<meta name="author" content="Claudio Calautti for Codrops" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="../css/demo.css" />
+
+<link rel="stylesheet" type="text/css" href="../css/tabs.css" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous" />
+<link rel="stylesheet" type="text/css" href="../css/tabstyles.css" />
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<link rel="stylesheet" type="text/css" href="../css/component.css" />
+<link rel="stylesheet" type="text/css" href="../css/playstyle.css" />
+<link rel="stylesheet" type="text/css" href="../css/share.css" />
+<!--[if IE]>
+	  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+<script>
+	if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+		var root = document.getElementsByTagName('html')[0];
+		root.setAttribute('class', 'ff');
+	};
+</script>
+</head>
+<body class="demo-1">
+	<div class="container">
+		<header class="codrops-header">
+
+
+			<nav class="top_nav">
+				<a href="/index">Lol Mains</a>
+				<div class="controls" style="float: right;">
+				
+					<div sec:authorize="isAuthenticated()">
+						<div id="auth" hidden="hidden">true</div>
+						<button>
+							<i class="fa fa-user" aria-hidden="true"></i>
+						</button>
+					</div>
+
+					<div sec:authorize="isAnonymous()">
+					
+						<div id="auth" hidden="hidden">false</div>
+						<button>
+							<i class="fa fa-sign-out" data-dialog="login_dialog" id="login_b"
+								aria-hidden="true"></i> Login
+						</button>
+						<button>
+							<i class="fa fa-sign-in" data-dialog="register_dialog"
+								id="register_b" aria-hidden="true"></i> Sign Up
+						</button>
+					</div>
+
+
+
+				</div>
+			</nav>
+
+		</header>
+		
+		<div class="content ">
+			<div th:if="${auth ==true}">
+									<a style="position: fixed;  left: 93%;top:90%; color:white !important;" class="share-toggle-button"
+										th:href="@{/editguide/} + ${playstyle.id}"> <i class="share-icon fa fa-plus"></i>
+									</a>
+								</div>
+			<div class="row">
+				<div class="col-md-3 col-md-offset-2">
+					<h1></h1>
+					<img class="profile"
+						th:src="@{http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/}+${playstyle.user.image} + @{.png}"></img>
+
+					<h1 th:text="${playstyle.user.name}"></h1>
+					<img class="league tier"
+						th:src="@{/img/tiers/}+${playstyle.user.tier} + @{.png}"></img>
+					<p th:text="${playstyle.user.tier}"></p>
+
+				</div>
+					<div class="col-md-3 ">
+					<h1></h1>
+				
+					<p th:text="@{Games : }+${playstyle.user.games}"></p>
+					<p th:text="@{Winrate : }+${playstyle.user.winrate}"></p>
+					<p th:text="@{KDA : }+${playstyle.user.kills}+@{/ }+${playstyle.user.deaths}+@{ / }+${playstyle.user.assists}"></p>
+					
+					
+		
+				</div>
+					<div class="col-md-3 ">
+					<h1></h1>
+					<img class="profile"
+						th:src="@{http://ddragon.leagueoflegends.com/cdn/6.22.1/img/champion/}+${playstyle.user.champion[0].leaguechampion.image}"></img>
+
+					<p th:text="@{Games : }+${playstyle.user.champion[0].games}"></p>
+					<p th:text="@{Winrate : }+${playstyle.user.champion[0].winrate}"></p>
+					<p th:text="@{KDA : }+${playstyle.user.champion[0].kills}+@{/ }+${playstyle.user.champion[0].deaths}+@{ / }+${playstyle.user.champion[0].assists}"></p>
+					<p th:text="@{Points : }+${playstyle.user.champion[0].championPoints}"></p>
+				</div>
+				
+				
+			<div class="col-md-12 top_mar">
+			<h1 th:text="${playstyle.name}"></h1>
+					<p type="hidden" id="content_text" style="display:none" th:text="${playstyle.content}"></p>
+					<p  id="content_id"></p>
+				</div>
+			</div>
+
+
+
+
+			<div class="row">
+				<div class="col-md-12">
+					<h2>Build</h2>
+					<table>
+
+						<tr>
+
+						<td><img  th:id="${playstyle.build.item1id.itemId}"
+							th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item//}+${playstyle.build.item1id.imageId}"
+							class='list_img tooltip_guide item'></img></td>
+						<td><img
+							th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item//}+${playstyle.build.item2id.imageId}"
+							class='list_img'></img></td>
+						<td><img
+							th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item//}+${playstyle.build.item3id.imageId}"
+							class='list_img'></img></td>
+
+						<tr></tr>
+
+						<td><img
+							th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item//}+${playstyle.build.item4id.imageId}"
+							class='list_img'></img></td>
+						<td><img
+							th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item//}+${playstyle.build.item5id.imageId}"
+							class='list_img'></img></td>
+						<td><img
+							th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item//}+${playstyle.build.item6id.imageId}"
+							class='list_img'></img></td>
+</tr>
+					</table>
+				</div>
+		
+				<div class="col-md-12 top_mar">
+					<p type="hidden" id="build_text" style="display:none" th:text="${playstyle.build.description}"></p>
+					<p  id="build_id"></p>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<h2>Summoners</h2>
+					<table>
+
+						<tr>
+
+							<td><img
+								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/}+${playstyle.summoners.summoner1.image}"
+								class='list_img'></img></td>
+
+							<td><img
+								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/}+${playstyle.summoners.summoner2.image}"
+								class='list_img'></img></td>
+						</tr>
+
+
+					</table>
+				</div>
+				
+				<div class="col-md-12 top_mar">
+					<h1>Description</h1>
+				
+					<p type="hidden" id="summoners_text" style="display:none" th:text="${playstyle.summoners.description}"></p>
+					<p  id="summoners_id"></p>
+				</div>
+			
+			</div>
+			<div class="row">
+			
+				<div class="col-md-12">
+					<h2>Masteries</h2>
+					<table>
+
+						<tr class="masteries " id="sect_masteries">
+							<td>
+								<table class="add_build guide_table more_extra_masteries"
+									style="width: 400px;">
+									<tr>
+										<td><a id="add_39"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_1} + @{mastery_shade build_img remove }"
+												id="img_add_39"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6111.png"></img>
+										</a></td>
+										<td><a id="add_40" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_2} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6114.png"></img>
+										</a></td>
+
+
+
+
+									</tr>
+									<tr>
+										<td><a id="add_41" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_3} + @{mastery_shade build_img remove }"
+												id="img_add_41"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6121.png"></img>
+										</a></td>
+										<td><a id="add_42" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_4} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6122.png"></img>
+										</a></td>
+										<td><a id="add_43" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_5} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6123.png"></img>
+										</a></td>
+
+									</tr>
+									<tr>
+										<td><a id="add_44" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_6} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6131.png"></img>
+										</a></td>
+										<td><a id="add_45" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_7} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6132.png"></img>
+										</a></td>
+
+
+
+									</tr>
+									<tr>
+										<td><a id="add_46" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_8} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6141.png"></img>
+										</a></td>
+										<td><a id="add_47" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_9} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6142.png"></img>
+										</a></td>
+										<td><a id="add_48" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_10} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6143.png"></img>
+										</a></td>
+
+									</tr>
+									<tr>
+										<td><a id="add_49" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_11} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6151.png"></img>
+										</a></td>
+										<td><a id="add_50" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_12} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6152.png"></img>
+										</a></td>
+
+
+
+
+									</tr>
+									<tr>
+										<td><a id="add_51" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_13} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6161.png"></img>
+										</a></td>
+										<td><a id="add_52" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_14} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6162.png"></img>
+										</a></td>
+										<td><a id="add_53" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_1_15} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6163.png"></img>
+										</a></td>
+
+									</tr>
+									<!-- 		<tr><td><buton id="masteries_extra" class="extra">Extra data</buton></td></tr> -->
+								</table>
+							</td>
+							<td>
+								<table class="add_build guide_table mid_table "
+									style="width: 400px;">
+									<tr>
+										<td><a id="add_54" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_1} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6211.png"></img>
+										</a></td>
+										<td><a id="add_55" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_2} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6212.png"></img>
+										</a></td>
+
+
+
+
+									</tr>
+									<tr>
+										<td><a id="add_56" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_3} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6221.png"></img>
+										</a></td>
+										<td><a id="add_57" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_4} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6222.png"></img>
+										</a></td>
+										<td><a id="add_58" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_5} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6223.png"></img>
+										</a></td>
+
+									</tr>
+									<tr>
+										<td><a id="add_59" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_6} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6231.png"></img>
+										</a></td>
+										<td><a id="add_60" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_7} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6232.png"></img>
+										</a></td>
+
+
+
+									</tr>
+									<tr>
+										<td><a id="add_61" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_8} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6241.png"></img>
+										</a></td>
+										<td><a id="add_62" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_9} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6242.png"></img>
+										</a></td>
+										<td><a id="add_63" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_10} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6243.png"></img>
+										</a></td>
+
+									</tr>
+									<tr>
+										<td><a id="add_64" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_11} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6251.png"></img>
+										</a></td>
+										<td><a id="add_65" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_12} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6252.png"></img>
+										</a></td>
+
+
+
+
+									</tr>
+									<tr>
+										<td><a id="add_66" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_13} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6261.png"></img>
+										</a></td>
+										<td><a id="add_67" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_14} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6262.png"></img>
+										</a></td>
+										<td><a id="add_68" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_2_15} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6263.png"></img>
+										</a></td>
+
+									</tr>
+								</table>
+							</td>
+							<td>
+								<table class="add_build guide_table" style="width: 400px;">
+									<tr>
+										<td><a id="add_69" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_1} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6311.png"></img>
+										</a></td>
+										<td><a id="add_70" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_2} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6312.png"></img>
+										</a></td>
+
+
+
+
+									</tr>
+									<tr>
+										<td><a id="add_71" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_3} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6321.png"></img>
+										</a></td>
+										<td><a id="add_72" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_4} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6322.png"></img>
+										</a></td>
+										<td><a id="add_73" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_5} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6323.png"></img>
+										</a></td>
+
+									</tr>
+									<tr>
+										<td><a id="add_74" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_6} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6331.png"></img>
+										</a></td>
+										<td><a id="add_75" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_7} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6332.png"></img>
+										</a></td>
+
+
+
+									</tr>
+									<tr>
+										<td><a id="add_76" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_8} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6341.png"></img>
+										</a></td>
+										<td><a id="add_77" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_9} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6342.png"></img>
+										</a></td>
+										<td><a id="add_78" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_10} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6343.png"></img>
+										</a></td>
+
+									</tr>
+									<tr>
+										<td><a id="add_79" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_11} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6351.png"></img>
+										</a></td>
+										<td><a id="add_80" class="add_mastery"> <img alt=""
+												cth:class="${playstyle.masteriesid.tree_3_12} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6352.png"></img>
+										</a></td>
+
+
+
+
+									</tr>
+									<tr>
+										<td><a id="add_81" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_13} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6361.png"></img>
+										</a></td>
+										<td><a id="add_83" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_14} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6362.png"></img>
+										</a></td>
+										<td><a id="add_84" class="add_mastery"> <img alt=""
+												th:class="${playstyle.masteriesid.tree_3_15} + @{mastery_shade build_img remove }"
+												src="http://ddragon.leagueoflegends.com/cdn/7.2.1/img/mastery/6363.png"></img>
+										</a></td>
+
+									</tr>
+
+								</table>
+
+							</td>
+						</tr>
+
+
+					</table>
+		
+				<div class="col-md-12 top_mar">
+					<h1>Description</h1>
+					
+					<p type="hidden" id="masteries_text" style="display:none" th:text="${playstyle.masteriesid.description}"></p>
+					<p  id="masteries_id"></p>
+				</div></div>
+			</div>
+			<div class="row">
+
+				<div class="col-md-12">
+					<h2>Runes</h2>
+					<table>
+
+						<tr class="runes " id="sect_runes">
+							<td>
+								<table class="add_build guide_table more_extra_runes">
+									<tr>
+										<td><a id="add_9" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_9"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_1_1.image}"></img>
+										</a></td>
+										<td><a id="add_10" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_10"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_1_2.image}"></img>
+										</a></td>
+										<td><a id="add_11" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_11"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_1_3.image}"></img>
+										</a></td>
+										<td><a id="add_12" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_12"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_1_4.image}"></img>
+										</a></td>
+										<td><a id="add_13" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_13"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_1_5.image}"></img>
+										</a></td>
+										<td><a id="add_14" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_14"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_1_6.image}"></img>
+										</a></td>
+										<td><a id="add_15" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_15"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_1_7.image}"></img>
+										</a></td>
+										<td><a id="add_16" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_16"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_1_8.image}"></img>
+										</a></td>
+										<td><a id="add_17" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_17"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_1_9.image}"></img>
+										</a></td>
+
+
+
+
+									</tr>
+									<tr>
+										<td><a id="add_18" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_18"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_2_1.image}"></img>
+										</a></td>
+										<td><a id="add_19" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_19"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_2_2.image}"></img>
+										</a></td>
+										<td><a id="add_20" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_20"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_2_3.image}"></img>
+										</a></td>
+										<td><a id="add_21" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_21"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_2_4.image}"></img>
+										</a></td>
+										<td><a id="add_22" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_22"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_2_5.image}"></img>
+										</a></td>
+										<td><a id="add_23" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_23"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_2_6.image}"></img>
+										</a></td>
+										<td><a id="add_24" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_24"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_2_7.image}"></img>
+										</a></td>
+										<td><a id="add_25" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_25"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_2_8.image}"></img>
+										</a></td>
+										<td><a id="add_26" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_26"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_2_9.image}"></img>
+										</a></td>
+
+
+
+
+									</tr>
+									<tr>
+										<td><a id="add_27" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_27"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_3_1.image}"></img>
+										</a></td>
+										<td><a id="add_28" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_28"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_3_2.image}"></img>
+										</a></td>
+										<td><a id="add_29" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_29"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_3_3.image}"></img>
+										</a></td>
+										<td><a id="add_30" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_30"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_3_4.image}"></img>
+										</a></td>
+										<td><a id="add_31" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_31"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_3_5.image}"></img>
+										</a></td>
+										<td><a id="add_32" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_32"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_3_6.image}"></img>
+										</a></td>
+										<td><a id="add_33" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_33"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_3_7.image}"></img>
+										</a></td>
+										<td><a id="add_34" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_34"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_3_8.image}"></img>
+										</a></td>
+										<td><a id="add_35" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_35"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_3_9.image}"></img>
+										</a></td>
+
+
+
+
+									</tr>
+									<tr>
+										<td><a id="add_36" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_36"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_4_1.image}"></img>
+										</a></td>
+										<td><a id="add_37" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_37"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_4_1.image}"></img>
+										</a></td>
+										<td><a id="add_38" class="add_item"> <img alt=""
+												class="build_img remove" id="img_add_38"
+												th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/}+${playstyle.runes.tree_4_1.image}"></img>
+										</a></td>
+
+									</tr>
+									<!-- 	<tr><td><buton id="runes_extra" class="extra">Extra data</buton></td></tr> -->
+								</table>
+							</td>
+						</tr>
+
+
+					</table>
+				</div>
+			
+				<div class="col-md-12 top_mar">
+					<h1>Description</h1>
+				
+					<p type="hidden" id="runes_text" style="display:none" th:text="${playstyle.runes.description}"></p>
+					<p  id="runes_id"></p>
+				</div>
+				</div>
+		
+
+
+		</div>
+	</div>
+	<div class="details">										
+										
+	</div>
+	<script src="/js/jquery-3.1.1.min.js"></script>
+	<script src="../js/clipboard.min.js"></script>
+	<script src="../js/main1.js"></script>
+<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+	<script>
+	
+	</script>
+			<script src="../js/tooltip.js"></script>
+</body>
+
+</html>
