@@ -112,13 +112,20 @@
 					<li class="last_li" style="float: right;">
 
 						<div sec:authorize="isAuthenticated()">
+							<div th:if="${user.summoner.verified == true}">
 
+								<!-- <li th:if="${authCount ==3}"><a
+									style='color: white; padding: 0px;'
+									th:href="@{/edittemplate/} + ${main.id}"> <i
+										class="fa fa-adjust gn_icon" aria-hidden="true"></i>Edit theme
+								</a></li> -->
+						
 
 							<a id="notification_button"><p class="notification_counter"
 									th:if="${user.summoner.notificationcount !=0}"
 									style="color: white; display: inline; margin: 10px;"
-									th:text="${user.summoner.notificationcount}"></p>
-								<i class="fa fa-bell" style="color: white;" aria-hidden="true"></i></a>
+									th:text="${user.summoner.notificationcount}"></p> <i
+								class="fa fa-bell" style="color: white;" aria-hidden="true"></i></a>
 
 
 							<div class="notification">
@@ -127,18 +134,21 @@
 
 									<img th:id="${notification.fromuser.id}"
 										th:src="@{http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/}+${notification.fromuser.image} + @{.png}"
-									class="profile_notification  tooltip_guide profile "></img>
+										class="profile_notification  tooltip_guide profile "></img>
 									<p th:text="${notification.content}"></p>
 
 								</div>
-								<div class=" notification_row_last"
-									>
+								<div class=" notification_row_last">
 
-								<a href="/summoner/notifications/1">Show More</a>
+									<a href="/summoner/notifications/1">Show More</a>
 
 								</div>
 							</div>
 						</div>
+						<div th:if="${user.summoner.verified == false}">
+						<a style="color:white" th:href="'/verify/' + ${user.id}">Verify Me</a>
+						</div>
+							</div>
 					</li>
 
 					<li style="float: right;">
@@ -157,7 +167,9 @@
 					<li>
 						<div style="display: none" id="session_id" th:text="${sessionid}"></div>
 						<div sec:authorize="isAuthenticated()">
-						<div style="display: none" id="notificationcounter" th:text="${user.summoner.notificationcount}"></div></div>
+							<div style="display: none" id="notificationcounter"
+								th:text="${user.summoner.notificationcount}"></div>
+						</div>
 						<div style="display: none" id="properties" th:text="${properties}"></div>
 						<div style="display: none" id="authCount" th:text="${authCount}"></div>
 						<div class="" style="float: right;">
@@ -459,7 +471,7 @@
 			<nav class="top_nav">
 				<ul id="gn-menu" class="gn-menu-main">
 					<li><a href="/">Lol<span>Mains</span></a></li>
-				
+
 
 
 
@@ -470,7 +482,7 @@
 				</ul>
 			</nav>
 		</header>
-		</div>
+	</div>
 	<div th:fragment="head_add">
 		<header class="codrops-header">
 

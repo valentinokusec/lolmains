@@ -106,6 +106,7 @@ function getAllData(data, id,type) {
 
 	} else {
 		console.log(id);
+		console.log(data);
 		if (id < 7) {
 			searchid = 0;
 			stompClient.send("/app/getguideitemdata/1", {}, JSON.stringify({
@@ -151,10 +152,10 @@ function getAllData(data, id,type) {
 
 
 
-var stompClient = null;
-connect();
 
-function connect() {
+connectDiscussion();
+
+function connectDiscussion() {
 	var socket = new SockJS('/gs-guide-websocket');
 	stompClient = Stomp.over(socket);
 	stompClient.debug = null

@@ -285,42 +285,7 @@
 								
 							</ul>
 								<div th:include="fragments/pagination::discussions"></div>
-							<div class="share">
-
-								<!-- 	<div sec:authorize="isAuthenticated()"> -->
-
-								<div th:if="${authCount ==1}">
-									<form th:action="@{/newmember}" method="post">
-
-										<button style="display: none;" data-dialog="discussion_dialog"
-											class="share-toggle-button" id="dis_b">
-											<i class="share-icon fa fa-plus"></i>
-										</button>
-
-										<td><input type="hidden" id="username" name="username"
-											th:value="${user.userName}"></input></td>
-
-										<td><input type="hidden" id="mainid" name="mainid"
-											th:value="${main.id}"></input></td>
-
-										<button class="share-toggle-button" type="submit">
-											<i class="share-icon fa fa-plus"></i>
-										</button>
-
-									</form>
-								</div>
-							<!-- 	<div th:if="${authCount ==2}">
-									<a style="position: relative;  left: 0px; color:white !important;" class="share-toggle-button"
-										th:href="@{/newdiscussion/} + ${main.id}"> <i class="share-icon fa fa-plus"></i>
-									</a>
-								</div>
- -->
-								<!-- 	</div> -->
-
-
-
-
-							</div>
+						
 						</section>
 					
 					<!-- 	<section id="section-linemove-7">

@@ -64,10 +64,10 @@ public class SocketController {
 
 	@Autowired
 	MainsService mainsservice;
-	
+
 	@Autowired
 	ChampionSpellService spellservice;
-	
+
 	@Autowired
 	NotificationService notificationservice;
 
@@ -139,9 +139,23 @@ public class SocketController {
 		comment.setCommentid(0);
 		comment.setDiscussionId(Integer.parseInt(id));
 		commentservice.addComment(comment);
+		Notification not = new Notification();
+		not.setFromuser(user.getSummoner());
+		not.setContent("Upvoted your post");
+		not.setTouser(comment.getUser());
+		notificationservice.addNotification(not);
 
+		Summoner owner = comment.getUser();
+		List<Notification> listNot = owner.getNotification();
+		listNot.add(not);
+		int counter = owner.getNotificationcount();
+		counter++;
+		owner.setNotificationcount(counter);
+		owner.setNotification(listNot);
+
+		summonerservice.addSummoners(owner);
 		return new Greeting(message.getName(), comment.getId(), comment.getReply(), message.getId(), user.getId(),
-				user.getSummoner().getImage(), user.getSummoner().getName(), 0, id);
+				user.getSummoner().getImage(), user.getSummoner().getName(), counter, not.toString());
 	}
 
 	@MessageMapping("/reply/{id}")
@@ -151,7 +165,21 @@ public class SocketController {
 		User user = userservice.findById(Integer.parseInt(message.getUser()));
 		Comment comment = commentservice.findComment(message.getId());
 		List<Comment> comlist = comment.getComment();
+		Notification not = new Notification();
+		not.setFromuser(user.getSummoner());
+		not.setContent("Replied to your post");
+		not.setTouser(comment.getUser());
+		notificationservice.addNotification(not);
 
+		Summoner owner = comment.getUser();
+		List<Notification> listNot = owner.getNotification();
+		listNot.add(not);
+		int counter = owner.getNotificationcount();
+		counter++;
+		owner.setNotificationcount(counter);
+		owner.setNotification(listNot);
+
+		summonerservice.addSummoners(owner);
 		Comment reply = new Comment();
 		reply.setContent(message.getName());
 		reply.setReply(true);
@@ -166,7 +194,7 @@ public class SocketController {
 		comment.setComment(comlist);
 		commentservice.addComment(comment);
 		return new Greeting(message.getName(), reply.getId(), reply.getReply(), message.getId(), user.getId(),
-				user.getSummoner().getImage(), user.getSummoner().getName(), 0, id);
+				user.getSummoner().getImage(), user.getSummoner().getName(), counter, not.toString());
 	}
 
 	@MessageMapping("/setlikediscussion/{id}")
@@ -178,22 +206,39 @@ public class SocketController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userservice.findByUserName(auth.getName());
 		Discussion topic = discussionservice.findTopic(message.getId());
+
+		Notification not = new Notification();
+		not.setFromuser(user.getSummoner());
+		
+		not.setTouser(topic.getUser().getSummoner());
+
 		dl.setDiscussion(topic);
 		dl.setUser(user);
 		int count;
 		if (message.getType() == 1) {
 			count = message.getCount() + 1;
 			dl.setState(true);
-
+			not.setContent("Upvoted your post");
 		} else {
 			count = message.getCount() - 1;
 			dl.setState(false);
+			not.setContent("Downvoted your post");
 		}
 		discussionlikesservice.addDiscussionLikes(dl);
 		topic.setVotes(count);
 		discussionservice.addTopic(topic);
+		notificationservice.addNotification(not);
 
-		return new Greeting(count + "", message.getId(), dl.isState(), 0, count, 0, id, count, id);
+		Summoner owner = topic.getUser().getSummoner();
+		List<Notification> listNot = owner.getNotification();
+		listNot.add(not);
+		int counter = owner.getNotificationcount();
+		counter++;
+		owner.setNotificationcount(counter);
+		owner.setNotification(listNot);
+
+		summonerservice.addSummoners(owner);
+		return new Greeting(count + "", message.getId(), dl.isState(), 0, count, 0, id, counter, not.toString());
 	}
 
 	@MessageMapping("/setlikediscussiontopic/{id}")
@@ -203,22 +248,12 @@ public class SocketController {
 		int count;
 		User user = userservice.findById(message.getUser());
 		Discussion topic = discussionservice.findTopic(message.getId());
-		Notification not= new Notification();
+		Notification not = new Notification();
 		not.setFromuser(user.getSummoner());
-		not.setContent("Upvoted your post");
+		
 		not.setTouser(topic.getUser().getSummoner());
-		notificationservice.addNotification(not);
 		
-		Summoner owner = topic.getUser().getSummoner();
-		List<Notification> listNot=owner.getNotification();
-		listNot.add(not);
-		int counter= owner.getNotificationcount();
-		counter++;
-		owner.setNotificationcount(counter);
-		owner.setNotification(listNot);
-		
-		summonerservice.addSummoners(owner);
-		
+
 		DiscussionLikes dl = discussionlikesservice.findByUserAndDiscussion(user, topic);
 		if (dl == null) {
 			dl = new DiscussionLikes();
@@ -228,10 +263,12 @@ public class SocketController {
 			if (message.getType() == 1) {
 				count = message.getCount() + 1;
 				dl.setState(true);
+				not.setContent("Upvoted your post");
 
 			} else {
 				count = message.getCount() - 1;
 				dl.setState(false);
+				not.setContent("Downvoted your post");
 			}
 			discussionlikesservice.addDiscussionLikes(dl);
 			topic.setVotes(count);
@@ -249,8 +286,19 @@ public class SocketController {
 			topic.setVotes(count);
 			discussionservice.addTopic(topic);
 		}
+		notificationservice.addNotification(not);
 
-		return new Greeting(count + "", message.getId(), dl.isState(), 0, count, counter, not.toString(),counter, not.toString());
+		Summoner owner = topic.getUser().getSummoner();
+		List<Notification> listNot = owner.getNotification();
+		listNot.add(not);
+		int counter = owner.getNotificationcount();
+		counter++;
+		owner.setNotificationcount(counter);
+		owner.setNotification(listNot);
+
+		summonerservice.addSummoners(owner);
+		return new Greeting(count + "", message.getId(), dl.isState(), 0, count, counter, not.toString(), counter,
+				not.toString());
 	}
 
 	@MessageMapping("/setlikediscussioncomment/{id}")
@@ -261,21 +309,11 @@ public class SocketController {
 
 		User user = userservice.findById(message.getUser());
 		Comment topic = commentservice.findComment(message.getId());
-		Notification not= new Notification();
+		Notification not = new Notification();
 		not.setFromuser(user.getSummoner());
-		not.setContent("Upvoted your post");
+		
 		not.setTouser(topic.getUser());
-		notificationservice.addNotification(not);
-		
-		Summoner owner = topic.getUser();
-		List<Notification> listNot=owner.getNotification();
-		listNot.add(not);
-		int counter= owner.getNotificationcount();
-		counter++;
-		owner.setNotificationcount(counter);
-		owner.setNotification(listNot);
-		
-		summonerservice.addSummoners(owner);
+	
 		CommentLikes dl = commentlikesdao.findByUserAndComment(user, topic);
 		int count;
 		if (dl == null) {
@@ -286,10 +324,12 @@ public class SocketController {
 			if (message.getType() == 1) {
 				count = message.getCount() + 1;
 				dl.setState(true);
+				not.setContent("Upvoted your post");
 
 			} else {
 				count = message.getCount() - 1;
 				dl.setState(false);
+				not.setContent("Downvoted your post");
 			}
 			commentlikesdao.save(dl);
 			topic.setVotes(count);
@@ -307,8 +347,18 @@ public class SocketController {
 			topic.setVotes(count);
 			commentservice.addComment(topic);
 		}
+		notificationservice.addNotification(not);
 
-		return new Greeting(count + "", message.getId(), dl.isState(), 0, count, 0, id,counter,not.toString());
+		Summoner owner = topic.getUser();
+		List<Notification> listNot = owner.getNotification();
+		listNot.add(not);
+		int counter = owner.getNotificationcount();
+		counter++;
+		owner.setNotificationcount(counter);
+		owner.setNotification(listNot);
+
+		summonerservice.addSummoners(owner);
+		return new Greeting(count + "", message.getId(), dl.isState(), 0, count, 0, id, counter, not.toString());
 	}
 
 	@MessageMapping("/content/{id}")
@@ -325,23 +375,24 @@ public class SocketController {
 
 		return dList;
 	}
+
 	@MessageMapping("/resetnotification/{id}")
 	@SendTo("/topic/resetnotification/{id}")
 	public String resetnotification(@DestinationVariable int id, String message) throws Exception {
 
-		Summoner user=userservice.findById(id).getSummoner();
+		Summoner user = userservice.findById(id).getSummoner();
 		user.setNotificationcount(0);
 		summonerservice.addSummoners(user);
 		return message;
 	}
+
 	@MessageMapping("/notification/{id}")
 	@SendTo("/topic/notification/{id}")
 	public String Notification(@DestinationVariable String id, String message) throws Exception {
 
-	
-
 		return message;
 	}
+
 	@MessageMapping("/alldata/{id}")
 	@SendTo("/topic/getall/{id}")
 	public List<Item> allItems(@DestinationVariable String id, SearchData message) throws Exception {
@@ -473,12 +524,14 @@ public class SocketController {
 
 		return leaguechampionservice.findByChampionid(Long.parseLong(message.getData()));
 	}
+
 	@MessageMapping("/gettooltispelldata/{id}")
 	@SendTo("/topic/gettooltipdata/{id}")
 	public ChampionSpells gettooltispelldata(@DestinationVariable String id, SearchData message) throws Exception {
 
 		return spellservice.findChampionSpells(Integer.parseInt(message.getData()));
 	}
+
 	@MessageMapping("/gettooltipsummonerdata/{id}")
 	@SendTo("/topic/gettooltipdata/{id}")
 	public LeagueSummoners gettooltipsummonerdata(@DestinationVariable String id, SearchData message) throws Exception {

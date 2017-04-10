@@ -1,10 +1,9 @@
-$("#topic_text").append(
-		$("#topic_content").text() );
+$("#topic_text").append($("#topic_content").text());
 var userid = $("#user_id").text();
 var mainid = $("#main_id").text();
 var topicid = $("#topic_id").text();
-var sessionId=$("#session_id").text();
-var authCount=$("#authCount").text();
+var sessionId = $("#session_id").text();
+var authCount = $("#authCount").text();
 
 var searchid;
 function getToolTipData(type, data) {
@@ -57,8 +56,8 @@ function sendLike(id, type) {
 				'count' : likes,
 				'id' : id,
 				'type' : type,
-				'user':$("#user_id").text()
-				
+				'user' : $("#user_id").text()
+
 			}));
 }
 function sendLikeReply(id, type) {
@@ -72,8 +71,8 @@ function sendLikeReply(id, type) {
 				'count' : likes,
 				'id' : id,
 				'type' : type,
-				'user':$("#user_id").text()
-				
+				'user' : $("#user_id").text()
+
 			}));
 }
 var data = $("#comments_data").text();
@@ -104,7 +103,7 @@ function sendReply(id) {
 	}));
 }
 function sendComment() {
-	
+
 	$("#reply_text").toggle("fast");
 	stompClient.send("/app/comment/" + topicid, {}, JSON.stringify({
 		'name' : $("#contenttext").html(),
@@ -114,249 +113,288 @@ function sendComment() {
 var stompClient = null;
 
 connect();
-function setTopicLike(message, id, type, commentId,notificationcounter,notification) {
-	
-	console.log(notification);
-	 notifications= JSON.parse(notification);
-	console.log(notificationcounter);
-	console.log(notifications.touser.id);
-	stompClient.send("/app/notification/" + notifications.touser.id, {}, JSON.stringify({
-		'touser' : notifications.touser,
-		'content' : notifications.content,
-		'fromuser' :notifications.fromuser
-	}));
-	if(type==true)
-	{
+function setTopicLike(message, id, type, commentId, notificationcounter,
+		notification) {
+
+	notifications = JSON.parse(notification);
+
+	stompClient.send("/app/notification/" + notifications.touser.id, {}, JSON
+			.stringify({
+				'touser' : notifications.touser,
+				'content' : notifications.content,
+				'fromuser' : notifications.fromuser
+			}));
+	if (type == true) {
 		console.log($(".topic_up"));
 		$(".topic_down").attr("disabled", false);
 		$(".topic_down").css("opacity", "1");
 		$(".topic_up").attr("disabled", true);
 		$(".topic_up").css("opacity", "0.5");
-	}
-else
-	{
-	$(".topic_up").attr("disabled", false);
-	$(".topic_up").css("opacity", "1");
-	$(".topic_down").attr("disabled", true);
-	$(".topic_down").css("opacity", "0.5");
+	} else {
+		$(".topic_up").attr("disabled", false);
+		$(".topic_up").css("opacity", "1");
+		$(".topic_down").attr("disabled", true);
+		$(".topic_down").css("opacity", "0.5");
 	}
 	$(".main_like").text(message);
 }
-function setTopicLikeReply(message, id, type, commentId) {
-	
-	if(type==true)
-		{
+function setTopicLikeReply(message, id, type, commentId, notificationcounter,
+		notification) {
+
+	notifications = JSON.parse(notification);
+
+	stompClient.send("/app/notification/" + notifications.touser.id, {}, JSON
+			.stringify({
+				'touser' : notifications.touser,
+				'content' : notifications.content,
+				'fromuser' : notifications.fromuser
+			}));
+	if (type == true) {
 		console.log(message);
-		$(".topic_down_"+id).attr("disabled", false);
-		$(".topic_down_"+id).css("opacity", "1");
-			$(".topic_up_"+id).attr("disabled", true);
-			$(".topic_up_"+id).css("opacity", "0.5");
-		}
-	else
-		{
+		$(".topic_down_" + id).attr("disabled", false);
+		$(".topic_down_" + id).css("opacity", "1");
+		$(".topic_up_" + id).attr("disabled", true);
+		$(".topic_up_" + id).css("opacity", "0.5");
+	} else {
 		console.log(message);
-		$(".topic_up_"+id).attr("disabled", false);
-		$(".topic_up_"+id).css("opacity", "1");
-		$(".topic_down_"+id).attr("disabled", true);
-		$(".topic_down_"+id).css("opacity", "0.5");
-		}
-	$(".like_"+id).text(message);
+		$(".topic_up_" + id).attr("disabled", false);
+		$(".topic_up_" + id).css("opacity", "1");
+		$(".topic_down_" + id).attr("disabled", true);
+		$(".topic_down_" + id).css("opacity", "0.5");
+	}
+	$(".like_" + id).text(message);
 }
 
 function fillComments(jsonArray) {
-	for (var i in jsonArray) {
-		
+	for ( var i in jsonArray) {
+
 		if (jsonArray[i].reply == false) {
-				
+
 			$("#comments")
 					.append(
 							"<div style='display:block;' class='comment' id="
-							+ jsonArray[i].id
-							+ ">"
-							+"<table style='    display: inline; width: 100%;'><tr><td><p>"
-							+ jsonArray[i].content
-							+"</p><tr><td>" +
-									"<img id='"+jsonArray[i].user.id+"'"
-				+"	src='http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/"+jsonArray[i].user.image+".png'"
-					+"class='  tooltip_guide profile'"
-					+"style='width: 30px; height: 30px;     float: left;' ></img>" +
-									"" +
-									"<p style='min-width: 200px;    position: relative; top: 8px; left: 10px;'>"+jsonArray[i].user.name+"</p></td>" +
-									"" +
-							"</tr></table>"
-							+ "<button class='reply reply_comment1 comment_reply show_member' onclick='openReply("
-							+ jsonArray[i].id
-							+ ")'> <i class='share-icon fa fa-reply'></i> Reply</button>" +
-									"<table class='dis_votes_topic_comments show_member'>"
-							+ "	<tr>"
-							+ "<td>" 
-							+"<button class='topic_up_"+jsonArray[i].id+"'"
-							+"onclick='sendLikeReply(this.id,1)' id='"+jsonArray[i].id+"'>"
-							+"<i class='fa fa-angle-up'></i>"
-				+"		</button>" 
-						+"	</td>"
-							+ "</tr>"
-							+ "<tr>"
-							+ "	<td><p style='margin-top: 0px; margin-bottom: 0px;'"
-							+ "			class='like_"+jsonArray[i].id+"' id='main_likes'"
-							+ "		>"+jsonArray[i].votes+"</p></td>"
-							+ "</tr>"
-							+ "<tr>"
-							+ "<td>" 
-							+"<button class='topic_down_"+jsonArray[i].id+"'"
-							+"onclick='sendLikeReply(this.id,2)' id='"+jsonArray[i].id+"'>"
-							+"<i class='fa fa-angle-down'></i>"
-				+"		</button>" 
-						+"	</td>"
-							+ "</tr>"
-							+ "</table>" 
-							+ "	<div class='reply_text_"
-							+ jsonArray[i].id
-							+ " reply_text'>"
+									+ jsonArray[i].id
+									+ ">"
+									+ "<table style='    display: inline; width: 100%;'><tr><td><p>"
+									+ jsonArray[i].content
+									+ "</p><tr><td>"
+									+ "<img id='"
+									+ jsonArray[i].user.id
+									+ "'"
+									+ "	src='http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/"
+									+ jsonArray[i].user.image
+									+ ".png'"
+									+ "class='  tooltip_guide profile'"
+									+ "style='width: 30px; height: 30px;     float: left;' ></img>"
+									+ ""
+									+ "<p style='min-width: 200px;    position: relative; top: 8px; left: 10px;'>"
+									+ jsonArray[i].user.name
+									+ "</p></td>"
+									+ ""
+									+ "</tr></table>"
+									+ "<button class='reply reply_comment1 comment_reply show_member' onclick='openReply("
+									+ jsonArray[i].id
+									+ ")'> <i class='share-icon fa fa-reply'></i> Reply</button>"
+									+ "<table class='dis_votes_topic_comments show_member'>"
+									+ "	<tr>"
+									+ "<td>"
+									+ "<button class='topic_up_"
+									+ jsonArray[i].id
+									+ "'"
+									+ "onclick='sendLikeReply(this.id,1)' id='"
+									+ jsonArray[i].id
+									+ "'>"
+									+ "<i class='fa fa-angle-up'></i>"
+									+ "		</button>"
+									+ "	</td>"
+									+ "</tr>"
+									+ "<tr>"
+									+ "	<td><p style='margin-top: 0px; margin-bottom: 0px;'"
+									+ "			class='like_"
+									+ jsonArray[i].id
+									+ "' id='main_likes'"
+									+ "		>"
+									+ jsonArray[i].votes
+									+ "</p></td>"
+									+ "</tr>"
+									+ "<tr>"
+									+ "<td>"
+									+ "<button class='topic_down_"
+									+ jsonArray[i].id
+									+ "'"
+									+ "onclick='sendLikeReply(this.id,2)' id='"
+									+ jsonArray[i].id
+									+ "'>"
+									+ "<i class='fa fa-angle-down'></i>"
+									+ "		</button>"
+									+ "	</td>"
+									+ "</tr>"
+									+ "</table>"
+									+ "	<div class='reply_text_"
+									+ jsonArray[i].id
+									+ " reply_text'>"
 
-							+ "<table><tr>"
-							+ "<td><div contentEditable='true' class='guide_textarea_dis'id='textarea"
-							+ jsonArray[i].id
-							+ "' name='textarea'	style='width:500px;height:200px;'></div></td>"
-							+ "	<td>	<table>"
-							+ "	<tr>"
-							+ "			<td><a id='textarea"
-							+ jsonArray[i].id
-							+ "_item' class='add_text'> <img"
-							+ "					alt='' class='add_text_img ' id='img_add_1'"
-							+ "					src='/img/add.png'></img>"
-							+ "			</a></td>"
-							+ "		</tr>"
-							+ "		<tr>"
-							+ "			<td><a id='textarea"
-							+ jsonArray[i].id
-							+ "_summoners' class='add_text'> <img"
-							+ "					alt='' class='add_text_img  ' id='img_add_1'"
-							+ "				src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png'></img>"
-							+ "		</a></td>"
-							+ "	</tr>"
-							+ "	<tr>"
-							+ "			<td><a id='textarea"
-							+ jsonArray[i].id
-							+ "_runes' class='add_text'> <img"
-							+ "				class='add_text_img'	src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png'></img>"
-							+ "			</a></td>"
-							+ "		</tr>"
-							+ "	<tr>"
-							+ "		<td><a id='textarea"
-							+ jsonArray[i].id
-							+ "_champion' class='add_text'> <img"
-							+ "				alt='' class='add_text_img ' id='img_add_1'"
-							+ "		src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png'></img>"
-							+ "	</a></td>"
-							+ "	</tr></table></td>"
-							+ "	</tr>"
-							+ "</table>"
-							+ "<button class='reply post' onclick='sendReply("
-							+ jsonArray[i].id
-							+ ")'>"
-							+ "	<i class='share-icon fa fa-reply'></i> Reply"
-							+ "	</button>" + "</div>"
-							+ "</div><div class='reply_comment' id='attach_reply_"
-							+ jsonArray[i].id
-							+ "'></div>"
-									
-									);
+									+ "<table><tr>"
+									+ "<td><div contentEditable='true' class='guide_textarea_dis'id='textarea"
+									+ jsonArray[i].id
+									+ "' name='textarea'	style='width:500px;height:200px;'></div></td>"
+									+ "	<td>	<table>"
+									+ "	<tr>"
+									+ "			<td><a id='textarea"
+									+ jsonArray[i].id
+									+ "_item' class='add_text'> <img"
+									+ "					alt='' class='add_text_img ' id='img_add_1'"
+									+ "					src='/img/add.png'></img>"
+									+ "			</a></td>"
+									+ "		</tr>"
+									+ "		<tr>"
+									+ "			<td><a id='textarea"
+									+ jsonArray[i].id
+									+ "_summoners' class='add_text'> <img"
+									+ "					alt='' class='add_text_img  ' id='img_add_1'"
+									+ "				src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png'></img>"
+									+ "		</a></td>"
+									+ "	</tr>"
+									+ "	<tr>"
+									+ "			<td><a id='textarea"
+									+ jsonArray[i].id
+									+ "_runes' class='add_text'> <img"
+									+ "				class='add_text_img'	src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png'></img>"
+									+ "			</a></td>"
+									+ "		</tr>"
+									+ "	<tr>"
+									+ "		<td><a id='textarea"
+									+ jsonArray[i].id
+									+ "_champion' class='add_text'> <img"
+									+ "				alt='' class='add_text_img ' id='img_add_1'"
+									+ "		src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png'></img>"
+									+ "	</a></td>"
+									+ "	</tr></table></td>"
+									+ "	</tr>"
+									+ "</table>"
+									+ "<button class='reply post' onclick='sendReply("
+									+ jsonArray[i].id
+									+ ")'>"
+									+ "	<i class='share-icon fa fa-reply'></i> Reply"
+									+ "	</button>"
+									+ "</div>"
+									+ "</div><div class='reply_comment' id='attach_reply_"
+									+ jsonArray[i].id + "'></div>"
+
+					);
 		} else {
 			$("#attach_reply_" + jsonArray[i].commentid)
 					.append(
 							"<div style='display:block;' class='comment' id="
-							+ jsonArray[i].id
-							+ ">"
-							+"<table style='    display: inline; width: 100%;'><tr><td><p>"
-							+ jsonArray[i].content
-							+"</p><tr><td>" +
-									"<img id='"+jsonArray[i].user.id+"'"
-				+"	src='http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/"+jsonArray[i].user.image+".png'"
-					+"class='  tooltip_guide profile'"
-					+"style='width: 30px; height: 30px;     float: left;' ></img>" +
-									"" +
-									"<p style='min-width: 200px;    position: relative; top: 8px; left: 10px;'>"+jsonArray[i].user.name+"</p></td>" +
-									"" +
-							"</tr></table>"
-							+ "<button class='reply reply_comment1 comment_reply show_member' onclick='openReply("
-							+ jsonArray[i].id
-							+ ")'> <i class='share-icon fa fa-reply'></i> Reply</button>" +
-									"<table class='dis_votes_topic_comments show_member'>"
-							+ "	<tr>"
-							+ "<td>" 
-							+"<button class='topic_up_"+jsonArray[i].id+"'"
-							+"onclick='sendLikeReply(this.id,1)' id='"+jsonArray[i].id+"'>"
-							+"<i class='fa fa-angle-up'></i>"
-				+"		</button>" 
-						+"	</td>"
-							+ "</tr>"
-							+ "<tr>"
-							+ "	<td><p style='margin-top: 0px; margin-bottom: 0px;'"
-							+ "			class='like_"+jsonArray[i].id+"' id='main_likes'"
-							+ "		>"+jsonArray[i].votes+"</p></td>"
-							+ "</tr>"
-							+ "<tr>"
-							+ "<td>" 
-							+"<button class='topic_down_"+jsonArray[i].id+"'"
-							+"onclick='sendLikeReply(this.id,2)' id='"+jsonArray[i].id+"'>"
-							+"<i class='fa fa-angle-down'></i>"
-				+"		</button>" 
-						+"	</td>"
-							+ "</tr>"
-							+ "</table>" 
-							+ "	<div class='reply_text_"
-							+ jsonArray[i].id
-							+ " reply_text'>"
+									+ jsonArray[i].id
+									+ ">"
+									+ "<table style='    display: inline; width: 100%;'><tr><td><p>"
+									+ jsonArray[i].content
+									+ "</p><tr><td>"
+									+ "<img id='"
+									+ jsonArray[i].user.id
+									+ "'"
+									+ "	src='http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/"
+									+ jsonArray[i].user.image
+									+ ".png'"
+									+ "class='  tooltip_guide profile'"
+									+ "style='width: 30px; height: 30px;     float: left;' ></img>"
+									+ ""
+									+ "<p style='min-width: 200px;    position: relative; top: 8px; left: 10px;'>"
+									+ jsonArray[i].user.name
+									+ "</p></td>"
+									+ ""
+									+ "</tr></table>"
+									+ "<button class='reply reply_comment1 comment_reply show_member' onclick='openReply("
+									+ jsonArray[i].id
+									+ ")'> <i class='share-icon fa fa-reply'></i> Reply</button>"
+									+ "<table class='dis_votes_topic_comments show_member'>"
+									+ "	<tr>"
+									+ "<td>"
+									+ "<button class='topic_up_"
+									+ jsonArray[i].id
+									+ "'"
+									+ "onclick='sendLikeReply(this.id,1)' id='"
+									+ jsonArray[i].id
+									+ "'>"
+									+ "<i class='fa fa-angle-up'></i>"
+									+ "		</button>"
+									+ "	</td>"
+									+ "</tr>"
+									+ "<tr>"
+									+ "	<td><p style='margin-top: 0px; margin-bottom: 0px;'"
+									+ "			class='like_"
+									+ jsonArray[i].id
+									+ "' id='main_likes'"
+									+ "		>"
+									+ jsonArray[i].votes
+									+ "</p></td>"
+									+ "</tr>"
+									+ "<tr>"
+									+ "<td>"
+									+ "<button class='topic_down_"
+									+ jsonArray[i].id
+									+ "'"
+									+ "onclick='sendLikeReply(this.id,2)' id='"
+									+ jsonArray[i].id
+									+ "'>"
+									+ "<i class='fa fa-angle-down'></i>"
+									+ "		</button>"
+									+ "	</td>"
+									+ "</tr>"
+									+ "</table>"
+									+ "	<div class='reply_text_"
+									+ jsonArray[i].id
+									+ " reply_text'>"
 
-							+ "<table><tr>"
-							+ "<td><div contentEditable='true' class='guide_textarea_dis'id='textarea"
-							+ jsonArray[i].id
-							+ "' name='textarea'	style='width:500px;height:200px;'></div></td>"
-							+ "	<td>	<table>"
-							+ "	<tr>"
-							+ "			<td><a id='textarea"
-							+ jsonArray[i].id
-							+ "_item' class='add_text'> <img"
-							+ "					alt='' class='add_text_img ' id='img_add_1'"
-							+ "					src='/img/add.png'></img>"
-							+ "			</a></td>"
-							+ "		</tr>"
-							+ "		<tr>"
-							+ "			<td><a id='textarea"
-							+ jsonArray[i].id
-							+ "_summoners' class='add_text'> <img"
-							+ "					alt='' class='add_text_img  ' id='img_add_1'"
-							+ "				src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png'></img>"
-							+ "		</a></td>"
-							+ "	</tr>"
-							+ "	<tr>"
-							+ "			<td><a id='textarea"
-							+ jsonArray[i].id
-							+ "_runes' class='add_text'> <img"
-							+ "				class='add_text_img'	src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png'></img>"
-							+ "			</a></td>"
-							+ "		</tr>"
-							+ "	<tr>"
-							+ "		<td><a id='textarea"
-							+ jsonArray[i].id
-							+ "_champion' class='add_text'> <img"
-							+ "				alt='' class='add_text_img ' id='img_add_1'"
-							+ "		src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png'></img>"
-							+ "	</a></td>"
-							+ "	</tr></table></td>"
-							+ "	</tr>"
-							+ "</table>"
-							+ "<button class='reply post' onclick='sendReply("
-							+ jsonArray[i].id
-							+ ")'>"
-							+ "	<i class='share-icon fa fa-reply'></i> Reply"
-							+ "	</button>" + "</div>"
-							+ "</div><div class='reply_comment' id='attach_reply_"
-							+ jsonArray[i].id
-							+ "'></div>"
-							
-							);
+									+ "<table><tr>"
+									+ "<td><div contentEditable='true' class='guide_textarea_dis'id='textarea"
+									+ jsonArray[i].id
+									+ "' name='textarea'	style='width:500px;height:200px;'></div></td>"
+									+ "	<td>	<table>"
+									+ "	<tr>"
+									+ "			<td><a id='textarea"
+									+ jsonArray[i].id
+									+ "_item' class='add_text'> <img"
+									+ "					alt='' class='add_text_img ' id='img_add_1'"
+									+ "					src='/img/add.png'></img>"
+									+ "			</a></td>"
+									+ "		</tr>"
+									+ "		<tr>"
+									+ "			<td><a id='textarea"
+									+ jsonArray[i].id
+									+ "_summoners' class='add_text'> <img"
+									+ "					alt='' class='add_text_img  ' id='img_add_1'"
+									+ "				src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png'></img>"
+									+ "		</a></td>"
+									+ "	</tr>"
+									+ "	<tr>"
+									+ "			<td><a id='textarea"
+									+ jsonArray[i].id
+									+ "_runes' class='add_text'> <img"
+									+ "				class='add_text_img'	src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png'></img>"
+									+ "			</a></td>"
+									+ "		</tr>"
+									+ "	<tr>"
+									+ "		<td><a id='textarea"
+									+ jsonArray[i].id
+									+ "_champion' class='add_text'> <img"
+									+ "				alt='' class='add_text_img ' id='img_add_1'"
+									+ "		src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png'></img>"
+									+ "	</a></td>"
+									+ "	</tr></table></td>"
+									+ "	</tr>"
+									+ "</table>"
+									+ "<button class='reply post' onclick='sendReply("
+									+ jsonArray[i].id
+									+ ")'>"
+									+ "	<i class='share-icon fa fa-reply'></i> Reply"
+									+ "	</button>"
+									+ "</div>"
+									+ "</div><div class='reply_comment' id='attach_reply_"
+									+ jsonArray[i].id + "'></div>"
+
+					);
 		}
 
 		if (jsonArray[i].comment.length != 0) {
@@ -366,115 +404,138 @@ function fillComments(jsonArray) {
 
 	}
 
-	if(authCount==3 || authCount==2)
-	{
-		$(".show_member").css("display","block");
+	if (authCount == 3 || authCount == 2) {
+		$(".show_member").css("display", "block");
 	}
 }
 console.log(authCount);
-if(authCount==3 || authCount==2)
-{
+if (authCount == 3 || authCount == 2) {
 	$(".show_member").fadeIn();
 }
-function showGreeting(message, id, type, commentId,userid,image,username) {
-	console.log(username);
+function showGreeting(message, id, type, commentId, userid, image, username, notificationcounter,
+		notification) {
+
+	notifications = JSON.parse(notification);
+
+	stompClient.send("/app/notification/" + notifications.touser.id, {}, JSON
+			.stringify({
+				'touser' : notifications.touser,
+				'content' : notifications.content,
+				'fromuser' : notifications.fromuser
+			}));
 	if (type == false)
 
 	{
 		$("#comments")
 				.append(
 						"<div style='display:block;' class='comment' id="
-						+ id
-						+ ">"
-						+"<table style='    display: inline; width: 100%;'><tr><td><p>"
-						+ message
-						+"</p><tr><td>" +
-								"<img id='"+userid+"'"
-			+"	src='http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/"+image+".png'"
-				+"class='  tooltip_guide profile'"
-				+"style='width: 30px; height: 30px;     float: left;' ></img>" +
-								"" +
-								"<p style='min-width: 200px;    position: relative; top: 8px; left: 10px;'>"+username+"</p></td>" +
-								"" +
-						"</tr></table>"
-						+ "<button class='reply reply_comment1 comment_reply show_member' onclick='openReply("
-						+ id
-						+ ")'> <i class='share-icon fa fa-reply'></i> Reply</button>" +
-								"<table class='dis_votes_topic_comments show_member'>"
-						+ "	<tr>"
-						+ "<td>" 
-						+"<button class='topic_up_"+id+"'"
-						+"onclick='sendLikeReply(this.id,1)' id='"+id+"'>"
-						+"<i class='fa fa-angle-up'></i>"
-			+"		</button>" 
-					+"	</td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ "	<td><p style='margin-top: 0px; margin-bottom: 0px;'"
-						+ "			class='like_"+id+"' id='main_likes'"
-						+ "		>0</p></td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ "<td>" 
-						+"<button class='topic_down_"+id+"'"
-						+"onclick='sendLikeReply(this.id,2)' id='"+id+"'>"
-						+"<i class='fa fa-angle-down'></i>"
-			+"		</button>" 
-					+"	</td>"
-						+ "</tr>"
-						+ "</table>" 
-						+ "	<div class='reply_text_"
-						+ id
-						+ " reply_text'>"
+								+ id
+								+ ">"
+								+ "<table style='    display: inline; width: 100%;'><tr><td><p>"
+								+ message
+								+ "</p><tr><td>"
+								+ "<img id='"
+								+ userid
+								+ "'"
+								+ "	src='http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/"
+								+ image
+								+ ".png'"
+								+ "class='  tooltip_guide profile'"
+								+ "style='width: 30px; height: 30px;     float: left;' ></img>"
+								+ ""
+								+ "<p style='min-width: 200px;    position: relative; top: 8px; left: 10px;'>"
+								+ username
+								+ "</p></td>"
+								+ ""
+								+ "</tr></table>"
+								+ "<button class='reply reply_comment1 comment_reply show_member' onclick='openReply("
+								+ id
+								+ ")'> <i class='share-icon fa fa-reply'></i> Reply</button>"
+								+ "<table class='dis_votes_topic_comments show_member'>"
+								+ "	<tr>"
+								+ "<td>"
+								+ "<button class='topic_up_"
+								+ id
+								+ "'"
+								+ "onclick='sendLikeReply(this.id,1)' id='"
+								+ id
+								+ "'>"
+								+ "<i class='fa fa-angle-up'></i>"
+								+ "		</button>"
+								+ "	</td>"
+								+ "</tr>"
+								+ "<tr>"
+								+ "	<td><p style='margin-top: 0px; margin-bottom: 0px;'"
+								+ "			class='like_"
+								+ id
+								+ "' id='main_likes'"
+								+ "		>0</p></td>"
+								+ "</tr>"
+								+ "<tr>"
+								+ "<td>"
+								+ "<button class='topic_down_"
+								+ id
+								+ "'"
+								+ "onclick='sendLikeReply(this.id,2)' id='"
+								+ id
+								+ "'>"
+								+ "<i class='fa fa-angle-down'></i>"
+								+ "		</button>"
+								+ "	</td>"
+								+ "</tr>"
+								+ "</table>"
+								+ "	<div class='reply_text_"
+								+ id
+								+ " reply_text'>"
 
-						+ "<table><tr>"
-						+ "<td><div contentEditable='true' class='guide_textarea_dis'id='textarea"
-						+ id
-						+ "' name='textarea'	style='width:500px;height:200px;'></div></td>"
-						+ "	<td>	<table>"
-						+ "	<tr>"
-						+ "			<td><a id='textarea"
-						+ id
-						+ "_item' class='add_text'> <img"
-						+ "					alt='' class='add_text_img ' id='img_add_1'"
-						+ "					src='/img/add.png'></img>"
-						+ "			</a></td>"
-						+ "		</tr>"
-						+ "		<tr>"
-						+ "			<td><a id='textarea"
-						+ id
-						+ "_summoners' class='add_text'> <img"
-						+ "					alt='' class='add_text_img  ' id='img_add_1'"
-						+ "				src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png'></img>"
-						+ "		</a></td>"
-						+ "	</tr>"
-						+ "	<tr>"
-						+ "			<td><a id='textarea"
-						+ id
-						+ "_runes' class='add_text'> <img"
-						+ "				class='add_text_img'	src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png'></img>"
-						+ "			</a></td>"
-						+ "		</tr>"
-						+ "	<tr>"
-						+ "		<td><a id='textarea"
-						+ id
-						+ "_champion' class='add_text'> <img"
-						+ "				alt='' class='add_text_img ' id='img_add_1'"
-						+ "		src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png'></img>"
-						+ "	</a></td>"
-						+ "	</tr></table></td>"
-						+ "	</tr>"
-						+ "</table>"
-						+ "<button class='reply post' onclick='sendReply("
-						+ id
-						+ ")'>"
-						+ "	<i class='share-icon fa fa-reply'></i> Reply"
-						+ "	</button>" + "</div>"
-						+ "</div><div class='reply_comment' id='attach_reply_"
-						+ id
-						+ "'></div>"
-						
-						);
+								+ "<table><tr>"
+								+ "<td><div contentEditable='true' class='guide_textarea_dis'id='textarea"
+								+ id
+								+ "' name='textarea'	style='width:500px;height:200px;'></div></td>"
+								+ "	<td>	<table>"
+								+ "	<tr>"
+								+ "			<td><a id='textarea"
+								+ id
+								+ "_item' class='add_text'> <img"
+								+ "					alt='' class='add_text_img ' id='img_add_1'"
+								+ "					src='/img/add.png'></img>"
+								+ "			</a></td>"
+								+ "		</tr>"
+								+ "		<tr>"
+								+ "			<td><a id='textarea"
+								+ id
+								+ "_summoners' class='add_text'> <img"
+								+ "					alt='' class='add_text_img  ' id='img_add_1'"
+								+ "				src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png'></img>"
+								+ "		</a></td>"
+								+ "	</tr>"
+								+ "	<tr>"
+								+ "			<td><a id='textarea"
+								+ id
+								+ "_runes' class='add_text'> <img"
+								+ "				class='add_text_img'	src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png'></img>"
+								+ "			</a></td>"
+								+ "		</tr>"
+								+ "	<tr>"
+								+ "		<td><a id='textarea"
+								+ id
+								+ "_champion' class='add_text'> <img"
+								+ "				alt='' class='add_text_img ' id='img_add_1'"
+								+ "		src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png'></img>"
+								+ "	</a></td>"
+								+ "	</tr></table></td>"
+								+ "	</tr>"
+								+ "</table>"
+								+ "<button class='reply post' onclick='sendReply("
+								+ id
+								+ ")'>"
+								+ "	<i class='share-icon fa fa-reply'></i> Reply"
+								+ "	</button>"
+								+ "</div>"
+								+ "</div><div class='reply_comment' id='attach_reply_"
+								+ id + "'></div>"
+
+				);
 		console.log("dsds");
 		$("#" + id).fadeIn("fast");
 	} else {
@@ -482,116 +543,127 @@ function showGreeting(message, id, type, commentId,userid,image,username) {
 		$("#attach_reply_" + commentId)
 				.append(
 						"<div style='display:block;' class='comment' id="
-						+ id
-						+ ">"
-						+"<table style='    display: inline; width: 100%;'><tr><td><p>"
-						+ message
-						+"</p><tr><td>" +
-								"<img id='"+userid+"'"
-			+"	src='http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/"+image+".png'"
-				+"class='  tooltip_guide profile'"
-				+"style='width: 30px; height: 30px;     float: left;' ></img>" +
-								"" +
-								"<p style='min-width: 200px;    position: relative; top: 8px; left: 10px;'>"+username+"</p></td>" +
-								"" +
-						"</tr></table>"
-						+ "<button class='reply reply_comment1 comment_reply show_member' onclick='openReply("
-						+ id
-						+ ")'> <i class='share-icon fa fa-reply'></i> Reply</button>" +
-								"<table class='dis_votes_topic_comments show_member'>"
-						+ "	<tr>"
-						+ "<td>" 
-						+"<button class='topic_up_"+id+"'"
-						+"onclick='sendLikeReply(this.id,1)' id='"+id+"'>"
-						+"<i class='fa fa-angle-up'></i>"
-			+"		</button>" 
-					+"	</td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ "	<td><p style='margin-top: 0px; margin-bottom: 0px;'"
-						+ "			class='like_"+id+"' id='main_likes'"
-						+ "		>0</p></td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ "<td>" 
-						+"<button class='topic_down_"+id+"'"
-						+"onclick='sendLikeReply(this.id,2)' id='"+id+"'>"
-						+"<i class='fa fa-angle-down'></i>"
-			+"		</button>" 
-					+"	</td>"
-						+ "</tr>"
-						+ "</table>" 
-						+ "	<div class='reply_text_"
-						+ id
-						+ " reply_text'>"
+								+ id
+								+ ">"
+								+ "<table style='    display: inline; width: 100%;'><tr><td><p>"
+								+ message
+								+ "</p><tr><td>"
+								+ "<img id='"
+								+ userid
+								+ "'"
+								+ "	src='http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/"
+								+ image
+								+ ".png'"
+								+ "class='  tooltip_guide profile'"
+								+ "style='width: 30px; height: 30px;     float: left;' ></img>"
+								+ ""
+								+ "<p style='min-width: 200px;    position: relative; top: 8px; left: 10px;'>"
+								+ username
+								+ "</p></td>"
+								+ ""
+								+ "</tr></table>"
+								+ "<button class='reply reply_comment1 comment_reply show_member' onclick='openReply("
+								+ id
+								+ ")'> <i class='share-icon fa fa-reply'></i> Reply</button>"
+								+ "<table class='dis_votes_topic_comments show_member'>"
+								+ "	<tr>"
+								+ "<td>"
+								+ "<button class='topic_up_"
+								+ id
+								+ "'"
+								+ "onclick='sendLikeReply(this.id,1)' id='"
+								+ id
+								+ "'>"
+								+ "<i class='fa fa-angle-up'></i>"
+								+ "		</button>"
+								+ "	</td>"
+								+ "</tr>"
+								+ "<tr>"
+								+ "	<td><p style='margin-top: 0px; margin-bottom: 0px;'"
+								+ "			class='like_"
+								+ id
+								+ "' id='main_likes'"
+								+ "		>0</p></td>"
+								+ "</tr>"
+								+ "<tr>"
+								+ "<td>"
+								+ "<button class='topic_down_"
+								+ id
+								+ "'"
+								+ "onclick='sendLikeReply(this.id,2)' id='"
+								+ id
+								+ "'>"
+								+ "<i class='fa fa-angle-down'></i>"
+								+ "		</button>"
+								+ "	</td>"
+								+ "</tr>"
+								+ "</table>"
+								+ "	<div class='reply_text_"
+								+ id
+								+ " reply_text'>"
 
-						+ "<table><tr>"
-						+ "<td><div contentEditable='true' class='guide_textarea_dis'id='textarea"
-						+ id
-						+ "' name='textarea'	style='width:500px;height:200px;'></div></td>"
-						+ "	<td>	<table>"
-						+ "	<tr>"
-						+ "			<td><a id='textarea"
-						+ id
-						+ "_item' class='add_text'> <img"
-						+ "					alt='' class='add_text_img ' id='img_add_1'"
-						+ "					src='/img/add.png'></img>"
-						+ "			</a></td>"
-						+ "		</tr>"
-						+ "		<tr>"
-						+ "			<td><a id='textarea"
-						+ id
-						+ "_summoners' class='add_text'> <img"
-						+ "					alt='' class='add_text_img  ' id='img_add_1'"
-						+ "				src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png'></img>"
-						+ "		</a></td>"
-						+ "	</tr>"
-						+ "	<tr>"
-						+ "			<td><a id='textarea"
-						+ id
-						+ "_runes' class='add_text'> <img"
-						+ "				class='add_text_img'	src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png'></img>"
-						+ "			</a></td>"
-						+ "		</tr>"
-						+ "	<tr>"
-						+ "		<td><a id='textarea"
-						+ id
-						+ "_champion' class='add_text'> <img"
-						+ "				alt='' class='add_text_img ' id='img_add_1'"
-						+ "		src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png'></img>"
-						+ "	</a></td>"
-						+ "	</tr></table></td>"
-						+ "	</tr>"
-						+ "</table>"
-						+ "<button class='reply post' onclick='sendReply("
-						+ id
-						+ ")'>"
-						+ "	<i class='share-icon fa fa-reply'></i> Reply"
-						+ "	</button>" + "</div>"
-						+ "</div><div class='reply_comment' id='attach_reply_"
-						+ id
-						+ "'></div>"
-						
-						);
+								+ "<table><tr>"
+								+ "<td><div contentEditable='true' class='guide_textarea_dis'id='textarea"
+								+ id
+								+ "' name='textarea'	style='width:500px;height:200px;'></div></td>"
+								+ "	<td>	<table>"
+								+ "	<tr>"
+								+ "			<td><a id='textarea"
+								+ id
+								+ "_item' class='add_text'> <img"
+								+ "					alt='' class='add_text_img ' id='img_add_1'"
+								+ "					src='/img/add.png'></img>"
+								+ "			</a></td>"
+								+ "		</tr>"
+								+ "		<tr>"
+								+ "			<td><a id='textarea"
+								+ id
+								+ "_summoners' class='add_text'> <img"
+								+ "					alt='' class='add_text_img  ' id='img_add_1'"
+								+ "				src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/spell/SummonerSnowball.png'></img>"
+								+ "		</a></td>"
+								+ "	</tr>"
+								+ "	<tr>"
+								+ "			<td><a id='textarea"
+								+ id
+								+ "_runes' class='add_text'> <img"
+								+ "				class='add_text_img'	src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/r_3_3.png'></img>"
+								+ "			</a></td>"
+								+ "		</tr>"
+								+ "	<tr>"
+								+ "		<td><a id='textarea"
+								+ id
+								+ "_champion' class='add_text'> <img"
+								+ "				alt='' class='add_text_img ' id='img_add_1'"
+								+ "		src='http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/Kindred.png'></img>"
+								+ "	</a></td>"
+								+ "	</tr></table></td>"
+								+ "	</tr>"
+								+ "</table>"
+								+ "<button class='reply post' onclick='sendReply("
+								+ id
+								+ ")'>"
+								+ "	<i class='share-icon fa fa-reply'></i> Reply"
+								+ "	</button>"
+								+ "</div>"
+								+ "</div><div class='reply_comment' id='attach_reply_"
+								+ id + "'></div>"
+
+				);
 		console.log("#" + id);
-		//$("#" + id).toggle("fast");
+		// $("#" + id).toggle("fast");
 	}
-	if(authCount==3 || authCount==2)
-	{
-		$(".show_member").css("display","block");
+	if (authCount == 3 || authCount == 2) {
+		$(".show_member").css("display", "block");
 	}
 }
 if ($('#auth').text() == "true") {
-	var deletetrigger = document.getElementById("delete_b"), deletedialog= document
-	.getElementById("delete_dialog"), deletedlg= new DialogFx(
-	deletedialog);
+	var deletetrigger = document.getElementById("delete_b"), deletedialog = document
+			.getElementById("delete_dialog"), deletedlg = new DialogFx(
+			deletedialog);
 
-deletetrigger.addEventListener('click', deletedlg.toggle.bind(deletedlg));
+	deletetrigger.addEventListener('click', deletedlg.toggle.bind(deletedlg));
 } else {
-
-	
-	
-
 
 	var logintrigger = document.getElementById("login_b"), logindialog = document
 			.getElementById("login_dialog"), logindlg = new DialogFx(
@@ -653,31 +725,38 @@ function connect() {
 	stompClient.connect({}, function(frame) {
 
 		console.log('Connected: ' + frame);
-		stompClient.subscribe('/topic/greetings/' + topicid, function(greeting) {
-			console.log("inc");
-			showGreeting(JSON.parse(greeting.body).content, JSON
-					.parse(greeting.body).id, JSON.parse(greeting.body).type,
-					JSON.parse(greeting.body).commentId,JSON.parse(greeting.body).userid,JSON.parse(greeting.body).image,JSON.parse(greeting.body).username);
-		});
+		stompClient.subscribe('/topic/greetings/' + topicid,
+				function(greeting) {
+					console.log("inc");
+					showGreeting(JSON.parse(greeting.body).content, JSON
+							.parse(greeting.body).id,
+							JSON.parse(greeting.body).type, JSON
+									.parse(greeting.body).commentId, JSON
+									.parse(greeting.body).userid, JSON
+									.parse(greeting.body).image, JSON
+									.parse(greeting.body).username, JSON
+									.parse(greeting.body).notificationcounter,
+									JSON.parse(greeting.body).notification);
+				});
 		stompClient.subscribe('/topic/topiclikes/' + topicid,
 				function(greeting) {
 					setTopicLike(JSON.parse(greeting.body).content, JSON
 							.parse(greeting.body).id,
 							JSON.parse(greeting.body).type, JSON
-									.parse(greeting.body).commentId
-									, JSON
-									.parse(greeting.body).notificationcounter
-									, JSON
-									.parse(greeting.body).notification);
+									.parse(greeting.body).commentId, JSON
+									.parse(greeting.body).notificationcounter,
+							JSON.parse(greeting.body).notification);
 				});
-		stompClient.subscribe('/topic/topiclikesreply/' + topicid,
-				function(greeting) {
-					setTopicLikeReply(JSON.parse(greeting.body).content, JSON
-							.parse(greeting.body).id,
-							JSON.parse(greeting.body).type, JSON
-									.parse(greeting.body).commentId);
-				});
-		stompClient.subscribe('/topic/gettooltipdata/'+sessionId, function(greeting) {
+		stompClient.subscribe('/topic/topiclikesreply/' + topicid, function(
+				greeting) {
+			setTopicLikeReply(JSON.parse(greeting.body).content, JSON
+					.parse(greeting.body).id, JSON.parse(greeting.body).type,
+					JSON.parse(greeting.body).commentId, JSON
+					.parse(greeting.body).notificationcounter,
+					JSON.parse(greeting.body).notification);
+		});
+		stompClient.subscribe('/topic/gettooltipdata/' + sessionId, function(
+				greeting) {
 
 			getToolTip(JSON.parse(greeting.body));
 		});
@@ -1449,35 +1528,32 @@ function getAll(message) {
 						}
 
 					});
-	
+
 }
 console.log($("#state").text());
-if ($("#state").text()==true) {
+if ($("#state").text() == true) {
 	$(".topic_up").attr("disabled", true);
 	$(".topic_up").css("opacity", "0.5");
-	
-}
-else($("#state").text()==false)
-	{
+
+} else
+	($("#state").text() == false)
+{
 	$(".topic_down").attr("disabled", true);
 	$(".topic_down").css("opacity", "0.5");
-	}
-var edata=JSON.parse($("#extra_data").text());
+}
+var edata = JSON.parse($("#extra_data").text());
 
-for(kk=0;kk<edata.length;kk++)
-{
-	if(edata[kk].state==true)
-		{
+for (kk = 0; kk < edata.length; kk++) {
+	if (edata[kk].state == true) {
 		console.log(edata);
-		$(".topic_up_"+edata[kk].id).attr("disabled", true);
-		$(".topic_up_"+edata[kk].id).css("opacity", "0.5");
-		}
-	else if(edata[kk].state==false)
-		{console.log(edata);
-		$(".topic_down_"+edata[kk].id).attr("disabled", true);
-		$(".topic_down_"+edata[kk].id).css("opacity", "0.5");
-		}
-	
-	//$("#time_"+edata[kk].id).append(edata[kk].time);
+		$(".topic_up_" + edata[kk].id).attr("disabled", true);
+		$(".topic_up_" + edata[kk].id).css("opacity", "0.5");
+	} else if (edata[kk].state == false) {
+		console.log(edata);
+		$(".topic_down_" + edata[kk].id).attr("disabled", true);
+		$(".topic_down_" + edata[kk].id).css("opacity", "0.5");
+	}
+
+	// $("#time_"+edata[kk].id).append(edata[kk].time);
 
 }

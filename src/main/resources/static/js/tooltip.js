@@ -1,8 +1,9 @@
 /* <![CDATA[ */
 
-
+var socket=null;
 connectTooltip()
 function connectTooltip() {
+
 	var socket = new SockJS('/gs-guide-websocket');
 	stompClient = Stomp.over(socket);
 	stompClient.connect({}, function(frame) {
@@ -63,7 +64,7 @@ $('.tooltip_guide').hover(function() {
 	}
 	$(".details").show();
 }, function() {
-	 $(".details").hide();
+	 //$(".details").hide();
 });
 function hoverTooltip(id) {
 
@@ -158,13 +159,13 @@ function getToolTip(message) {
 
 		$(".details").append("<div class='data' id='stats'>" +
 
-		"<p>Cost:" + message.gold + "</p>" +
+		"<p class='col-md-3'>Cost</p><p class='col-md-1'>:</p><p class='col-md-3'> " + message.gold + "</p>" +
 		// "<p>Points:</p>" +
 		"</div>");
 		for (k = 0; k < message.stats.length; k++) {
 
 			$("#stats").append(
-					"" + "<p>" + message.stats[k].name + ":"
+					"" + "<p class='col-md-4'>" + message.stats[k].name + "</p><p class='col-md-2'>:</p><p class='col-md-4'>"
 							+ message.stats[k].value + "</p>");
 
 		}

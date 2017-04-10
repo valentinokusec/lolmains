@@ -106,12 +106,12 @@ function getAllData(data, id, type) {
 	}
 }
 
-var stompClient = null;
-connect();
+
+
 var sessionId = $("#session_id").text();
-function connect() {
-	var socket = new SockJS('/gs-guide-websocket');
-	stompClient = Stomp.over(socket);
+
+function connectMain() {
+	
 	stompClient.connect({}, function(frame) {
 
 		console.log('Connected: ' + frame);

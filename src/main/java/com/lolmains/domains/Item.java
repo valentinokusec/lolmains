@@ -33,9 +33,9 @@ public class Item implements Serializable {
 
 	
 	 private Double FlatArmorMod, FlatAttackSpeedMod, FlatBlockMod, FlatCritChanceMod, FlatCritDamageMod, FlatEXPBonus, FlatEnergyPoolMod, FlatEnergyRegenMod,
-     FlatHPPoolMod, FlatHPRegenMod, FlatMPPoolMod, FlatMPRegenMod, FlatMagicDamageMod, FlatMovementSpeedMod, FlatPhysicalDamageMod, FlatSpellBlockMod,
+     HP, FlatHPRegenMod, FlatMPPoolMod, FlatMPRegenMod, FlatMagicDamageMod, FlatMovementSpeedMod, FlatPhysicalDamageMod, FlatSpellBlockMod,
      PercentArmorMod, PercentAttackSpeedMod, PercentBlockMod, PercentCritChanceMod, PercentCritDamageMod, PercentDodgeMod, PercentEXPBonus,
-     PercentHPPoolMod, PercentHPRegenMod, PercentLifeStealMod, PercentMPPoolMod, PercentMPRegenMod, PercentMagicDamageMod, PercentMovementSpeedMod,
+     PercentHPPoolMod, HPRegen, PercentLifeStealMod, PercentMPPoolMod, PercentMPRegenMod, PercentMagicDamageMod, PercentMovementSpeedMod,
      PercentPhysicalDamageMod, PercentSpellBlockMod, PercentSpellVampMod, rFlatArmorModPerLevel, rFlatArmorPenetrationMod,
      rFlatArmorPenetrationModPerLevel, rFlatCritChanceModPerLevel, rFlatCritDamageModPerLevel, rFlatDodgeMod, rFlatDodgeModPerLevel,
      rFlatEnergyModPerLevel, rFlatEnergyRegenModPerLevel, rFlatGoldPer10Mod, rFlatHPModPerLevel, rFlatHPRegenModPerLevel, rFlatMPModPerLevel,
@@ -53,11 +53,11 @@ public class Item implements Serializable {
 	public Item(int itemId,int type,  int gold, String imageId, String name, String description, 
 			Double flatArmorMod, Double flatAttackSpeedMod, Double flatBlockMod, Double flatCritChanceMod,
 			Double flatCritDamageMod, Double flatEXPBonus, Double flatEnergyPoolMod, Double flatEnergyRegenMod,
-			Double flatHPPoolMod, Double flatHPRegenMod, Double flatMPPoolMod, Double flatMPRegenMod,
+			Double HP, Double flatHPRegenMod, Double flatMPPoolMod, Double flatMPRegenMod,
 			Double flatMagicDamageMod, Double flatMovementSpeedMod, Double flatPhysicalDamageMod,
 			Double flatSpellBlockMod, Double percentArmorMod, Double percentAttackSpeedMod, Double percentBlockMod,
 			Double percentCritChanceMod, Double percentCritDamageMod, Double percentDodgeMod, Double percentEXPBonus,
-			Double percentHPPoolMod, Double percentHPRegenMod, Double percentLifeStealMod, Double percentMPPoolMod,
+			Double percentHPPoolMod, Double HPRegen, Double percentLifeStealMod, Double percentMPPoolMod,
 			Double percentMPRegenMod, Double percentMagicDamageMod, Double percentMovementSpeedMod,
 			Double percentPhysicalDamageMod, Double percentSpellBlockMod, Double percentSpellVampMod,
 			Double rFlatArmorModPerLevel, Double rFlatArmorPenetrationMod, Double rFlatArmorPenetrationModPerLevel,
@@ -88,7 +88,7 @@ public class Item implements Serializable {
 		FlatEXPBonus = flatEXPBonus;
 		FlatEnergyPoolMod = flatEnergyPoolMod;
 		FlatEnergyRegenMod = flatEnergyRegenMod;
-		FlatHPPoolMod = flatHPPoolMod;
+		this.HP = HP;
 		FlatHPRegenMod = flatHPRegenMod;
 		FlatMPPoolMod = flatMPPoolMod;
 		FlatMPRegenMod = flatMPRegenMod;
@@ -104,7 +104,7 @@ public class Item implements Serializable {
 		PercentDodgeMod = percentDodgeMod;
 		PercentEXPBonus = percentEXPBonus;
 		PercentHPPoolMod = percentHPPoolMod;
-		PercentHPRegenMod = percentHPRegenMod;
+		this.HPRegen = HPRegen;
 		PercentLifeStealMod = percentLifeStealMod;
 		PercentMPPoolMod = percentMPPoolMod;
 		PercentMPRegenMod = percentMPRegenMod;
@@ -231,11 +231,11 @@ public class Item implements Serializable {
 	public void setFlatEnergyRegenMod(Double flatEnergyRegenMod) {
 		FlatEnergyRegenMod = flatEnergyRegenMod;
 	}
-	public Double getFlatHPPoolMod() {
-		return FlatHPPoolMod;
+	public Double getHP() {
+		return HP;
 	}
-	public void setFlatHPPoolMod(Double flatHPPoolMod) {
-		FlatHPPoolMod = flatHPPoolMod;
+	public void setHP(Double HP) {
+		this.HP = HP;
 	}
 	public Double getFlatHPRegenMod() {
 		return FlatHPRegenMod;
@@ -327,11 +327,11 @@ public class Item implements Serializable {
 	public void setPercentHPPoolMod(Double percentHPPoolMod) {
 		PercentHPPoolMod = percentHPPoolMod;
 	}
-	public Double getPercentHPRegenMod() {
-		return PercentHPRegenMod;
+	public Double getHPRegen() {
+		return this.HPRegen;
 	}
-	public void setPercentHPRegenMod(Double percentHPRegenMod) {
-		PercentHPRegenMod = percentHPRegenMod;
+	public void setHPRegen(Double percentHPRegenMod) {
+		HPRegen = percentHPRegenMod;
 	}
 	public Double getPercentLifeStealMod() {
 		return PercentLifeStealMod;
@@ -587,7 +587,7 @@ public class Item implements Serializable {
 				+ ", FlatAttackSpeedMod=" + FlatAttackSpeedMod + ", FlatBlockMod=" + FlatBlockMod
 				+ ", FlatCritChanceMod=" + FlatCritChanceMod + ", FlatCritDamageMod=" + FlatCritDamageMod
 				+ ", FlatEXPBonus=" + FlatEXPBonus + ", FlatEnergyPoolMod=" + FlatEnergyPoolMod
-				+ ", FlatEnergyRegenMod=" + FlatEnergyRegenMod + ", FlatHPPoolMod=" + FlatHPPoolMod
+				+ ", FlatEnergyRegenMod=" + FlatEnergyRegenMod + ", HP=" + HP
 				+ ", FlatHPRegenMod=" + FlatHPRegenMod + ", FlatMPPoolMod=" + FlatMPPoolMod + ", FlatMPRegenMod="
 				+ FlatMPRegenMod + ", FlatMagicDamageMod=" + FlatMagicDamageMod + ", FlatMovementSpeedMod="
 				+ FlatMovementSpeedMod + ", FlatPhysicalDamageMod=" + FlatPhysicalDamageMod + ", FlatSpellBlockMod="
@@ -595,7 +595,7 @@ public class Item implements Serializable {
 				+ PercentAttackSpeedMod + ", PercentBlockMod=" + PercentBlockMod + ", PercentCritChanceMod="
 				+ PercentCritChanceMod + ", PercentCritDamageMod=" + PercentCritDamageMod + ", PercentDodgeMod="
 				+ PercentDodgeMod + ", PercentEXPBonus=" + PercentEXPBonus + ", PercentHPPoolMod=" + PercentHPPoolMod
-				+ ", PercentHPRegenMod=" + PercentHPRegenMod + ", PercentLifeStealMod=" + PercentLifeStealMod
+				+ ", HPRegen=" + HPRegen + ", PercentLifeStealMod=" + PercentLifeStealMod
 				+ ", PercentMPPoolMod=" + PercentMPPoolMod + ", PercentMPRegenMod=" + PercentMPRegenMod
 				+ ", PercentMagicDamageMod=" + PercentMagicDamageMod + ", PercentMovementSpeedMod="
 				+ PercentMovementSpeedMod + ", PercentPhysicalDamageMod=" + PercentPhysicalDamageMod
