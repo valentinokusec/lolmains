@@ -1,11 +1,14 @@
 /* <![CDATA[ */
 
 var socket=null;
+var stompClient;
 connectTooltip()
 function connectTooltip() {
-
+	
 	var socket = new SockJS('/gs-guide-websocket');
+
 	stompClient = Stomp.over(socket);
+	stompClient.debug = null
 	stompClient.connect({}, function(frame) {
 
 		console.log('Connected: ' + frame);
@@ -64,8 +67,44 @@ $('.tooltip_guide').hover(function() {
 	}
 	
 }, function() {
-	//$(".details").hide();
+	$(".details").hide();
 });
+function hoverToolTopNew(item) {
+
+	var idd = 0;
+	console.log("hh");
+
+	position = $(item).offset();
+	var classs = $(item).attr('class');
+
+	$(".details").text("");
+	if ($(item).hasClass('profile')) {
+		getToolTipData("profile", item.id);
+	}
+
+	else if ($(item).hasClass('item')) {
+
+		getToolTipData("item", item.id);
+
+	} else if ($(item).hasClass('summoner')) {
+
+		getToolTipData("summoner", item.id);
+
+	} else if ($(item).hasClass('champion')) {
+
+		getToolTipData("champion", item.id);
+
+	} else if ($(item).hasClass('rune')) {
+
+		getToolTipData("rune", item.id);
+
+	}else if ($(item).hasClass('spell')) {
+
+		getToolTipData("spell", item.id);
+
+	}
+	
+};
 function hoverTooltip(id) {
 
 	console.log($(id).offset());
@@ -191,14 +230,14 @@ function getToolTip(message) {
 		$(".details").text("");
 		$(".details")
 				.append(
-						"	<img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/champion/"
-								+ message.image + "'></img>");
+						"	<div style='height:50px;'><img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/champion/"
+								+ message.image + "'></img></div>");
 
-		$(".details").append("<h2 class='name'>" + message.name + "</h2>");
+		$(".details").append("<h2 class='name animeate_details'>" + message.name + "</h2>");
 
 		$(".details")
 				.append(
-						"<table class='data'>"
+						"<table class='data animeate_details'>"
 								+
 
 								"<tr>"
@@ -239,14 +278,14 @@ function getToolTip(message) {
 		$(".details").text("");
 		$(".details")
 				.append(
-						"	<img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/spell/"
-								+ message.image + "'></img>");
+						"	<div style='height:50px;'><img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/spell/"
+								+ message.image + "'></img></div>");
 
-		$(".details").append("<h2 class='name'>" + message.name + "</h2>");
+		$(".details").append("<h2 class='name animeate_details'>" + message.name + "</h2>");
 		$(".details").append(
 				"<h3 class='name'>" + message.description + "</h3>");
 
-		$(".details").append("<div class='data'>" +
+		$(".details").append("<div class='data animeate_details'>" +
 
 		"</div>");
 
@@ -270,10 +309,10 @@ function getToolTip(message) {
 		$(".details").text("");
 		$(".details")
 				.append(
-						"	<img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/rune/"
-								+ message.image + "'></img>");
+						"	<div style='height:50px;'><img  class='details_img animeate_details' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/rune/"
+								+ message.image + "'></img></div>");
 
-		$(".details").append("<h2 class='name'>" + message.name + "</h2>");
+		$(".details").append("<h2 class='name animeate_details'>" + message.name + "</h2>");
 		$(".details").append(
 				"<h3 class='name'>" + message.description + "</h3>");
 
@@ -294,10 +333,10 @@ function getToolTip(message) {
 		$(".details").text("");
 		$(".details")
 				.append(
-						"	<img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/spell/"
-								+ message.image + "'></img>");
+						"	<div style='height:50px;'><img  class='details_img animeate_details' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/spell/"
+								+ message.image + "'></img></div>");
 
-		$(".details").append("<h2 class='name'>" + message.name + "</h2>");
+		$(".details").append("<h2 class='name animeate_details'>" + message.name + "</h2>");
 		$(".details").append(
 				"<h3 class='name'>" + message.description + "</h3>");
 
@@ -318,11 +357,11 @@ function getToolTip(message) {
 		$(".details").text("");
 		$(".details")
 				.append(
-						"	<img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/profileicon/"
-								+ message.summoner.image + ".png'></img>");
+						"	<div style='height:50px;'><img  class='details_img animeate_details' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/profileicon/"
+								+ message.summoner.image + ".png'></img></div>");
 
 		$(".details").append(
-				"<h2 class='name'>" + message.summoner.name + "</h2>");
+				"<h2 class='name animeate_details'>" + message.summoner.name + "</h2>");
 		$(".details").append(
 				"<p class='kda'>" + message.summoner.kills + "/"
 						+ message.summoner.deaths + "/"
@@ -352,7 +391,7 @@ function getToolTip(message) {
 			{
 		$(".details")
 				.append(
-						"<table class='data'>"
+						"<table class='data animeate_details'>"
 								+ "<tr><td></td>  <td>General</td> <td>Champion</td> </tr>"
 								+ "<tr>" + "<td><p>Games:</td><td>"
 								+ message.summoner.games

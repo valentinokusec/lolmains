@@ -112,7 +112,7 @@ function sendComment() {
 }
 var stompClient = null;
 
-connect();
+
 function setTopicLike(message, id, type, commentId, notificationcounter,
 		notification) {
 
@@ -719,9 +719,11 @@ $('.img_item').hover(
 		}, function() {
 			$(".details").hide();
 		});
+setTimeout(function(){ connect()}, 2000);
 function connect() {
 	var socket = new SockJS('/gs-guide-websocket');
 	stompClient = Stomp.over(socket);
+	stompClient.debug = null
 	stompClient.connect({}, function(frame) {
 
 		console.log('Connected: ' + frame);
@@ -755,11 +757,7 @@ function connect() {
 					.parse(greeting.body).notificationcounter,
 					JSON.parse(greeting.body).notification);
 		});
-		stompClient.subscribe('/topic/gettooltipdata/' + sessionId, function(
-				greeting) {
-
-			getToolTip(JSON.parse(greeting.body));
-		});
+	
 		stompClient.subscribe('/topic/getguidedata/' + userid, function(
 				greeting) {
 
@@ -1389,7 +1387,7 @@ function getAll(message) {
 										.append(
 												"<img id='"
 														+ description_id
-														+ "' class='textarea_img tooltip_guide item' src='"
+														+ "' class='textarea_img  item' onmouseover='hoverToolTopNew(this)' src='"
 														+ description_img
 														+ "'></img>");
 							} else if (description_img.includes("spell")) {
@@ -1397,7 +1395,7 @@ function getAll(message) {
 										.append(
 												"<img id='"
 														+ description_id
-														+ "' class='textarea_img tooltip_guide summoner' src='"
+														+ "' class='textarea_img  summoner' onmouseover='hoverToolTopNew(this)' src='"
 														+ description_img
 														+ "'></img>");
 							} else if (description_img.includes("rune")) {
@@ -1405,7 +1403,7 @@ function getAll(message) {
 										.append(
 												"<img id='"
 														+ description_id
-														+ "' class='textarea_img tooltip_guide rune' src='"
+														+ "' class='textarea_img  rune' onmouseover='hoverToolTopNew(this)' src='"
 														+ description_img
 														+ "'></img>");
 							} else if (description_img.includes("champion")) {
@@ -1413,7 +1411,7 @@ function getAll(message) {
 										.append(
 												"<img id='"
 														+ description_id
-														+ "' class='textarea_img tooltip_guide champion' src='"
+														+ "' class='textarea_img  champion' onmouseover='hoverToolTopNew(this)' src='"
 														+ description_img
 														+ "'></img>");
 							}

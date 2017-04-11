@@ -17,7 +17,8 @@ if($("#notificationcounter").text()==0)
 
 setTimeout(function(){ connectNotification()}, 1000);
 function connectNotification() {
-	
+	var socket = new SockJS('/gs-guide-websocket');
+	stompClient = Stomp.over(socket);
 	stompClient.connect({}, function(frame) {
 
 		console.log('Connected: ' + frame);

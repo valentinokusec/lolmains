@@ -92,6 +92,8 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	public User findById(Integer id) {
 		// TODO Auto-generated method stub
 		return userdao.findOne(id);
+		
+		
 	}
 	 
 	
