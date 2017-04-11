@@ -1328,7 +1328,7 @@ function getAll(message) {
 						$(".item_img").attr("src", description_img);
 						$(".item_name").text(description_name);
 						console.log(description_id);
-						var left = +position.left - 210;
+						var left = +position.left - 310;
 						var top = +position.top - 10;
 						$(".details").css("left", left + "px");
 						$(".details").css("top", top + "px");
@@ -1343,11 +1343,7 @@ function getAll(message) {
 						$(".details").append(
 								"<h3 class='name'>" + description + "</h3>");
 
-						$(".details").append(
-								"<div class='data'>" + "<p>Games</p>" +
-								// "<p>Winrate</p>" +
-								// "<p>Points:</p>" +
-								"</div>");
+						$(".details_img").addClass("details_img_scale");
 
 						$(".details").show();
 

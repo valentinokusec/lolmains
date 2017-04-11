@@ -9,10 +9,22 @@ $("#notification_button").click(function() {
 		
 	}));
 	$(".notification_counter").fadeOut();
+	$(".last_li").animate({
+	    width: "60px"
+	  }, 100, function() {
+		
+	  });
 });
 if($("#notificationcounter").text()==0)
 	{
 	$(".last_li").css({"background-color": "#5f6f81"});
+	$(".notification_counter").fadeOut();
+//	$(".notification_counter").animate({
+//
+//	    width: "0"
+//	  }, 500, function() {
+//	    // Animation complete.
+//	  });
 	}
 
 setTimeout(function(){ connectNotification()}, 1000);
@@ -32,7 +44,7 @@ function connectNotification() {
 });
 }
 	function showNotification(content,fromuser) {
-		console.log(fromuser);
+		console.log(content);
 		var counter=$(".notification_counter").text();
 		$('.notification').prepend("<div class=' notification_row'>"
 
@@ -50,6 +62,13 @@ function connectNotification() {
 		var child=$('.notification .notification_row:nth-child(4)');
 		child.fadeOut();
 		
+		$(".last_li").animate({
+				    width: "95px"
+				  }, 100, function() {
+					
+				  });
+		setTimeout(function(){ 	$(".notification_counter").fadeIn();}, 1000);
+		$(".last_li").css({"background-color": "#ff3d81"});
 		
 	}
 	

@@ -498,23 +498,22 @@ function getAll(message) {
 								.find('.description_id').text();
 						var position1=$(this).offset();
 						console.log(position1);
-					var left=+position1.left-210;
-					var top=+position1.top-10;
-					$(".details").css("left", left+"px");
-					$(".details").css("top", top+"px");
-					$(".details").text("");
-					$(".details").append("	<img  class='details_img' src='"+description_img+"'></img>");
-					
-					$(".details").append("<h2 class='name'>"+description_name+"</h2>" );
-					$(".details").append("<h3 class='name'>"+description+"</h3>" );
-							
-							
-//					$(".details").append("<div class='data'>" +
-//							"<p>Games</p>" +
-//							"<p>Winrate</p>" +
-//							"<p>Points:</p>" +
-//							"</div>" );
-															
+						var left = +position.left - 310;
+						var top = +position.top - 10;
+						$(".details").css("left", left + "px");
+						$(".details").css("top", top + "px");
+						$(".details").text("");
+						$(".details").append(
+								"	<img  class='details_img' src='"
+										+ description_img + "'></img>");
+
+						$(".details").append(
+								"<h2 class='name'>" + description_name
+										+ "</h2>");
+						$(".details").append(
+								"<h3 class='name'>" + description + "</h3>");
+
+						$(".details_img").addClass("details_img_scale");			
 					
 					$(".details").show();
 						

@@ -275,10 +275,12 @@ public class SocketController {
 			discussionservice.addTopic(topic);
 		} else {
 			if (message.getType() == 1) {
+				not.setContent("Upvoted your post");
 				count = message.getCount() + 2;
 				dl.setState(true);
 
 			} else {
+				not.setContent("Upvoted your post");
 				count = message.getCount() - 2;
 				dl.setState(false);
 			}
@@ -336,10 +338,12 @@ public class SocketController {
 			commentservice.addComment(topic);
 		} else {
 			if (message.getType() == 1) {
+				not.setContent("Upvoted your post");
 				count = message.getCount() + 2;
 				dl.setState(true);
 
 			} else {
+				not.setContent("Upvoted your post");
 				count = message.getCount() - 2;
 				dl.setState(false);
 			}
