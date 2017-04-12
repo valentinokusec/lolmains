@@ -170,10 +170,6 @@ function connectDiscussion() {
 
 			getAll(JSON.parse(greeting.body));
 		});
-		stompClient.subscribe('/topic/gettooltipdata/1', function(greeting) {
-
-			getToolTip(JSON.parse(greeting.body));
-		});
 		stompClient.subscribe('/topic/getguidedata/1', function(greeting) {
 
 			getAll(JSON.parse(greeting.body));

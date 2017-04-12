@@ -127,10 +127,6 @@ function connect() {
 
 			addMore(JSON.parse(greeting.body));
 		});
-		stompClient.subscribe('/topic/gettooltipdata/'+sessionId, function(greeting) {
-
-			getToolTip(JSON.parse(greeting.body));
-		});
 		stompClient.subscribe('/topic/content/1', function(greeting) {
 
 			setContent(JSON.parse(greeting.body));
