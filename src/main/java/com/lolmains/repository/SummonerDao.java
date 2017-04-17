@@ -13,6 +13,10 @@ public interface SummonerDao extends  JpaRepository< Summoner ,Integer>{
 	public Summoner findByName(String name);
 	public Summoner findByMain(Mains main);
 	public Page<Summoner> findByMain(Pageable page, Mains main);
-	public int countByMain(Mains main);
+	public Page<Summoner> findByMainOrderByTierNumberDesc(Pageable page, Mains main);
+	public Page<Summoner> findByMainOrderByTierNumberAsc(Pageable page, Mains main);
+	public Page<Summoner> findByMainOrderByGamesDesc(Pageable page, Mains main);
+	public Page<Summoner> findByMainOrderByGamesAsc(Pageable page, Mains main);
+	//public int countByMain(Mains main);
 
 }

@@ -173,45 +173,6 @@ public class MainCotroller {
 
 
 
-	@PostMapping("/newdiscussion")
-	public String addTopic(@ModelAttribute CreateTopic CreateTopic, Model model) {
-
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName();
-
-		Discussion topic = new Discussion();
-		// topic.setUser(name);
-	//	topic.setMainsid(CreateTopic.getMainsid());
-		topic.setType(CreateTopic.getType());
-		topic.setHeader(CreateTopic.getHeader());
-		topic.setContent(CreateTopic.getContent());
-		topic.setItem1id(itemservice.findByItemId(CreateTopic.getParam1()));
-		topic.setItem2id(itemservice.findByItemId(CreateTopic.getParam2()));
-		topic.setItem3id(itemservice.findByItemId(CreateTopic.getParam3()));
-		topic.setItem4id(itemservice.findByItemId(CreateTopic.getParam4()));
-		topic.setItem5id(itemservice.findByItemId(CreateTopic.getParam5()));
-		topic.setItem6id(itemservice.findByItemId(CreateTopic.getParam6()));
-		topic.setDate(new Timestamp(System.currentTimeMillis()));
-		User user=userservice.findByUserName(name);
-		
-		topic.setUser(user);
-
-//		String url = CreateTopic.getVideo();
-//		
-//		url = url.substring(32);
-//		String url_list[] = url.split("&");
-//		url = url_list[0];
-//		topic.setVideo(url);
-//		topic.setUrl(CreateTopic.getUrl());
-		// Champion ch=championservice.findChampion(1);
-
-		discussionservice.addTopic(topic);
-		List<Discussion> chList=new ArrayList<Discussion>();
-		chList.add(topic);
-		user.setDiscussion(chList);
-		return "redirect:main/1";
-
-	}
 
 
 

@@ -24,5 +24,7 @@ public interface DiscussionService {
 	public Page<Discussion> findAll(Pageable pageable);
 	Page<Discussion> findAllByMain(Pageable pageable,Mains main);
 	Page<Discussion> findAllByMainAndType(Pageable pageable,Mains main, int type);
-	
+	Page<Discussion> findAllByMainAndSticky(Pageable pageable,Mains main, boolean sticky);
+	Page<Discussion> findAllByMainAndTypeAndSticky(Pageable pageable,Mains main, int type, boolean sticky);
+		
 } 

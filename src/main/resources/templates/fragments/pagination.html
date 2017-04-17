@@ -66,12 +66,17 @@
 									
 								<table class="pagination">
 											<tr>
-											<td th:if="${pagination !=1}"><a th:href="@{/knowledge/}+${main.name}+'/'  +${prevPage} "><i class="fa fa-angle-left round_col" style="padding-top: 10px;" aria-hidden="true"></i></a></td>
+											<td th:if="${pagination !=1}"><form th:action="@{/members/}+${main.name}+'/'+${prevPage}" method="post">
+									<input type="hidden" id="value" name="value" th:value="${value}"></input>
+									<button type="submit"><i class="fa fa-angle-left round_col" style="padding-top: 10px;" aria-hidden="true"></i></button>
+									</form></td>
 											
 											<td><p class = "round_col" style="margin-top: 0px;    margin-bottom: 0px;" th:text="${pagination}"></p></td>
 
-											<td th:if="${nextPageConf == true}"><a th:href="@{/knowledge/} + ${main.name} + '/'   + ${nextPage} "> <i
-													 style="padding-top: 10px;" class="fa fa-angle-right round_col" aria-hidden="true"></i></a></td>
+													<td th:if="${pagination !=1}"><form th:action="@{/members/}+${main.name}+'/'+${nextPage}" method="post">
+									<input type="hidden" id="value" name="value" th:value="${value}"></input>
+									<button type="submit"><i class="fa fa-angle-righ round_col" style="padding-top: 10px;" aria-hidden="true"></i></button>
+									</form></td>
 										</tr>
 											</table>
 								

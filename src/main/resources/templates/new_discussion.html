@@ -50,14 +50,8 @@
 		<div class="content topic_content" style="top: 100px;">
 			<form role="form" action="#" th:action="@{/newdiscussion}"
 				th:object="${CreateTopic}" method="post">
-				<input type="hidden" class="form-control" value="0" id="param1"
-					name="param1" /> <input type="hidden" class="form-control"
-					value="0" id="param2" name="param2" /> <input type="hidden"
-					class="form-control" value="0" id="param3" name="param3" /> <input
-					type="hidden" class="form-control" value="0" id="param4"
-					name="param4" /> <input type="hidden" class="form-control"
-					value="0" id="param5" name="param5" /> <input type="hidden"
-					class="form-control" value="0" id="param6" name="param6" /> <input
+				<input type="hidden"
+					class="buildlist0" value="0" id="buildlist[0]" name="buildlist[0]" /> <input
 					type="hidden" class="form-control" value="0" id="param7"
 					name="param7" /> <input type="hidden" class="form-control"
 					value="0" id="param9" name="param9" /> <input type="hidden"
@@ -121,30 +115,14 @@
 						<td id="change_topic" colspan="2">
 							<div class="topic_build" id="topic_type_2">
 								<table class="add_build">
-									<tr>
-										<td><a id="add_1" class="add_item"> <img alt=""
-												class="build_img remove" id="img_add_1" src="/img/add.png"></img>
+									<tr class="build">
+										<td><a id="build0" onclick="itemClick(this.id)" class=""> <img alt=""
+												class="build_img remove" id="img_build0" src="/img/add.png"></img>
 										</a></td>
-										<td><a id="add_2" class="add_item"> <img alt=""
-												class="build_img remove" id="img_add_2" src="/img/add.png"></img>
-										</a></td>
-										<td><a id="add_3" class="add_item"> <img alt=""
-												class="build_img remove" id="img_add_3" src="/img/add.png"></img>
-										</a></td>
+										
 
 									</tr>
-									<tr>
-										<td><a id="add_4" class="add_item"> <img alt=""
-												class="build_img remove" id="img_add_4" src="/img/add.png"></img>
-										</a></td>
-										<td><a id="add_5" class="add_item"> <img alt=""
-												class="build_img remove" id="img_add_5" src="/img/add.png"></img>
-										</a></td>
-										<td><a id="add_6" class="add_item"> <img alt=""
-												class="build_img remove" id="img_add_6" src="/img/add.png"></img>
-										</a></td>
-
-									</tr>
+									
 								</table>
 							</div>
 							<div class="topic_build" id="topic_type_3">

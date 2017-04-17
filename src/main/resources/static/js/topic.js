@@ -426,9 +426,10 @@ function showGreeting(message, id, type, commentId, userid, image, username, not
 	if (type == false)
 
 	{
+		console.log("dsds");
 		$("#comments")
-				.append(
-						"<div style='display:block;' class='comment' id="
+				.prepend(
+						"<div style='display:none;' class='comment' id="
 								+ id
 								+ ">"
 								+ "<table style='    display: inline; width: 100%;'><tr><td><p>"
@@ -536,13 +537,13 @@ function showGreeting(message, id, type, commentId, userid, image, username, not
 								+ id + "'></div>"
 
 				);
-		console.log("dsds");
-		$("#" + id).fadeIn("fast");
+	
+		$("#" + id).slideToggle("fast");
 	} else {
 		console.log("gg");
 		$("#attach_reply_" + commentId)
-				.append(
-						"<div style='display:block;' class='comment' id="
+				.prepend(
+						"<div style='display:none;' class='comment' id="
 								+ id
 								+ ">"
 								+ "<table style='    display: inline; width: 100%;'><tr><td><p>"
@@ -651,7 +652,7 @@ function showGreeting(message, id, type, commentId, userid, image, username, not
 
 				);
 		console.log("#" + id);
-		// $("#" + id).toggle("fast");
+		$("#" + id).slideToggle("fast");
 	}
 	if (authCount == 3 || authCount == 2) {
 		$(".show_member").css("display", "block");

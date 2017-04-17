@@ -90,36 +90,9 @@
 
 
 
-																<td><img 	th:class="'tooltip_guide item left_td_img'"
-																	th:id="${knowledge.item1id.itemId}"
-																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${knowledge.item1id.itemId} + @{.png}"></img>
-																</td>
-																<td><img alt=""
-																	th:class="'tooltip_guide item left_td_img '"
-																	th:id="${knowledge.item2id.itemId}"
-																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${knowledge.item2id.itemId} + @{.png}"></img>
-																</td>
-																<td><img alt=""
-																	th:class="'tooltip_guide item left_td_img '"
-																	th:id="${knowledge.item3id.itemId}"
-																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${knowledge.item3id.itemId} + @{.png}"></img>
-																</td>
-																<tr></tr>
-
-																<td><img alt=""
-																	th:class="'tooltip_guide item left_td_img '"
-																	th:id="${knowledge.item4id.itemId}"
-																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${knowledge.item4id.itemId} + @{.png}"></img>
-																</td>
-																<td th:if="${knowledge.item5id!=null}"><img alt=""
-																	th:class="'tooltip_guide item left_td_img '"
-																	th:id="${knowledge.item5id.itemId}"
-																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${knowledge.item5id.itemId} + @{.png}"></img>
-																</td>
-																<td th:if="${knowledge.item6id!=null}"><img alt=""
-																	th:class="'tooltip_guide item left_td_img'"
-																	th:id="${knowledge.item6id.itemId}"
-																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${knowledge.item6id.itemId} + @{.png}"></img>
+															<td  th:each="item : ${knowledge.build}"><img 	class="tooltip_guide item left_td_img"
+																	th:id="${item.itemId}"
+																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${item.itemId} + @{.png}"></img>
 																</td>
 
 															</table>

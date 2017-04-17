@@ -62,6 +62,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/members")
@@ -96,7 +97,7 @@ public class MembersController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-			if (summonerservice.findByMain(main) != null) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
@@ -198,68 +199,14 @@ public class MembersController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-			if (summonerservice.findByMain(main) != null) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
 				}
 			}
 		}
-		int challenger=0;
-		int masters=0;
-		int diamond=0;
-		int platinum=0;
-		int gold=0;
-		int silver=0;
-		int bronze=0;
-		
-		int morethan60=0;
-		int morethan70=0;
-		
-		for (Summoner summoner: members) 
-		{
-		
-			if(summoner.getTierNumber()<6)
-			{
-				bronze++;
-			}
-			else if(summoner.getTierNumber()<11)
-			{
-				silver++;
-			}
-			else if(summoner.getTierNumber()<16)
-			{
-				gold++;
-			}
-			else if(summoner.getTierNumber()<21)
-			{
-				platinum++;
-			}
-			else if(summoner.getTierNumber()<26)
-			{
-				diamond++;
-			}
-			else if(summoner.getTierNumber()<27)
-			{
-				masters++;
-			}
-			else if(summoner.getTierNumber()<28)
-			{
-				challenger++;
-			}
-			for(Champion champion:summoner.getChampion())
-			{
-				if (champion.getName().contains(main.getName())) {
-					if (champion.getWinrate()>=70) {
-						morethan70++;
-					}
-					else if(champion.getWinrate()>=60)
-					{
-						morethan60++;
-					}
-				}
-			}
-		}
+	
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
 			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
 		} 
@@ -267,6 +214,7 @@ public class MembersController {
 		{
 			model.addAttribute("mainbuild","empty");
 		}
+		
 		int count = summonerservice.countByMain(main);
 		model.addAttribute("nextPage", false);
 		if (count - page * 10 > 10) {
@@ -277,17 +225,68 @@ public class MembersController {
 		model.addAttribute("pagination", page);
 		model.addAttribute("nextPage", page + 1);
 		model.addAttribute("prevPage", page - 1);
-		model.addAttribute("users", main.getSummoner());
+		model.addAttribute("users", members);
 		model.addAttribute("main",main);
-		model.addAttribute("challenger",challenger);
-		model.addAttribute("masters",masters);
-		model.addAttribute("diamond",diamond);
-		model.addAttribute("platinum",platinum);
-		model.addAttribute("gold",gold);
-		model.addAttribute("silver",silver);
-		model.addAttribute("bronze",bronze);
-		model.addAttribute("morethan70",morethan70);
-		model.addAttribute("morethan60",morethan60);
+		model.addAttribute("championname",main.getChampion().getName());
+		model.addAttribute("CreateUser", new CreateUser());
+		
+		return "members";
+	}
+	@PostMapping("/{mainn}/{page}")
+	public String membersSort(@RequestParam("value") String value,Model model, @PathVariable(value = "mainn") String mainn,  @PathVariable(value = "page") int page) {
+		Page<Summoner> members;
+		Mains main = mainsservice.findByName(mainn);
+		if (value.contains("membersasc")) {
+		members= summonerservice.findByMainOrderByTierNumberAsc(new PageRequest(page-1,10), main);
+		model.addAttribute("value", "membersdesc");
+		}
+		else if (value.contains("membersdesc")){
+			members= summonerservice.findByMainOrderByTierNumberDesc(new PageRequest(page-1,10), main);
+			model.addAttribute("value", "membersdesc");
+		}
+		else if (value.contains("gamesdesc")){
+			members= summonerservice.findByMainOrderByGamesDesc(new PageRequest(page-1,10), main);
+			model.addAttribute("value", "gamesasc");
+		}
+		else{
+			members= summonerservice.findByMainOrderByGamesAsc(new PageRequest(page-1,10), main);
+			model.addAttribute("value", "gamesdesc");
+		}
+		int authCount = 0;
+		User user = null;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!auth.getName().contentEquals("anonymousUser")) {
+			user = userservice.findByUserName(auth.getName());
+			authCount = 1;
+			if (main.getSummoner().contains(user.getSummoner())) {
+				authCount = 2;
+				if (main.getAdmins().contains(user)) {
+					authCount = 3;
+				}
+			}
+		}
+	
+		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
+			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} 
+		else
+		{
+			model.addAttribute("mainbuild","empty");
+		}
+		
+		int count = summonerservice.countByMain(main);
+		model.addAttribute("nextPage", false);
+		if (count - page * 10 > 10) {
+			model.addAttribute("nextPage", true);
+		}
+		model.addAttribute("user", user);
+		model.addAttribute("authCount", authCount);
+		model.addAttribute("pagination", page);
+		model.addAttribute("nextPage", page + 1);
+		model.addAttribute("prevPage", page - 1);
+		model.addAttribute("users", members);
+		model.addAttribute("main",main);
+
 		model.addAttribute("CreateUser", new CreateUser());
 		
 		return "members";

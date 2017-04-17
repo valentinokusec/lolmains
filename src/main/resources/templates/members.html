@@ -54,11 +54,25 @@
 								<thead>
 									<td>Profile</td>
 									<td>Name</td>
-									<td>Tier</td>
+									<td th:if="${value!='membersasc'}"><form th:action="@{/members/}+${main.name}+'/1'" method="post">
+									<input type="hidden" id="value" name="value" value="membersasc"></input>
+									<button type="submit">Tier</button>
+									</form></td>
+									<td th:if="${value=='membersasc'}"><form th:action="@{/members/}+${main.name}+'/1'" method="post">
+									<input type="hidden" id="value" name="value" value="membersdesc"></input>
+									<button type="submit">Tier</button>
+									</form></td>
 									<td>Winrate</td>
 									<td>Points</td>
 									<td colspan="3">KDA</td>
-									<td>Games</td>
+											<td th:if="${value!='gamesasc'}"><form th:action="@{/members/}+${main.name}+'/1'" method="post">
+									<input type="hidden" id="value" name="value" value="gamesdesc"></input>
+									<button type="submit">Games</button>
+									</form></td>
+									<td th:if="${value=='gamesasc'}"><form th:action="@{/members/}+${main.name}+'/1'" method="post">
+									<input type="hidden" id="value" name="value" value="gamesasc"></input>
+									<button type="submit">Games</button>
+									</form></td>
 									<td></td>
 								</thead>
 								<tr th:each="summoner: ${users}">
@@ -72,22 +86,22 @@
 										th:src="@{/img/tiers/}+${summoner.tier} + @{.png}"
 										class='list_img tier'></img></td>
 									<td>
-										<p th:text="${summoner.champion[0].winrate}"></p>
+										<p th:text="${summoner.winrate}"></p>
 									</td>
 									<td>
 										<p th:text="${summoner.champion[0].championPoints}"></p>
 									</td>
 									<td>
-										<p th:text="${summoner.champion[0].kills}"></p>
+										<p th:text="${summoner.kills}"></p>
 									</td>
 									<td>
-										<p th:text="${summoner.champion[0].deaths}"></p>
+										<p th:text="${summoner.deaths}"></p>
 									</td>
 									<td>
-										<p th:text="${summoner.champion[0].assists}"></p>
+										<p th:text="${summoner.assists}"></p>
 									</td>
 									<td>
-										<p th:text="${summoner.champion[0].games}"></p>
+										<p th:text="${summoner.games}"></p>
 									</td>
 									<!-- 	<td><a style="position: relative; left: 0px;"
 										th:href="@{/summoner/} + ${summoner.name}"> <i

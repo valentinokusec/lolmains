@@ -134,6 +134,7 @@ public class SummonerServiceImpl implements SummonerService {
 		ch.setNotificationcount(0);
 		ch.setTierNumber(tiernumber);
 		ch.setImage(summoner.getProfileIconID());
+		
 		// TODO Auto-generated method stub
 		return summonersdao.save(ch);
 	}
@@ -405,7 +406,35 @@ public class SummonerServiceImpl implements SummonerService {
 	@Override
 	public int countByMain(Mains main) {
 		// TODO Auto-generated method stub
-		return summonersdao.countByMain(main);
+		return 0;
+	}
+
+
+	@Override
+	public Page<com.lolmains.domains.Summoner> findByMainOrderByTierNumberDesc(Pageable page, Mains main) {
+		// TODO Auto-generated method stub
+		return summonersdao.findByMainOrderByTierNumberDesc(page, main);
+	}
+
+
+	@Override
+	public Page<com.lolmains.domains.Summoner> findByMainOrderByTierNumberAsc(Pageable page, Mains main) {
+		// TODO Auto-generated method stub
+		return summonersdao.findByMainOrderByTierNumberAsc(page, main);
+	}
+
+
+	@Override
+	public Page<com.lolmains.domains.Summoner> findByMainOrderByGamesDesc(Pageable page, Mains main) {
+		// TODO Auto-generated method stub
+		return summonersdao.findByMainOrderByGamesDesc(page, main);
+	}
+
+
+	@Override
+	public Page<com.lolmains.domains.Summoner> findByMainOrderByGamesAsc(Pageable page, Mains main) {
+		// TODO Auto-generated method stub
+		return summonersdao.findByMainOrderByGamesAsc(page, main);
 	}
 
 	

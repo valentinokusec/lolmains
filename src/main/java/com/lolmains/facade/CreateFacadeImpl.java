@@ -379,12 +379,16 @@ public class CreateFacadeImpl implements CreateFacade {
 		topic.setType(CreateTopic.getType());
 		topic.setHeader(CreateTopic.getHeader());
 		topic.setContent(CreateTopic.getContent());
-		topic.setItem1id(itemservice.findByItemId(CreateTopic.getParam1()));
-		topic.setItem2id(itemservice.findByItemId(CreateTopic.getParam2()));
-		topic.setItem3id(itemservice.findByItemId(CreateTopic.getParam3()));
-		topic.setItem4id(itemservice.findByItemId(CreateTopic.getParam4()));
-		topic.setItem5id(itemservice.findByItemId(CreateTopic.getParam5()));
-		topic.setItem6id(itemservice.findByItemId(CreateTopic.getParam6()));
+		CreateTopic.getBuildlist().remove(CreateTopic.getBuildlist().size()-1);
+		List<Item> blist= new ArrayList<Item>();
+		for(Integer item:CreateTopic.getBuildlist())
+		{
+			
+			blist.add(itemservice.findByItemId(item));
+		
+		}
+		topic.setSticky(false);
+		topic.setBuild(blist);
 		topic.setDate(new Timestamp(System.currentTimeMillis()));
 		topic.setMathup(leaguechampionservice.findByChampionid(CreateTopic.getParam10()));
 		topic.setItemvs0(itemservice.findByItemId(CreateTopic.getParam7()));
@@ -486,15 +490,18 @@ public class CreateFacadeImpl implements CreateFacade {
 		knowledge.setType(CreateKnowledge.getType());
 		knowledge.setHeader(CreateKnowledge.getHeader());
 		knowledge.setContent(CreateKnowledge.getContent());
-		knowledge.setItem1id(itemservice.findByItemId(CreateKnowledge.getParam1()));
-		knowledge.setItem2id(itemservice.findByItemId(CreateKnowledge.getParam2()));
-		knowledge.setItem3id(itemservice.findByItemId(CreateKnowledge.getParam3()));
-		knowledge.setItem4id(itemservice.findByItemId(CreateKnowledge.getParam4()));
-		knowledge.setItem5id(itemservice.findByItemId(CreateKnowledge.getParam5()));
-		knowledge.setItem6id(itemservice.findByItemId(CreateKnowledge.getParam6()));
+		
 		knowledge.setDate(new Timestamp(System.currentTimeMillis()));
 		knowledge.setMathup(leaguechampionservice.findByChampionid(CreateKnowledge.getParam10()));
+		CreateKnowledge.getBuildlist().remove(CreateKnowledge.getBuildlist().size()-1);
+		List<Item> blist= new ArrayList<Item>();
+		for(Integer item:CreateKnowledge.getBuildlist())
+		{
+			
+			blist.add(itemservice.findByItemId(item));
 		
+		}
+		knowledge.setBuild(blist);
 		knowledge.setItem(itemservice.findByItemId(CreateKnowledge.getParam8()));
 		User user=userservice.findByUserName(name);
 		List<ChampionSpells> spells=new ArrayList<ChampionSpells>();

@@ -101,7 +101,16 @@
 											base</a></li>
 									<li><a th:href="@{/videos/}+${main.name}+@{/featured}"><i
 											class="fa fa-play icons" aria-hidden="true"></i>Videos</a></li>
+
 								</ul>
+								<ul class="gn-menu bottommenu">
+								<li><form th:action="@{/logout}" method="post">
+										<button style="width: 47%;" type="submit">
+											<i style="float: left; margin-top: 18px;"
+												class="fa fa-sign-out icons" aria-hidden="true"></i>
+											<p>Logout</p>
+										</button>
+									</form></li></ul>
 							</div>
 
 						</nav></li>
@@ -119,36 +128,36 @@
 									th:href="@{/edittemplate/} + ${main.id}"> <i
 										class="fa fa-adjust gn_icon" aria-hidden="true"></i>Edit theme
 								</a></li> -->
-						
-
-							<a id="notification_button"><p class="notification_counter"
-									
-									style="color: white; display: inline; margin: 10px;"
-									th:text="${user.summoner.notificationcount}"></p> <i
-								class="fa fa-bell" style="color: white;" aria-hidden="true"></i></a>
 
 
-							<div class="notification">
-								<div class=" notification_row"
-									th:each="notification : ${notifications}">
+								<a id="notification_button"><p class="notification_counter"
+										style="color: white; display: inline; margin: 10px;"
+										th:text="${user.summoner.notificationcount}"></p> <i
+									class="fa fa-bell" style="color: white;" aria-hidden="true"></i></a>
 
-									<img th:id="${notification.fromuser.id}"
-										th:src="@{http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/}+${notification.fromuser.image} + @{.png}"
-										class="profile_notification  tooltip_guide profile "></img>
-									<p th:text="${notification.content}"></p>
 
-								</div>
-								<div class=" notification_row_last">
+								<div class="notification">
+									<div class=" notification_row"
+										th:each="notification : ${notifications}">
 
-									<a href="/summoner/notifications/1">Show More</a>
+										<img th:id="${notification.fromuser.id}"
+											th:src="@{http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/}+${notification.fromuser.image} + @{.png}"
+											class="profile_notification  tooltip_guide profile "></img>
+										<p th:text="${notification.content}"></p>
 
+									</div>
+									<div class=" notification_row_last">
+
+										<a href="/summoner/notifications/1">Show More</a>
+
+									</div>
 								</div>
 							</div>
-						</div>
-						<div th:if="${user.summoner.verified == false}">
-						<a style="color:white" th:href="'/verify/' + ${user.id}">Verify Me</a>
-						</div>
+							<div th:if="${user.summoner.verified == false}">
+								<a style="color: white" th:href="'/verify/' + ${user.id}">Verify
+									Me</a>
 							</div>
+						</div>
 					</li>
 
 					<li style="float: right;">
@@ -238,8 +247,8 @@
 					<table>
 
 						<tr>
-							<td><input type="hidden" id="main" name="main"
-								th:value="${main.name}"></input></td>
+							<input type="hidden" id="main" name="main"
+								th:value="${main.name}"></input>
 							<td><label>Server</label></td>
 							<td><select type="text" class="form-control"
 								th:field="*{server}" required="required">

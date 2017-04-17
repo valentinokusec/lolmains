@@ -153,9 +153,9 @@ function getAllData(data, id,type) {
 
 
 var stompClient = null;
-connect();
 
-function connect() {
+setTimeout(function(){ connectKnowledge()}, 2000);
+function connectKnowledge() {
 	var socket = new SockJS('/gs-guide-websocket');
 	stompClient = Stomp.over(socket);
 	stompClient.debug = null
@@ -498,8 +498,8 @@ function getAll(message) {
 								.find('.description_id').text();
 						var position1=$(this).offset();
 						console.log(position1);
-						var left = +position.left - 310;
-						var top = +position.top - 10;
+						var left = +position1.left - 310;
+						var top = +position1.top - 10;
 						$(".details").css("left", left + "px");
 						$(".details").css("top", top + "px");
 						$(".details").text("");
@@ -524,6 +524,7 @@ function getAll(message) {
 			           });
 	
 		var combo=0;	
+		var build=0;	
 	$('.img_item').click(
 			function() {
 				console.log(typeData);
@@ -660,6 +661,35 @@ function getAll(message) {
 
 				} 
 				if (typeData == 5) {
+					if(listid=="build")
+						{
+						$("#img_build"  + build).attr("src",
+								description_img);
+						$(".buildlist" + build).attr("value",
+								description_id);
+						console.log( "#img_build"  + build);
+						build++;
+						$(".build")
+								.append(
+										"	<td><a id='build"
+												+ build
+												+ "' class='' onclick='itemClick(this.id)'> <img "
+												+ "	class='build_img remove' id='img_build"
+												+ build
+												+ "'"
+												+ "	src='/img/add.png'></img>"
+												+ "</a></td>"
+												+ "<input type='hidden' class='buildlist"
+												+ build
+												+ "' value='0' id='buildlist["
+												+ build + "  ]'"
+												+ "	name='buildlist["
+												+ build + "]' /> ");
+
+						$("#img_build"  + build).addClass("active");
+						}
+					else
+						{
 					$("#img_combo"  + combo).attr("src",
 							description_img);
 					$(".combolist" + combo).attr("value",
@@ -684,7 +714,7 @@ function getAll(message) {
 											+ combo + "]' /> ");
 
 					$("#img_combo"  + combo).addClass("active");
-				}
+				}}
 			});
 }
 $(".textarea").keyup(function() {
@@ -773,24 +803,36 @@ $('.add_text').click(function() {
 		setTimeout(function(){ getAllData("", id[1],2);
 		searchid = id.charAt(0); }, 500);
 });
+var listid;
+
 function itemClick(id) {
 
 	console.log(id);
 	typeData=5;
+	listid = id.substring(0, 5);
 	$(".sidebar").animate({
 
 		width : "230px"
 	}, 500, function() {
-		getAllData("", 11, 3);
-		searchid = id.substring(5, 6);
+		if(listid=="build")
+			{
+			getAllData("", 1, 3);
+			searchid = id.substring(5, 6);
+			}
+		else
+			{
+			getAllData("", 11, 3);
+			searchid = id.substring(5, 6);
+			}
+	
 	});
-	tier = id.substring(0, 5);
-	console.log(tier);
+	
+
 	
 	last_item_id = id.substring(5, 6);
 	console.log(last_item_id);
 	$(".remove").removeClass("active");
-	$("#img_" + tier + last_item_id).addClass("active");
+	$("#img_" + listid + last_item_id).addClass("active");
 
 }
 

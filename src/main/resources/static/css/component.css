@@ -1350,7 +1350,20 @@
 		cursor: pointer;
 		padding: 0 20px; 
 }
-
+.bottommenu
+{
+	    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+.gn-menu-main p {
+		display: block;
+		height: 100%;
+		color: #5f6f81;
+		text-decoration: none;
+		cursor: pointer;
+		padding: 0 20px; 
+}
 .no-touch .gn-menu-main a:hover,
 .no-touch .gn-menu li.gn-search-item:hover,
 .no-touch .gn-menu li.gn-search-item:hover a {

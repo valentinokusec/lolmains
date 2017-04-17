@@ -95,36 +95,10 @@
 				<div th:if="${discussion.type ==2}" style='margin:10px'>
 					<table style="margin-top: 10px; margin-bottom: 17px;">
 
-						<tr>
-
-							<td><img th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
-								th:id="${discussion.item1id.itemId}"
-								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item1id.itemId} + @{.png}"></img>
-							</td>
-							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
-								th:id="${discussion.item2id.itemId}"
-								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item2id.itemId} + @{.png}"></img>
-							</td>
-							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
-								th:id="${discussion.item3id.itemId}"
-								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item3id.itemId} + @{.png}"></img>
-							</td>
-						</tr>
-						<tr>
-
-							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
-								th:id="${discussion.item4id.itemId}"
-								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item4id.itemId} + @{.png}"></img>
-							</td>
-							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
-								th:id="${discussion.item5id.itemId}"
-								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item5id.itemId} + @{.png}"></img>
-							</td>
-							<td><img alt="" th:class="'tooltip_guide item left_td_img td_img_'+ ${discussion.type}"
-								th:id="${discussion.item6id.itemId}"
-								th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${discussion.item6id.itemId} + @{.png}"></img>
-							</td>
-						</tr>
+							<td  th:each="item : ${discussion.build}"><img 	class="tooltip_guide item left_td_img"
+																	th:id="${item.itemId}"
+																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${item.itemId} + @{.png}"></img>
+																</td>
 					</table>
 
 				</div>

@@ -762,7 +762,7 @@ public class HelloController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-			if (summonerservice.findByMain(main) != null) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
