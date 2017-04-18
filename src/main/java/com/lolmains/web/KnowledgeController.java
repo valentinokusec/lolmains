@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lolmains.domains.Champion;
 import com.lolmains.domains.Comment;
 import com.lolmains.domains.Mains;
+import com.lolmains.domains.Subsctriction;
 import com.lolmains.domains.TierList;
 import com.lolmains.domains.Discussion;
 import com.lolmains.domains.DiscussionLikes;
@@ -79,6 +80,12 @@ public class KnowledgeController {
 	VideoService videoservice;
 	
 	@Autowired
+	com.lolmains.services.SubstrictionService SubstrictionService;
+	
+	@Autowired
+	com.lolmains.services.SubstrictinItemService SubstrictinItemService;
+	
+	@Autowired
 	KnowledgeService knowledgeservice;
 
 	@Autowired
@@ -117,7 +124,7 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-			if (summonerservice.findByMain(main) != null) {
+				if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
@@ -267,7 +274,7 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-			if (summonerservice.findByMain(main) != null) {
+				if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
@@ -314,7 +321,7 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-			if (summonerservice.findByMain(main) != null) {
+				if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
@@ -383,7 +390,7 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-			if (summonerservice.findByMain(main) != null) {
+				if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
@@ -453,7 +460,7 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-			if (summonerservice.findByMain(main) != null) {
+				if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
@@ -523,7 +530,7 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-			if (summonerservice.findByMain(main) != null) {
+				if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
@@ -594,7 +601,7 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-			if (summonerservice.findByMain(main) != null) {
+				if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
@@ -651,5 +658,160 @@ public class KnowledgeController {
 		
 
 		return "knowledge_bugs";
+	}
+	@RequestMapping("/{id}/Substrictions/{page}")
+	public String knowledgeSubstrictions(@PathVariable(value = "id") String id, @PathVariable(value = "page") int page,
+			 Model model, HttpServletRequest ServletRequest) {
+
+		int authCount = 0;
+		Mains main = mainsservice.findByName(id);
+
+		String sessionId = ServletRequest.getSession().getId();
+
+		User user = null;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!auth.getName().contentEquals("anonymousUser")) {
+			user = userservice.findByUserName(auth.getName());
+			authCount = 1;
+				if (main.getSummoner().contains(user.getSummoner())) {
+				authCount = 2;
+				if (main.getAdmins().contains(user)) {
+					authCount = 3;
+				}
+			}
+		}
+	
+		Page<Subsctriction>	Subsctriction = SubstrictionService.findAllByMain(new PageRequest(page-1, 10), main);
+		int count=knowledgeservice.coundByMainAndType(main, 3);
+		model.addAttribute("nextPage", false);
+		if(count-page*10>10)
+		{
+			model.addAttribute("nextPage", true);
+		}
+		
+		JSONArray extraData = new JSONArray();
+		
+		for(Subsctriction Subsctrictioni:Subsctriction)
+		{
+			JSONObject jo= new JSONObject();
+			jo.put("id", Subsctrictioni.getId());
+			jo.put("content", Subsctrictioni.getContent());
+			extraData.put(jo);
+			
+		}
+			
+		model.addAttribute("extraData", extraData);
+		
+		model.addAttribute("sessionid", sessionId);
+		model.addAttribute("CreateUser", new CreateUser());
+		model.addAttribute("nextpage", true);
+		
+		model.addAttribute("main", main);
+		model.addAttribute("pagination", page);
+		model.addAttribute("nextPage", page+1);
+		model.addAttribute("prevPage", page-1);
+		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
+		model.addAttribute("user", user);
+		model.addAttribute("authCount", authCount);
+//		model.addAttribute("champion", main.getChampion().getName());
+//		model.addAttribute("championid", main.getChampion().getId());
+		model.addAttribute("mainsid", id);
+		model.addAttribute("Subsctriction", Subsctriction);
+		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
+			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} 
+		else
+		{
+			model.addAttribute("mainbuild","empty");
+		}
+
+		return "knowledge_substriction";
+	}
+	@RequestMapping("/{id}/Subsctriction/{substriction}")
+	public String knowledgeSubstriction(@PathVariable(value = "id") String id, @PathVariable(value = "substriction") int substriction,
+			 Model model, HttpServletRequest ServletRequest) {
+
+		int authCount = 0;
+		Mains main = mainsservice.findByName(id);
+
+		String sessionId = ServletRequest.getSession().getId();
+
+		User user = null;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!auth.getName().contentEquals("anonymousUser")) {
+			user = userservice.findByUserName(auth.getName());
+			authCount = 1;
+				if (main.getSummoner().contains(user.getSummoner())) {
+				authCount = 2;
+				if (main.getAdmins().contains(user)) {
+					authCount = 3;
+				}
+			}
+		}
+	
+		Subsctriction	Subsctriction = SubstrictionService.findSubsctriction(substriction);
+		
+		
+		
+	
+			JSONObject jo= new JSONObject();
+			jo.put("id", Subsctriction.getId());
+			jo.put("content", Subsctriction.getContent());
+	
+			
+		
+			
+		model.addAttribute("extraData", jo);
+		
+		model.addAttribute("sessionid", sessionId);
+		model.addAttribute("CreateUser", new CreateUser());
+		model.addAttribute("nextpage", true);
+		
+		model.addAttribute("main", main);
+	
+		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
+		model.addAttribute("user", user);
+		model.addAttribute("authCount", authCount);
+//		model.addAttribute("champion", main.getChampion().getName());
+//		model.addAttribute("championid", main.getChampion().getId());
+		model.addAttribute("mainsid", id);
+		model.addAttribute("subsctriction", Subsctriction);
+		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
+			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} 
+		else
+		{
+			model.addAttribute("mainbuild","empty");
+		}
+
+		return "knowledge_substriction_item";
+	}
+	@RequestMapping("/newsubsctriction/{id}")
+	public String newSubsctriction(@PathVariable(value = "id") int id, Model model) {
+
+		Mains main = mainsservice.findMain(id);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String name = auth.getName();
+		User user = userservice.findByUserName(name);
+		model.addAttribute("user", user);
+		model.addAttribute("main", main);
+		model.addAttribute("CreateUser", new CreateUser());
+		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
+			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} 
+		else
+		{
+			model.addAttribute("mainbuild","empty");
+		}
+		model.addAttribute("Subsctriction", new Subsctriction());
+		return "new_substriction";
+	}
+	@PostMapping("/newsbsctriction")
+	public String newSubstriction(Model model, Subsctriction Subsctriction)
+	{
+	
+		SubstrictionService.addSubsctriction(Subsctriction);
+		return "redirect:/main/" + Subsctriction.getMain().getName();
+		
 	}
 }

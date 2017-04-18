@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lol Mains</title>
+<meta name="description"
+	content="Card Expansion Effect with SVG clipPath" />
+<meta name="keywords"
+	content="clipPath, svg, effect, layout, expansion, images, grid, polygon" />
+<meta name="author" content="Claudio Calautti for Codrops" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="/css/normalize.css" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="/css/demo.css" />
+<link rel="stylesheet" type="text/css" href="/css/component.css" />
+<link rel="stylesheet" type="text/css" href="/css/tabs.css" />
+<link rel="stylesheet" type="text/css" href="/css/tabstyles.css" />
+<link rel="stylesheet" type="text/css" href="/css/main.css" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous" />
+<link rel="stylesheet" type="text/css" href="/css/share.css" />
+<link rel="stylesheet" type="text/css" href="/css/dialog.css" />
+<!-- individual effect -->
+<link rel="stylesheet" type="text/css" href="/css/dialog-sandra.css" />
+<link rel="stylesheet" type="text/css" href="/css/cs-select.css" />
+<link rel="stylesheet" type="text/css" href="/css/cs-skin-slide.css" />
+<link th:if="${main.name!='Support' and main.name!='Adc' and main.name!='Jungler' and main.name!='Mid' and main.name!='Top'}" rel="shortcut icon" th:href="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/} + ${main.champion.image}" />
+
+
+<link th:if="${main.name=='Support'}" rel="shortcut icon"
+	href="/img/support.jpg" />
+<link th:if="${main.name=='Top'}" rel="shortcut icon"
+	href="/img/top.jpg" />
+<link th:if="${main.name=='Mid'}" rel="shortcut icon"
+	href="/img/mid.jpg" />
+<link th:if="${main.name=='Adc'}" rel="shortcut icon"
+	href="/img/adc.jpg" />
+<link th:if="${main.name=='Jungler'}" rel="shortcut icon"
+	href="/img/jungle.jpg" />
+<!--[if IE]>
+	  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+<script>
+	if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+		var root = document.getElementsByTagName('html')[0];
+		root.setAttribute('class', 'ff');
+	};
+</script>
+</head>
+<body class="demo-1">
+	<div class="container">
+		<div th:include="fragments/header::head"></div>
+		<div class="details"></div>
+		<div id="data" type="hidden" th:text="${topics_data}"></div>
+		<div id="edata" type="hidden" style="display: none"
+			th:text="${extraData}"></div>
+
+		<div class="content_discussions">
+			<!-- trianglify pattern container -->
+			<div th:include="fragments/lists::knowledge"></div>
+			<section>
+				<div class="tabs">
+
+					<div style="display: none" id="main_id" th:text="${main.id}"></div>
+					<div class="content-wrap discussions_content_wrap">
+						<section id="">
+
+							<ul id="content" class="content_pag">
+								<!--   -->
+
+								<li style="text-align: left;">
+
+									<div class="col-md-10 col-md-offset-2">
+
+
+
+										<div class="row items_row" th:each="Subsctriction : ${Subsctriction}">
+
+											<div class="col-md-1">
+
+											<i
+													style="float: left; margin-top: 5px; color: #5f6f81; margin-right: 3px;"
+													class="fa  fa-clock-o" aria-hidden="true"></i>
+											</div>
+
+											<div class="col-md-9">
+												<a th:text="${Subsctriction.header}" style="margin: 0px;" th:href="'/knowledge/' + ${main.name} +'Substriction/' +${Substriction.id}"></a>
+												<i
+													style="float: left; margin-top: 5px; color: #5f6f81; margin-right: 3px;"
+													class="fa  fa-clock-o" aria-hidden="true"></i>
+												<p th:text="${#dates.format(Subsctriction.date, 'dd-MMM-yyyy')}"></p>
+											</div>
+											<div class="col-md-1" th:if="${authCount ==3}">
+												<form th:action="@{/knowledge/deleteSubsctriction}"
+													method="post" th:object="${DeleteTopic}"
+													style="padding-left: 0px !important;">
+													<input id="maind" name="mainid" type="hidden"
+														th:value="${main.id}"></input> <input
+														th:if="${knowledge!=null}" id="topicid" name="topicid"
+														type="hidden" th:value="${knowledge.id}"></input>
+													<button type="submit">
+														<i class="fa  fa-trash fa-2x" aria-hidden="true"></i>
+													</button>
+												</form>
+											</div>
+										
+										
+										</div>
+									</div>
+								</li>
+
+							</ul>
+							<div th:include="fragments/pagination::knowledge"></div>
+
+							<div class="share">
+
+							
+
+								<div th:if="${authCount ==1}">
+									<form th:action="@{/newmember}" method="post">
+
+										<button style="display: none;" data-dialog="discussion_dialog"
+											class="share-toggle-button" id="dis_b">
+											<i class="share-icon fa fa-plus"></i>
+										</button>
+
+										<td><input type="hidden" id="username" name="username"
+											th:value="${user.userName}"></input></td>
+
+										<td><input type="hidden" id="mainid" name="mainid"
+											th:value="${main.id}"></input></td>
+
+										<button class="share-toggle-button" type="submit">
+											<i class="share-icon fa fa-plus"></i>
+										</button>
+
+									</form>
+								</div>
+								<div th:if="${authCount ==3}">
+									<a
+										style="position: relative; left: 0px; color: white !important;"
+										class="share-toggle-button"
+										th:href="@{/knowledge/newsubsctriction/} + ${main.id}"> <i style="color:white;"
+										class="share-icon fa fa-plus"></i>
+									</a>
+								</div>
+
+								<!-- 	</div> -->
+
+
+
+
+							</div>
+						</section>
+
+						<!-- 	<section id="section-linemove-7">
+							<p>6</p>
+						</section> -->
+					</div>
+					<!-- /content -->
+				</div>
+				<!-- /tabs -->
+			</section>
+
+		</div>
+
+
+		<div id="login_dialog" class="dialog">
+			<div class="dialog__overlay"></div>
+			<div class="dialog__content">
+				<h2>
+					<strong>Login</strong>
+				</h2>
+				<form th:action="@{/login}" method="post"
+					default-target-url="/main/1">
+
+
+					<table>
+
+						<tr>
+							<td><label>UserName</label></td>
+							<td><input id="username" name="username" type="text"></input></td>
+						</tr>
+						<tr>
+							<td><label>Password</label></td>
+							<td><input id="password" name="password" type="password"></input></td>
+						</tr>
+
+						<tr>
+							<td><button type="submit">
+									Login
+									<div class="ripples buttonRipples">
+										<span class="ripplesCircle"></span>
+									</div>
+								</button></td>
+						</tr>
+					</table>
+				</form>
+				<div>
+					<button class="action" data-dialog-close="data-dialog-close">Close</button>
+				</div>
+			</div>
+		</div>
+		<div id="register_dialog" class="dialog">
+			<div class="dialog__overlay"></div>
+			<div class="dialog__content">
+				<h2>
+					<strong>Register</strong>
+				</h2>
+				<form role="form" action="#" th:action="@{/newuser}"
+					th:object="${CreateUser}" method="post">
+					<table>
+
+						<tr>
+							<td><input type="hidden" id="main" name="main"
+								th:value="${main.name}"></input></td>
+							<td><label>Server</label></td>
+							<td><select type="text" class="form-control"
+								th:field="*{server}" required="required">
+
+									<option value="EUW">EUW</option>
+									<option value="NA">NA</option>
+									<option value="EUE">EUE</option>
+							</select></td>
+						</tr>
+
+						<tr>
+							<td><label>UserName</label></td>
+							<td><input type="text" class="form-control"
+								th:field="*{username}" required="required" /></td>
+						</tr>
+						<tr>
+							<td><label>Password</label></td>
+							<td><input type="text" class="form-control"
+								th:field="*{password}" required="required" /></td>
+						</tr>
+						<tr>
+							<td><label>Repeat Password</label></td>
+							<td><input type="text" class="form-control"
+								th:field="*{confirmpassword}" required="required" /></td>
+						</tr>
+						<tr>
+							<td><label>Summoner name</label></td>
+							<td><input type="text" class="form-control"
+								th:field="*{summoner}" required="required" /></td>
+						</tr>
+						<tr>
+							<td>
+								<button type="submit" class="btn btn-default">Register</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+
+				<div>
+					<button class="action" data-dialog-close="data-dialog-close">Close</button>
+				</div>
+			</div>
+
+		</div>
+		<!-- Related demos -->
+		<div class="sidebar">
+			<textarea class="textarea" rows="1" cols="20"></textarea>
+			<div class="items_list"></div>
+		</div>
+		<div class="item_details">
+
+			<img alt="" class="item_img" id="img_item_1"
+				src="http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/1001.png"></img>
+			<div class="item_name"></div>
+			<div class="item_description"></div>
+			<div class="item_stats"></div>
+		</div>
+	</div>
+	<!-- /container -->
+	<!-- JS -->
+
+
+	<script src="/js/classie.js"></script>
+
+	<script src="/js/selectFx.js"></script>
+
+	<script src="/js/jquery-3.1.1.min.js"></script>
+
+
+
+	<script src="/js/modernizr.custom.js"></script>
+
+	<script src="/js/TweenMax.min.js"></script>
+	<script src="/js/share.js"></script>
+	<script src="/js/gnmenu.js"></script>
+	<script src="/js/dialogFx.js"></script>
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+	<script src="/js/discussionSocket.js"></script>
+	<script src="/js/tooltip.js"></script>
+		<script src="/js/notification.js"></script>
+	<script src="/js/changeCss.js"></script>
+	<script>
+		/* <![CDATA[ */
+		(function() {
+			new gnMenu(document.getElementById('gn-menu'));
+			$('#open_build').click(function() {
+				console.log("d");
+				$(".build_list").slideToggle("fast");
+			});
+			var edata = JSON.parse($("#edata").text());
+			console.log(edata);
+			for (kk = 0; kk < edata.length; kk++) {
+
+				console.log(edata[kk].content);
+
+				$("#details_" + edata[kk].id).append(edata[kk].content);
+			}
+
+		})();
+		var last_id;
+		function viewDetails(id) {
+			$("#details_" + last_id).slideToggle("fast");
+			last_id = last_id = id;
+			$("#details_" + id).slideToggle("fast");
+		}
+		/* ]]> */
+	</script>
+</body>
+
+</html>

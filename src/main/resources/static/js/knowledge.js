@@ -726,6 +726,7 @@ $(".editbox").keyup(function() {
 
 	
 	var id= this.id.replace("text","");
+	console.log(id);
 	$("#" + id).attr("value", $("#"+this.id).html());
 	
 
