@@ -69,6 +69,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/knowledge")
@@ -716,7 +717,7 @@ public class KnowledgeController {
 //		model.addAttribute("champion", main.getChampion().getName());
 //		model.addAttribute("championid", main.getChampion().getId());
 		model.addAttribute("mainsid", id);
-		model.addAttribute("Subsctriction", Subsctriction);
+		model.addAttribute("Subsctrictions", Subsctriction);
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
 			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
 		} 
@@ -795,6 +796,7 @@ public class KnowledgeController {
 		User user = userservice.findByUserName(name);
 		model.addAttribute("user", user);
 		model.addAttribute("main", main);
+		model.addAttribute("mainobject", main.toString());
 		model.addAttribute("CreateUser", new CreateUser());
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
 			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
@@ -807,9 +809,10 @@ public class KnowledgeController {
 		return "new_substriction";
 	}
 	@PostMapping("/newsbsctriction")
-	public String newSubstriction(Model model, Subsctriction Subsctriction)
+	public String newSubstriction(Model model, Subsctriction Subsctriction, @RequestParam("mainid") int id)
 	{
 	
+		Subsctriction.setMain(mainsservice.findMain(id));
 		SubstrictionService.addSubsctriction(Subsctriction);
 		return "redirect:/main/" + Subsctriction.getMain().getName();
 		

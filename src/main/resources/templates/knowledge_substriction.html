@@ -80,7 +80,7 @@
 
 
 
-										<div class="row items_row" th:each="Subsctriction : ${Subsctriction}">
+										<div class="row items_row" th:each="subsctriction : ${Subsctrictions}">
 
 											<div class="col-md-1">
 
@@ -90,7 +90,7 @@
 											</div>
 
 											<div class="col-md-9">
-												<a th:text="${Subsctriction.header}" style="margin: 0px;" th:href="'/knowledge/' + ${main.name} +'Substriction/' +${Substriction.id}"></a>
+												<a th:text="${subsctriction.header}" style="margin: 0px;" th:href="'/knowledge/' + ${main.name} +'Substriction/' +${substriction.id}"></a>
 												<i
 													style="float: left; margin-top: 5px; color: #5f6f81; margin-right: 3px;"
 													class="fa  fa-clock-o" aria-hidden="true"></i>
