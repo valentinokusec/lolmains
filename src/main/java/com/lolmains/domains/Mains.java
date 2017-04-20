@@ -53,6 +53,9 @@ public class Mains {
 	@JoinColumn(name = "knowledge")
 	@OneToMany
 	private List<Knowledge> knowledge;
+	@JoinColumn(name = "knowledge")
+	@OneToMany
+	private List<MailingList> mailingList;
 	
 	public int getId() {
 		return id;
@@ -125,6 +128,12 @@ public class Mains {
 	}
 	public void setKnowledge(List<Knowledge> knowledge) {
 		this.knowledge = knowledge;
+	}
+	public List<MailingList> getMailingList() {
+		return mailingList;
+	}
+	public void setMailingList(List<MailingList> mailingList) {
+		this.mailingList = mailingList;
 	}
 	
 }

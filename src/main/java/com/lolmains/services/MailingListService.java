@@ -20,7 +20,6 @@ import com.lolmains.domains.Mains;
 public interface MailingListService {
 	public List<MailingList> getAll();
 	public MailingList addMailingList(MailingList MailingList);
-	public List<MailingList> findByMain(Mains main);
 
 	
 } 

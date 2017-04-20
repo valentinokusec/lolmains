@@ -14,5 +14,4 @@ import com.lolmains.domains.MailingList;
 
 
 public interface MailingListDao extends  JpaRepository< MailingList ,Integer>{
-	public List<MailingList> findByMain(Mains main);
 }

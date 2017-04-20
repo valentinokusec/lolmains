@@ -8,6 +8,7 @@ import com.lolmains.domains.Champion;
 import com.lolmains.domains.Comment;
 import com.lolmains.domains.Mains;
 import com.lolmains.domains.Subsctriction;
+import com.lolmains.domains.Summoner;
 import com.lolmains.domains.TierList;
 import com.lolmains.domains.Discussion;
 import com.lolmains.domains.DiscussionLikes;
@@ -15,6 +16,7 @@ import com.lolmains.domains.Knowledge;
 import com.lolmains.domains.LeagueChampion;
 import com.lolmains.domains.Link;
 import com.lolmains.domains.LinkGroup;
+import com.lolmains.domains.MailingList;
 import com.lolmains.domains.User;
 import com.lolmains.domains.UserRole;
 import com.lolmains.domains.Video;
@@ -40,6 +42,7 @@ import com.lolmains.services.LeagueRunesService;
 import com.lolmains.services.LeagueSummonersService;
 import com.lolmains.services.LinkGroupService;
 import com.lolmains.services.LinkService;
+import com.lolmains.services.MailingListService;
 import com.lolmains.services.UserService;
 import com.lolmains.services.VideoService;
 import com.robrua.orianna.api.core.RiotAPI;
@@ -84,19 +87,19 @@ public class KnowledgeController {
 
 	@Autowired
 	VideoService videoservice;
-	
+
 	@Autowired
 	com.lolmains.services.SubstrictionService SubstrictionService;
-	
+
 	@Autowired
 	com.lolmains.services.SubstrictinItemService SubstrictinItemService;
-	
+
 	@Autowired
 	KnowledgeService knowledgeservice;
 
 	@Autowired
 	TierListService tierlistservice;
-	
+
 	@Autowired
 	MainsService mainsservice;
 
@@ -105,26 +108,28 @@ public class KnowledgeController {
 
 	@Autowired
 	SummonerService summonerservice;
-	
+
 	@Autowired
 	CommentService commentservice;
-	
+
 	@Autowired
 	DiscussionService discussionservice;
-	
+
 	@Autowired
 	LeagueChampionService leaguechampionservice;
-	
+
 	@Autowired
 	LinkGroupService linkgroupservice;
-	
+
 	@Autowired
 	LinkService linkservice;
-
 	
+	@Autowired
+	MailingListService mailnglistservice;
+
 	@RequestMapping("/{id}/TierList")
-	public String discussionsTierList(@PathVariable(value = "id") String id,
-			 Model model, HttpServletRequest ServletRequest) {
+	public String discussionsTierList(@PathVariable(value = "id") String id, Model model,
+			HttpServletRequest ServletRequest) {
 
 		int authCount = 0;
 		Mains main = mainsservice.findByName(id);
@@ -136,7 +141,7 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-				if (main.getSummoner().contains(user.getSummoner())) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
@@ -148,18 +153,16 @@ public class KnowledgeController {
 		String name = auth.getName();
 
 		int typen = 0;
-		
 
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonInString = "";
-		
+
 		TierList tl = tierlistservice.findAllByMain(main);
-		
+
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
 		model.addAttribute("nextpage", true);
-	
-	
+
 		model.addAttribute("main", main);
 		model.addAttribute("tl", tl);
 		model.addAttribute("extraData", extraData);
@@ -168,30 +171,26 @@ public class KnowledgeController {
 		model.addAttribute("champion", "Kindred");
 
 		model.addAttribute("mainsid", id);
-	
+
 		model.addAttribute("topics_data", jsonInString);
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
-			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
-		} 
-		else
-		{
-			model.addAttribute("mainbuild","empty");
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
 		}
-	
+
 		return "knowledge_tier_list";
 	}
-	
-	
-	
-	
+
 	@PostMapping("/deleteknowledge")
-	public String deleteTopic(Model model, DeleteTopic DeleteTopic)
-	{
-	
+	public String deleteTopic(Model model, DeleteTopic DeleteTopic) {
+
 		knowledgeservice.deleteKnowledge(knowledgeservice.findTopic(DeleteTopic.getTopicid()));
 		return "redirect:/main/" + mainsservice.findMain(DeleteTopic.getMainid()).getName();
-		
+
 	}
+
 	@RequestMapping("/newtierlist/{id}")
 	public String createTierList(@PathVariable(value = "id") int id, Model model) {
 
@@ -203,11 +202,10 @@ public class KnowledgeController {
 		model.addAttribute("main", main);
 		model.addAttribute("CreateUser", new CreateUser());
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
-			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
-		} 
-		else
-		{
-			model.addAttribute("mainbuild","empty");
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
 		}
 		model.addAttribute("CreateTierList", new CreateTierList());
 		return "new_tier_list";
@@ -220,61 +218,61 @@ public class KnowledgeController {
 		String name = auth.getName();
 
 		TierList tl = new TierList();
-		List<LeagueChampion> tiera= new ArrayList<LeagueChampion>();
-		for (Long champion:CreateTierList.getTierlista()) {
-			
-			if (champion!=0) {
+		List<LeagueChampion> tiera = new ArrayList<LeagueChampion>();
+		for (Long champion : CreateTierList.getTierlista()) {
+
+			if (champion != 0) {
 				tiera.add(leaguechampionservice.findByChampionid(champion));
 			}
-		
-			
+
 		}
 		tl.setTiera(tiera);
-		
-		List<LeagueChampion> tierb= new ArrayList<LeagueChampion>();
-		for (Long champion:CreateTierList.getTierlistb()) {
-			
-			if (champion!=0) {
+
+		List<LeagueChampion> tierb = new ArrayList<LeagueChampion>();
+		for (Long champion : CreateTierList.getTierlistb()) {
+
+			if (champion != 0) {
 				tierb.add(leaguechampionservice.findByChampionid(champion));
 			}
-			
+
 		}
 		tl.setTierb(tierb);
-		
-		List<LeagueChampion> tierc= new ArrayList<LeagueChampion>();
-		for (Long champion:CreateTierList.getTierlistc()) {
-			
-			if (champion!=0) {
+
+		List<LeagueChampion> tierc = new ArrayList<LeagueChampion>();
+		for (Long champion : CreateTierList.getTierlistc()) {
+
+			if (champion != 0) {
 				tierc.add(leaguechampionservice.findByChampionid(champion));
 			}
-			
+
 		}
 		tl.setTierc(tierc);
-		
-		List<LeagueChampion> tierd= new ArrayList<LeagueChampion>();
-		for (Long champion:CreateTierList.getTierlistd()) {
-			
-			if (champion!=0) {
+
+		List<LeagueChampion> tierd = new ArrayList<LeagueChampion>();
+		for (Long champion : CreateTierList.getTierlistd()) {
+
+			if (champion != 0) {
 				tierd.add(leaguechampionservice.findByChampionid(champion));
 			}
-			
+
 		}
 		tl.setTierd(tierd);
-		
+
 		Mains main = mainsservice.findMain(CreateTierList.getMainid());
-		
+
 		tl.setMain(main);
-		
-		TierList t=tierlistservice.findAllByMain(main);
+
+		TierList t = tierlistservice.findAllByMain(main);
 		tl.setId(t.getId());
 		tierlistservice.addTierList(tl);
-		
+
 		return "redirect:/knowledge/" + main.getName() + "/TierList";
 
 	}
+
 	@RequestMapping("/{id}/Build/{type}")
 	public String knowledgeBuild(@PathVariable(value = "id") String id, @PathVariable(value = "type") String type,
-			 Model model, HttpServletRequest ServletRequest) {
+			Model model, HttpServletRequest ServletRequest) {
 
 		int authCount = 0;
 		Mains main = mainsservice.findByName(id);
@@ -286,42 +284,41 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-				if (main.getSummoner().contains(user.getSummoner())) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
 				}
 			}
 		}
-	
-		Knowledge	knowledge = knowledgeservice.findAllByMainAndTypeAndHeader(main, 1, type);
-		
+
+		Knowledge knowledge = knowledgeservice.findAllByMainAndTypeAndHeader(main, 1, type);
 
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
 		model.addAttribute("nextpage", true);
-		
+
 		model.addAttribute("main", main);
 		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
-	//	model.addAttribute("champion", main.getChampion().getName());
-	//	model.addAttribute("championid", main.getChampion().getId());
+		// model.addAttribute("champion", main.getChampion().getName());
+		// model.addAttribute("championid", main.getChampion().getId());
 		model.addAttribute("mainsid", id);
 		model.addAttribute("knowledge", knowledge);
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
-			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
-		} 
-		else
-		{
-			model.addAttribute("mainbuild","empty");
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
 		}
 
 		return "knowledge_build";
 	}
+
 	@RequestMapping("/{id}/Items/{page}")
 	public String knowledgeItems(@PathVariable(value = "id") String id, @PathVariable(value = "page") int page,
-			 Model model, HttpServletRequest ServletRequest) {
+			Model model, HttpServletRequest ServletRequest) {
 
 		int authCount = 0;
 		Mains main = mainsservice.findByName(id);
@@ -333,63 +330,61 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-				if (main.getSummoner().contains(user.getSummoner())) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
 				}
 			}
 		}
-	
-		Page<Knowledge>	knowledge = knowledgeservice.findAllByMainAndType(new PageRequest(page-1, 10), main, 3);
-		int count=knowledgeservice.coundByMainAndType(main, 3);
+
+		Page<Knowledge> knowledge = knowledgeservice.findAllByMainAndType(new PageRequest(page - 1, 10), main, 3);
+		int count = knowledgeservice.coundByMainAndType(main, 3);
 		model.addAttribute("nextPage", false);
-		if(count-page*10>10)
-		{
+		if (count - page * 10 > 10) {
 			model.addAttribute("nextPage", true);
 		}
-		
+
 		JSONArray extraData = new JSONArray();
-		
-		for(Knowledge knowledgei:knowledge)
-		{
-			JSONObject jo= new JSONObject();
+
+		for (Knowledge knowledgei : knowledge) {
+			JSONObject jo = new JSONObject();
 			jo.put("id", knowledgei.getId());
 			jo.put("content", knowledgei.getContent());
 			extraData.put(jo);
-			
+
 		}
-			
+
 		model.addAttribute("extraData", extraData);
-		
+
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
 		model.addAttribute("nextpage", true);
-		
+
 		model.addAttribute("main", main);
 		model.addAttribute("pagination", page);
-		model.addAttribute("nextPage", page+1);
-		model.addAttribute("prevPage", page-1);
+		model.addAttribute("nextPage", page + 1);
+		model.addAttribute("prevPage", page - 1);
 		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
-//		model.addAttribute("champion", main.getChampion().getName());
-//		model.addAttribute("championid", main.getChampion().getId());
+		// model.addAttribute("champion", main.getChampion().getName());
+		// model.addAttribute("championid", main.getChampion().getId());
 		model.addAttribute("mainsid", id);
 		model.addAttribute("knowledges", knowledge);
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
-			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
-		} 
-		else
-		{
-			model.addAttribute("mainbuild","empty");
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
 		}
 
 		return "knowledge_items";
 	}
+
 	@RequestMapping("/{id}/Links")
-	public String knowledgeLinks(@PathVariable(value = "id") String id,
-			 Model model, HttpServletRequest ServletRequest) {
+	public String knowledgeLinks(@PathVariable(value = "id") String id, Model model,
+			HttpServletRequest ServletRequest) {
 
 		int authCount = 0;
 		Mains main = mainsservice.findByName(id);
@@ -401,46 +396,42 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-				if (main.getSummoner().contains(user.getSummoner())) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
 				}
 			}
 		}
-	
-		List<LinkGroup>	links= linkgroupservice.findByMain(main);
-		
-			
-	
-		
+
+		List<LinkGroup> links = linkgroupservice.findByMain(main);
+
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
 		model.addAttribute("nextpage", true);
-		
+
 		model.addAttribute("main", main);
 
 		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
-//		model.addAttribute("champion", main.getChampion().getName());
-//		model.addAttribute("championid", main.getChampion().getId());
+		// model.addAttribute("champion", main.getChampion().getName());
+		// model.addAttribute("championid", main.getChampion().getId());
 		model.addAttribute("mainsid", id);
-		model.addAttribute("linksgroups",links);
+		model.addAttribute("linksgroups", links);
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
-			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
-		} 
-		else
-		{
-			model.addAttribute("mainbuild","empty");
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
 		}
 
 		return "knowledge_links";
 	}
+
 	@RequestMapping("/{id}/TipsAndTricks/{page}")
 	public String knowledgeTips(@PathVariable(value = "id") String id, @PathVariable(value = "page") int page,
-			 Model model, HttpServletRequest ServletRequest) {
-
+			Model model, HttpServletRequest ServletRequest) {
 
 		int authCount = 0;
 		Mains main = mainsservice.findByName(id);
@@ -452,65 +443,61 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-				if (main.getSummoner().contains(user.getSummoner())) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
 				}
 			}
 		}
-	
-		Page<Knowledge>	knowledge = knowledgeservice.findAllByMainAndType(new PageRequest(page-1, 10), main, 4);
-		int count=knowledgeservice.coundByMainAndType(main, 4);
+
+		Page<Knowledge> knowledge = knowledgeservice.findAllByMainAndType(new PageRequest(page - 1, 10), main, 4);
+		int count = knowledgeservice.coundByMainAndType(main, 4);
 		model.addAttribute("nextPageConf", false);
-		if(count-page*10>0)
-		{
+		if (count - page * 10 > 0) {
 			model.addAttribute("nextPageConf", true);
 		}
-		
+
 		JSONArray extraData = new JSONArray();
-		
-		for(Knowledge knowledgei:knowledge)
-		{
-			JSONObject jo= new JSONObject();
+
+		for (Knowledge knowledgei : knowledge) {
+			JSONObject jo = new JSONObject();
 			jo.put("id", knowledgei.getId());
 			jo.put("content", knowledgei.getContent());
 			extraData.put(jo);
-			
+
 		}
-			
+
 		model.addAttribute("extraData", extraData);
-		
+
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
-		
-		
+
 		model.addAttribute("main", main);
 		model.addAttribute("type", "TipsAndTricks");
 		model.addAttribute("pagination", page);
-		model.addAttribute("nextPage", page+1);
-		model.addAttribute("prevPage", page-1);
+		model.addAttribute("nextPage", page + 1);
+		model.addAttribute("prevPage", page - 1);
 		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
-//		model.addAttribute("champion", main.getChampion().getName());
-//		model.addAttribute("championid", main.getChampion().getId());
+		// model.addAttribute("champion", main.getChampion().getName());
+		// model.addAttribute("championid", main.getChampion().getId());
 		model.addAttribute("mainsid", id);
 		model.addAttribute("knowledges", knowledge);
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
-			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
-		} 
-		else
-		{
-			model.addAttribute("mainbuild","empty");
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
 		}
 
 		return "knowledge_tips";
 	}
-	@RequestMapping("/{id}/Combos/{page}")
-	public String Combos(@PathVariable(value = "id") String id, @PathVariable(value = "page") int page,
-			 Model model, HttpServletRequest ServletRequest) {
 
+	@RequestMapping("/{id}/Combos/{page}")
+	public String Combos(@PathVariable(value = "id") String id, @PathVariable(value = "page") int page, Model model,
+			HttpServletRequest ServletRequest) {
 
 		int authCount = 0;
 		Mains main = mainsservice.findByName(id);
@@ -522,65 +509,61 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-				if (main.getSummoner().contains(user.getSummoner())) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
 				}
 			}
 		}
-	
-		Page<Knowledge>	knowledge = knowledgeservice.findAllByMainAndType(new PageRequest(page-1, 10), main, 9);
-		int count=knowledgeservice.coundByMainAndType(main, 4);
+
+		Page<Knowledge> knowledge = knowledgeservice.findAllByMainAndType(new PageRequest(page - 1, 10), main, 9);
+		int count = knowledgeservice.coundByMainAndType(main, 4);
 		model.addAttribute("nextPageConf", false);
-		if(count-page*10>0)
-		{
+		if (count - page * 10 > 0) {
 			model.addAttribute("nextPageConf", true);
 		}
-		
+
 		JSONArray extraData = new JSONArray();
-		
-		for(Knowledge knowledgei:knowledge)
-		{
-			JSONObject jo= new JSONObject();
+
+		for (Knowledge knowledgei : knowledge) {
+			JSONObject jo = new JSONObject();
 			jo.put("id", knowledgei.getId());
 			jo.put("content", knowledgei.getContent());
 			extraData.put(jo);
-			
+
 		}
-			
+
 		model.addAttribute("extraData", extraData);
-		
+
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
-		
-		
+
 		model.addAttribute("main", main);
 		model.addAttribute("type", "TipsAndTricks");
 		model.addAttribute("pagination", page);
-		model.addAttribute("nextPage", page+1);
-		model.addAttribute("prevPage", page-1);
+		model.addAttribute("nextPage", page + 1);
+		model.addAttribute("prevPage", page - 1);
 		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
-//		model.addAttribute("champion", main.getChampion().getName());
-//		model.addAttribute("championid", main.getChampion().getId());
+		// model.addAttribute("champion", main.getChampion().getName());
+		// model.addAttribute("championid", main.getChampion().getId());
 		model.addAttribute("mainsid", id);
 		model.addAttribute("knowledges", knowledge);
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
-			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
-		} 
-		else
-		{
-			model.addAttribute("mainbuild","empty");
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
 		}
 
 		return "knowledge_combos";
 	}
+
 	@RequestMapping("/{id}/Champions/{page}")
 	public String knowledgeChampions(@PathVariable(value = "id") String id, @PathVariable(value = "page") int page,
-			 Model model, HttpServletRequest ServletRequest) {
-
+			Model model, HttpServletRequest ServletRequest) {
 
 		int authCount = 0;
 		Mains main = mainsservice.findByName(id);
@@ -592,66 +575,62 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-				if (main.getSummoner().contains(user.getSummoner())) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
 				}
 			}
 		}
-	
-		Page<Knowledge>	knowledge = knowledgeservice.findAllByMainAndType(new PageRequest(page-1, 10), main, 5);
-		int count=knowledgeservice.coundByMainAndType(main, 5);
+
+		Page<Knowledge> knowledge = knowledgeservice.findAllByMainAndType(new PageRequest(page - 1, 10), main, 5);
+		int count = knowledgeservice.coundByMainAndType(main, 5);
 		model.addAttribute("nextPageConf", false);
-		if(count-page*10>0)
-		{
+		if (count - page * 10 > 0) {
 			model.addAttribute("nextPageConf", true);
 		}
-		
+
 		JSONArray extraData = new JSONArray();
-		
-		for(Knowledge knowledgei:knowledge)
-		{
-			JSONObject jo= new JSONObject();
+
+		for (Knowledge knowledgei : knowledge) {
+			JSONObject jo = new JSONObject();
 			jo.put("id", knowledgei.getId());
 			jo.put("content", knowledgei.getContent());
 			extraData.put(jo);
-			
+
 		}
-			
+
 		model.addAttribute("extraData", extraData);
-		
+
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
-		
-		
+
 		model.addAttribute("main", main);
 		model.addAttribute("type", "TipsAndTricks");
 		model.addAttribute("pagination", page);
-		model.addAttribute("nextPage", page+1);
-		model.addAttribute("prevPage", page-1);
+		model.addAttribute("nextPage", page + 1);
+		model.addAttribute("prevPage", page - 1);
 		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
-//		model.addAttribute("champion", main.getChampion().getName());
-//		model.addAttribute("championid", main.getChampion().getId());
+		// model.addAttribute("champion", main.getChampion().getName());
+		// model.addAttribute("championid", main.getChampion().getId());
 		model.addAttribute("mainsid", id);
 		model.addAttribute("knowledges", knowledge);
-		
+
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
-			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
-		} 
-		else
-		{
-			model.addAttribute("mainbuild","empty");
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
 		}
-		
+
 		return "knowledge_champions";
 	}
+
 	@RequestMapping("/{id}/Bugs/{page}")
 	public String knowledgeBugs(@PathVariable(value = "id") String id, @PathVariable(value = "page") int page,
-			 Model model, HttpServletRequest ServletRequest) {
-
+			Model model, HttpServletRequest ServletRequest) {
 
 		int authCount = 0;
 		Mains main = mainsservice.findByName(id);
@@ -663,67 +642,62 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-				if (main.getSummoner().contains(user.getSummoner())) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
 				}
 			}
 		}
-	
-		Page<Knowledge>	knowledge = knowledgeservice.findAllByMainAndType(new PageRequest(page-1, 10), main, 8);
-		int count=knowledgeservice.coundByMainAndType(main, 8);
+
+		Page<Knowledge> knowledge = knowledgeservice.findAllByMainAndType(new PageRequest(page - 1, 10), main, 8);
+		int count = knowledgeservice.coundByMainAndType(main, 8);
 		model.addAttribute("nextPageConf", false);
-		if(count-page*10>0)
-		{
+		if (count - page * 10 > 0) {
 			model.addAttribute("nextPageConf", true);
 		}
-		
+
 		JSONArray extraData = new JSONArray();
-		
-		for(Knowledge knowledgei:knowledge)
-		{
-			JSONObject jo= new JSONObject();
+
+		for (Knowledge knowledgei : knowledge) {
+			JSONObject jo = new JSONObject();
 			jo.put("id", knowledgei.getId());
 			jo.put("content", knowledgei.getContent());
 			extraData.put(jo);
-			
+
 		}
-			
+
 		model.addAttribute("extraData", extraData);
-		
+
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
-		
-		
+
 		model.addAttribute("main", main);
 		model.addAttribute("type", "TipsAndTricks");
 		model.addAttribute("pagination", page);
-		model.addAttribute("nextPage", page+1);
-		model.addAttribute("prevPage", page-1);
+		model.addAttribute("nextPage", page + 1);
+		model.addAttribute("prevPage", page - 1);
 		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
-//		model.addAttribute("champion", main.getChampion().getName());
-//		model.addAttribute("championid", main.getChampion().getId());
+		// model.addAttribute("champion", main.getChampion().getName());
+		// model.addAttribute("championid", main.getChampion().getId());
 		model.addAttribute("mainsid", id);
 		model.addAttribute("knowledges", knowledge);
-		
+
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
-			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
-		} 
-		else
-		{
-			model.addAttribute("mainbuild","empty");
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
 		}
-	
-		
 
 		return "knowledge_bugs";
 	}
+
 	@RequestMapping("/{id}/Substrictions/{page}")
 	public String knowledgeSubstrictions(@PathVariable(value = "id") String id, @PathVariable(value = "page") int page,
-			 Model model, HttpServletRequest ServletRequest) {
+			Model model, HttpServletRequest ServletRequest) {
 
 		int authCount = 0;
 		Mains main = mainsservice.findByName(id);
@@ -735,63 +709,62 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-				if (main.getSummoner().contains(user.getSummoner())) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
 				}
 			}
 		}
-	
-		Page<Subsctriction>	Subsctriction = SubstrictionService.findAllByMain(new PageRequest(page-1, 10), main);
-		int count=knowledgeservice.coundByMainAndType(main, 3);
+
+		Page<Subsctriction> Subsctriction = SubstrictionService.findAllByMain(new PageRequest(page - 1, 10), main);
+		int count = knowledgeservice.coundByMainAndType(main, 3);
 		model.addAttribute("nextPage", false);
-		if(count-page*10>10)
-		{
+		if (count - page * 10 > 10) {
 			model.addAttribute("nextPage", true);
 		}
-		
+
 		JSONArray extraData = new JSONArray();
-		
-		for(Subsctriction Subsctrictioni:Subsctriction)
-		{
-			JSONObject jo= new JSONObject();
+
+		for (Subsctriction Subsctrictioni : Subsctriction) {
+			JSONObject jo = new JSONObject();
 			jo.put("id", Subsctrictioni.getId());
 			jo.put("content", Subsctrictioni.getContent());
 			extraData.put(jo);
-			
+
 		}
-			
+
 		model.addAttribute("extraData", extraData);
-		
+
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
+		model.addAttribute("MailingList", new MailingList());
 		model.addAttribute("nextpage", true);
-		
+
 		model.addAttribute("main", main);
 		model.addAttribute("pagination", page);
-		model.addAttribute("nextPage", page+1);
-		model.addAttribute("prevPage", page-1);
+		model.addAttribute("nextPage", page + 1);
+		model.addAttribute("prevPage", page - 1);
 		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
-//		model.addAttribute("champion", main.getChampion().getName());
-//		model.addAttribute("championid", main.getChampion().getId());
+		// model.addAttribute("champion", main.getChampion().getName());
+		// model.addAttribute("championid", main.getChampion().getId());
 		model.addAttribute("mainsid", id);
 		model.addAttribute("SubsctrictionsData", Subsctriction);
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
-			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
-		} 
-		else
-		{
-			model.addAttribute("mainbuild","empty");
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
 		}
 
 		return "knowledge_substriction";
 	}
+
 	@RequestMapping("/{id}/Substriction/{substriction}")
-	public String knowledgeSubstriction(@PathVariable(value = "id") String id, @PathVariable(value = "substriction") int substriction,
-			 Model model, HttpServletRequest ServletRequest) {
+	public String knowledgeSubstriction(@PathVariable(value = "id") String id,
+			@PathVariable(value = "substriction") int substriction, Model model, HttpServletRequest ServletRequest) {
 
 		int authCount = 0;
 		Mains main = mainsservice.findByName(id);
@@ -803,51 +776,45 @@ public class KnowledgeController {
 		if (!auth.getName().contentEquals("anonymousUser")) {
 			user = userservice.findByUserName(auth.getName());
 			authCount = 1;
-				if (main.getSummoner().contains(user.getSummoner())) {
+			if (main.getSummoner().contains(user.getSummoner())) {
 				authCount = 2;
 				if (main.getAdmins().contains(user)) {
 					authCount = 3;
 				}
 			}
 		}
-	
-		Subsctriction	Subsctriction = SubstrictionService.findSubsctriction(substriction);
-		
-		
-		
-	
-			JSONObject jo= new JSONObject();
-			jo.put("id", Subsctriction.getId());
-			jo.put("content", Subsctriction.getContent());
-	
-			
-		
-			
+
+		Subsctriction Subsctriction = SubstrictionService.findSubsctriction(substriction);
+
+		JSONObject jo = new JSONObject();
+		jo.put("id", Subsctriction.getId());
+		jo.put("content", Subsctriction.getContent());
+
 		model.addAttribute("extraData", jo);
-		
+
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
 		model.addAttribute("nextpage", true);
-		
+
 		model.addAttribute("main", main);
-	
+
 		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
-//		model.addAttribute("champion", main.getChampion().getName());
-//		model.addAttribute("championid", main.getChampion().getId());
+		// model.addAttribute("champion", main.getChampion().getName());
+		// model.addAttribute("championid", main.getChampion().getId());
 		model.addAttribute("mainsid", id);
 		model.addAttribute("subsctriction", Subsctriction);
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
-			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
-		} 
-		else
-		{
-			model.addAttribute("mainbuild","empty");
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
 		}
 
 		return "knowledge_substriction_item";
 	}
+
 	@RequestMapping("/newsubsctriction/{id}")
 	public String newSubsctriction(@PathVariable(value = "id") int id, Model model) {
 
@@ -860,36 +827,54 @@ public class KnowledgeController {
 		model.addAttribute("mainobject", main.toString());
 		model.addAttribute("CreateUser", new CreateUser());
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
-			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
-		} 
-		else
-		{
-			model.addAttribute("mainbuild","empty");
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
 		}
 		model.addAttribute("Subsctriction", new Subsctriction());
 		return "new_substriction";
 	}
-	
+
 	@PostMapping("/newsbsctriction")
-	public String newSubstriction(Model model, Subsctriction Subsctriction, @RequestParam("mainid") int id)
-	{
-	
+	public String newSubstriction(Model model, Subsctriction Subsctriction, @RequestParam("mainid") int id) {
+
 		Subsctriction.setMain(mainsservice.findMain(id));
 		Subsctriction.setDate(new Timestamp(System.currentTimeMillis()));
 		SubstrictionService.addSubsctriction(Subsctriction);
 		return "redirect:/main/" + Subsctriction.getMain().getName();
-		
+
 	}
+
 	@PostMapping("/newlink")
-	public String newLink(Model model, Link link, @RequestParam("groupid") int id)
-	{
-	
-		LinkGroup lg=linkgroupservice.findAll(id);
-		List<Link> linkList=lg.getLink();
+	public String newLink(Model model, Link link, @RequestParam("groupid") int id) {
+
+		LinkGroup lg = linkgroupservice.findAll(id);
+		List<Link> linkList = lg.getLink();
 		linkservice.addLink(link);
 		linkList.add(link);
 		linkgroupservice.addLinkGroup(lg);
 		return "redirect:/main/" + lg.getMain().getName();
+
+	}
+
+	@PostMapping("/newsubstrictor")
+	public String newSubstrictor(Model model, MailingList email, @RequestParam("mainid") int id,
+			@RequestParam("userid") int userId) {
 		
+		mailnglistservice.addMailingList(email);
+		Mains main = mainsservice.findMain(id);
+		List<MailingList> mailingListt= main.getMailingList();
+		mailingListt.add(email);
+		main.setMailingList(mailingListt);
+		mainsservice.addMain(main);
+		Summoner summoner=userservice.findById(userId).getSummoner();
+		List<MailingList> mailingListUser=summoner.getMailingList();
+		mailingListUser.add(email);
+		summoner.setMailingList(mailingListUser);
+		summonerservice.addSummoners(summoner);
+	
+		return "redirect:/main/" + main.getName();
+
 	}
 }

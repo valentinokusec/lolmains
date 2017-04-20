@@ -130,8 +130,7 @@
 												</form>
 											</div>
 											<div class="col-md-11 col-md-offset-1" th:each="link : ${linksgroup.link}">
-													<h3 th:text="${link.header}" style="margin: 0px;"></h3>
-														<h3 th:text="${link.url}" style="margin: 0px;"></h3>
+													<a th:href="${link.url}" th:text="${link.header}" style="margin: 0px;"></a>
 											</div>
 										</div>
 									</div>

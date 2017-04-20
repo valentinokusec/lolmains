@@ -30,7 +30,10 @@
 <link rel="stylesheet" type="text/css" href="/css/dialog-sandra.css" />
 <link rel="stylesheet" type="text/css" href="/css/cs-select.css" />
 <link rel="stylesheet" type="text/css" href="/css/cs-skin-slide.css" />
-<link th:if="${main.name!='Support' and main.name!='Adc' and main.name!='Jungler' and main.name!='Mid' and main.name!='Top'}" rel="shortcut icon" th:href="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/} + ${main.champion.image}" />
+<link
+	th:if="${main.name!='Support' and main.name!='Adc' and main.name!='Jungler' and main.name!='Mid' and main.name!='Top'}"
+	rel="shortcut icon"
+	th:href="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/} + ${main.champion.image}" />
 
 
 <link th:if="${main.name=='Support'}" rel="shortcut icon"
@@ -58,45 +61,48 @@
 		<div th:include="fragments/header::head"></div>
 		<div class="details"></div>
 		<div id="data" type="hidden" th:text="${topics_data}"></div>
-		<div id="edata" type="hidden" style="display:none" th:text="${extraData}"></div>
-		
+		<div id="edata" type="hidden" style="display: none"
+			th:text="${extraData}"></div>
+
 		<div class="content_discussions">
 			<!-- trianglify pattern container -->
-		<div th:include="fragments/lists::knowledge"></div>
+			<div th:include="fragments/lists::knowledge"></div>
 			<section>
 				<div class="tabs">
-					
-					<div style="display:none" id="main_id" th:text="${main.id}"></div>
+
+					<div style="display: none" id="main_id" th:text="${main.id}"></div>
 					<div class="content-wrap discussions_content_wrap">
 						<section id="">
-							
+
 							<ul id="content" style="margin-top: 0px;">
-							<!--   -->
-							
+								<!--   -->
+
 								<li th:if="${subsctriction != null}">
-							<div class="col-md-12 col-md-offset-0 space" style="text-align:center;">
-								<h1 th:text="${subsctriction.header}"></h1>
-								<h2 th:text="${subsctriction.date}"></h2>
-							</div>
-								
-										<div  th:each="substrictionitem : ${subsctriction.substrictionitem}" class="col-md-8 col-md-offset-4 space">
+									<div class="col-md-12 col-md-offset-0 space"
+										style="text-align: center;">
+										<h1 th:text="${subsctriction.header}"></h1>
+										<h2 th:text="${subsctriction.date}"></h2>
+									</div>
 
 
+									<div class="col-md-10 col-md-offset-2 space"
+										style="text-align: left;">
+										<h2 th:id="text"></h2>
+										<div id="textContent" style="display: none;"
+											th:text="${subsctriction.content}"></div>
 
-											<!-- <i class="fa fa-comment fa-2x icon_fa" aria-hidden="true"></i> -->
-										
-													
-													
-												
-				
+										<div
+											th:each="substrictionitem : ${subsctriction.substrictionitem}"
+											class="col-md-10 col-md-offset-2 space">
+
+											<h1 th:text="${substrictionitem.header}"></h1>
+												<h1 th:text="${substrictionitem.content}"></h1>
+
 										</div>
-										<div class="col-md-10 col-md-offset-2 space" style="text-align:left;">
-								<h2 th:id="text"></h2>
-								<div id="textContent" style="display:none;" th:text="${subsctriction.content}"></div>
-							</div>
-									
+									</div>
+
 								</li>
-								
+
 							</ul>
 							<div class="share">
 
@@ -122,14 +128,20 @@
 
 									</form>
 								</div>
-									<div th:if="${authCount ==3}">
-								<button style="position: relative;  left: -100px;; color:white !important;" class="share-toggle-button" data-dialog="delete_dialog" id="delete_b">
-						<i class="share-icon fa fa-trash"></i> Delete
-					</button>
+								<div th:if="${authCount ==3}">
+									<button
+										style="position: relative; left: -100px;; color: white !important;"
+										class="share-toggle-button" data-dialog="delete_dialog"
+										id="delete_b">
+										<i class="share-icon fa fa-trash"></i> Delete
+									</button>
 								</div>
 								<div th:if="${authCount ==3}">
-									<a style="position: relative;  left: 0px; color:white !important;     bottom: 50px;" class="share-toggle-button"
-										th:href="@{/newknowledge/} + ${main.id}"> <i class="share-icon fa fa-plus"></i>
+									<a
+										style="position: relative; left: 0px; color: white !important; bottom: 50px;"
+										class="share-toggle-button"
+										th:href="@{/newknowledge/} + ${main.id}"> <i
+										class="share-icon fa fa-plus"></i>
 									</a>
 								</div>
 
@@ -140,8 +152,8 @@
 
 							</div>
 						</section>
-					
-					<!-- 	<section id="section-linemove-7">
+
+						<!-- 	<section id="section-linemove-7">
 							<p>6</p>
 						</section> -->
 					</div>
@@ -151,8 +163,8 @@
 			</section>
 
 		</div>
-		
-	
+
+
 		<div id="login_dialog" class="dialog">
 			<div class="dialog__overlay"></div>
 			<div class="dialog__content">
@@ -201,16 +213,15 @@
 
 						<tr>
 							<td><input type="hidden" id="main" name="main"
-											th:value="${main.name}"></input></td>
+								th:value="${main.name}"></input></td>
 							<td><label>Server</label></td>
 							<td><select type="text" class="form-control"
-								th:field="*{server}" required="required" >
-								
-								<option value="EUW">EUW</option>
-								<option value="NA">NA</option>
-								<option value="EUE">EUE</option>
-								</select>
-								</td>
+								th:field="*{server}" required="required">
+
+									<option value="EUW">EUW</option>
+									<option value="NA">NA</option>
+									<option value="EUE">EUE</option>
+							</select></td>
 						</tr>
 
 						<tr>
@@ -245,41 +256,43 @@
 					<button class="action" data-dialog-close="data-dialog-close">Close</button>
 				</div>
 			</div>
-			
+
 		</div>
 		<div id="delete_dialog" class="dialog">
-		<div class="dialog__overlay"></div>
-		<div class="dialog__content">
-			<h2>
-				<strong>Are you sure</strong>
-			</h2>
-			<form th:action="@{/knowledge/deleteknowledge}" method="post" th:object="${DeleteTopic}" style="padding-left: 0px !important;"
-				>
+			<div class="dialog__overlay"></div>
+			<div class="dialog__content">
+				<h2>
+					<strong>Are you sure</strong>
+				</h2>
+				<form th:action="@{/knowledge/deleteknowledge}" method="post"
+					th:object="${DeleteTopic}" style="padding-left: 0px !important;">
 
 
-				<table style="    margin: auto;">
+					<table style="margin: auto;">
 
-					
-						<input id="maind" name="mainid" type="hidden" th:value="${main.id}" ></input>
-						<input th:if="${knowledge!=null}" id="topicid" name="topicid" type="hidden" th:value="${knowledge.id}"></input>
-					
-					
 
-					<tr>
-						<td><button type="submit">
-								Confirm
-								<div class="ripples buttonRipples">
-									<span class="ripplesCircle"></span>
-								</div>
-							</button></td>
-					</tr>
-				</table>
-			</form>
-			<div>
-				<button class="action" data-dialog-close="data-dialog-close"></button>
+						<input id="maind" name="mainid" type="hidden"
+							th:value="${main.id}"></input>
+						<input th:if="${knowledge!=null}" id="topicid" name="topicid"
+							type="hidden" th:value="${knowledge.id}"></input>
+
+
+
+						<tr>
+							<td><button type="submit">
+									Confirm
+									<div class="ripples buttonRipples">
+										<span class="ripplesCircle"></span>
+									</div>
+								</button></td>
+						</tr>
+					</table>
+				</form>
+				<div>
+					<button class="action" data-dialog-close="data-dialog-close"></button>
+				</div>
 			</div>
 		</div>
-	</div>
 		<!-- Related demos -->
 		<div class="sidebar">
 			<textarea class="textarea" rows="1" cols="20"></textarea>
@@ -307,38 +320,36 @@
 
 
 	<script src="/js/modernizr.custom.js"></script>
-	
+
 	<script src="/js/TweenMax.min.js"></script>
 	<script src="/js/share.js"></script>
-<script src="/js/gnmenu.js"></script>
+	<script src="/js/gnmenu.js"></script>
 	<script src="/js/dialogFx.js"></script>
 	<script src="/webjars/jquery/jquery.min.js"></script>
 	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
 	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
- 	<script src="/js/discussionSocket.js"></script> 
-	 <script src="/js/tooltip.js"></script>
-	 	<script src="/js/notification.js"></script>
-  <script src="/js/changeCss.js"></script> 
+	<script src="/js/discussionSocket.js"></script>
+	<script src="/js/tooltip.js"></script>
+	<script src="/js/notification.js"></script>
+	<script src="/js/changeCss.js"></script>
 	<script>
 		(function() {
 			$("#text").append($("#textContent").text());
 			if ($('#auth').text() == "true") {
-				var deletetrigger = document.getElementById("delete_b"), deletedialog= document
-				.getElementById("delete_dialog"), deletedlg= new DialogFx(
-				deletedialog);
+				var deletetrigger = document.getElementById("delete_b"), deletedialog = document
+						.getElementById("delete_dialog"), deletedlg = new DialogFx(
+						deletedialog);
 
-			deletetrigger.addEventListener('click', deletedlg.toggle.bind(deletedlg));
+				deletetrigger.addEventListener('click', deletedlg.toggle
+						.bind(deletedlg));
 			} else {
-
-				
-				
-
 
 				var logintrigger = document.getElementById("login_b"), logindialog = document
 						.getElementById("login_dialog"), logindlg = new DialogFx(
 						logindialog);
 
-				logintrigger.addEventListener('click', logindlg.toggle.bind(logindlg));
+				logintrigger.addEventListener('click', logindlg.toggle
+						.bind(logindlg));
 
 				var registertrigger = document.getElementById("register_b"), registerdialog = document
 						.getElementById("register_dialog"), registerdlg = new DialogFx(
@@ -349,12 +360,11 @@
 
 			}
 			new gnMenu(document.getElementById('gn-menu'));
-			$('#open_build').click(
-					function() {
-						console.log("d");
-					$(".build_list").slideToggle("fast");	
-					});
-		
+			$('#open_build').click(function() {
+				console.log("d");
+				$(".build_list").slideToggle("fast");
+			});
+
 		})();
 	</script>
 </body>

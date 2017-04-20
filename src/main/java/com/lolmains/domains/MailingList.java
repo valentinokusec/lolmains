@@ -22,9 +22,8 @@ public class MailingList {
 	private int id;
 	@Column(name="email")
 	private String email;
-	@JoinColumn(name="main_id")
-	@OneToMany
-	private List<Mains> main;
+
+	
 	public int getId() {
 		return id;
 	}
@@ -36,12 +35,6 @@ public class MailingList {
 	}
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	public List<Mains> getMain() {
-		return main;
-	}
-	public void setMain(List<Mains> main) {
-		this.main = main;
 	}
 
 	

@@ -72,7 +72,9 @@ public class Summoner {
 	private List<Notification> notification;
 	@Column(name="notificationcount")
 	private int notificationcount;
-	
+	@JoinColumn(name = "knowledge")
+	@OneToMany
+	private List<MailingList> mailingList;
 	public int getId() {
 		return id;
 	}
@@ -192,6 +194,12 @@ public class Summoner {
 	}
 	public void setNotificationcount(int notificationcount) {
 		this.notificationcount = notificationcount;
+	}
+	public List<MailingList> getMailingList() {
+		return mailingList;
+	}
+	public void setMailingList(List<MailingList> mailingList) {
+		this.mailingList = mailingList;
 	}
 	
 	

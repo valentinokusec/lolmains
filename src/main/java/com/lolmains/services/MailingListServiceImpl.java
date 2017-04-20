@@ -55,18 +55,5 @@ public class MailingListServiceImpl implements MailingListService {
 		return mailinglistdao.save(MailingList);
 	}
 
-	@Override
-	public List<MailingList> findByMain(Mains main) {
-		// TODO Auto-generated method stub
-		return mailinglistdao.findByMain(main);
-	}
-
-
-
-
-
-	
-
-
 	
 }
