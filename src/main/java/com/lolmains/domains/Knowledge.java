@@ -50,6 +50,10 @@ public class Knowledge {
 	@ManyToOne
 	@JsonBackReference
 	private Mains main;
+	@JoinColumn(name = "list_group_id")
+	@OneToOne
+	@JsonBackReference
+	private LinkGroup linkGroup;
 	@Column(name="type")
 	public int type;
 	@Column(name="header")
@@ -178,6 +182,12 @@ public class Knowledge {
 	}
 	public void setBuild(List<Item> build) {
 		this.build = build;
+	}
+	public LinkGroup getLinkGroup() {
+		return linkGroup;
+	}
+	public void setLinkGroup(LinkGroup linkGroup) {
+		this.linkGroup = linkGroup;
 	}
 
 	

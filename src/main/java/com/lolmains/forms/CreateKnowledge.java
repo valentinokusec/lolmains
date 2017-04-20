@@ -27,6 +27,8 @@ public class CreateKnowledge {
 	
 	private int param11;
 	
+	private String linkGroup;
+	
 	private String header;
 	
 	private String url;
@@ -124,6 +126,12 @@ public class CreateKnowledge {
 	}
 	public void setBuildlist(ArrayList<Integer> buildlist) {
 		this.buildlist = buildlist;
+	}
+	public String getLinkGroup() {
+		return linkGroup;
+	}
+	public void setLinkGroup(String linkGroup) {
+		this.linkGroup = linkGroup;
 	}
 
 	

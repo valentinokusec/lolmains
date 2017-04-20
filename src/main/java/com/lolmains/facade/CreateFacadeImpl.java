@@ -25,6 +25,7 @@ import com.lolmains.domains.Item;
 import com.lolmains.domains.Knowledge;
 import com.lolmains.domains.LeagueRunes;
 import com.lolmains.domains.LeagueSummoners;
+import com.lolmains.domains.LinkGroup;
 import com.lolmains.domains.Mains;
 import com.lolmains.domains.MainsProperties;
 import com.lolmains.domains.Masteries;
@@ -49,6 +50,7 @@ import com.lolmains.services.KnowledgeService;
 import com.lolmains.services.LeagueChampionService;
 import com.lolmains.services.LeagueRunesService;
 import com.lolmains.services.LeagueSummonersService;
+import com.lolmains.services.LinkGroupService;
 import com.lolmains.services.MainPropertiesService;
 import com.lolmains.services.MainsService;
 import com.lolmains.services.MasteriesService;
@@ -124,6 +126,9 @@ public class CreateFacadeImpl implements CreateFacade {
 	
 	@Autowired
 	GuideService guideservice;
+	
+	@Autowired
+	LinkGroupService linkgroupservice;
 	
 	
 	@Override
@@ -490,7 +495,10 @@ public class CreateFacadeImpl implements CreateFacade {
 		knowledge.setType(CreateKnowledge.getType());
 		knowledge.setHeader(CreateKnowledge.getHeader());
 		knowledge.setContent(CreateKnowledge.getContent());
-		
+		if (CreateKnowledge.getType()==10) {
+			LinkGroup lg= linkgroupservice.addLinkGroup(new LinkGroup(CreateKnowledge.getLinkGroup(),main));
+			knowledge.setLinkGroup(lg);	
+		}
 		knowledge.setDate(new Timestamp(System.currentTimeMillis()));
 		knowledge.setMathup(leaguechampionservice.findByChampionid(CreateKnowledge.getParam10()));
 		CreateKnowledge.getBuildlist().remove(CreateKnowledge.getBuildlist().size()-1);

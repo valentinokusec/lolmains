@@ -13,6 +13,8 @@ import com.lolmains.domains.Discussion;
 import com.lolmains.domains.DiscussionLikes;
 import com.lolmains.domains.Knowledge;
 import com.lolmains.domains.LeagueChampion;
+import com.lolmains.domains.Link;
+import com.lolmains.domains.LinkGroup;
 import com.lolmains.domains.User;
 import com.lolmains.domains.UserRole;
 import com.lolmains.domains.Video;
@@ -36,6 +38,8 @@ import com.lolmains.services.KnowledgeService;
 import com.lolmains.services.LeagueChampionService;
 import com.lolmains.services.LeagueRunesService;
 import com.lolmains.services.LeagueSummonersService;
+import com.lolmains.services.LinkGroupService;
+import com.lolmains.services.LinkService;
 import com.lolmains.services.UserService;
 import com.lolmains.services.VideoService;
 import com.robrua.orianna.api.core.RiotAPI;
@@ -48,6 +52,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -109,6 +114,12 @@ public class KnowledgeController {
 	
 	@Autowired
 	LeagueChampionService leaguechampionservice;
+	
+	@Autowired
+	LinkGroupService linkgroupservice;
+	
+	@Autowired
+	LinkService linkservice;
 
 	
 	@RequestMapping("/{id}/TierList")
@@ -375,6 +386,56 @@ public class KnowledgeController {
 		}
 
 		return "knowledge_items";
+	}
+	@RequestMapping("/{id}/Links")
+	public String knowledgeLinks(@PathVariable(value = "id") String id,
+			 Model model, HttpServletRequest ServletRequest) {
+
+		int authCount = 0;
+		Mains main = mainsservice.findByName(id);
+
+		String sessionId = ServletRequest.getSession().getId();
+
+		User user = null;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!auth.getName().contentEquals("anonymousUser")) {
+			user = userservice.findByUserName(auth.getName());
+			authCount = 1;
+				if (main.getSummoner().contains(user.getSummoner())) {
+				authCount = 2;
+				if (main.getAdmins().contains(user)) {
+					authCount = 3;
+				}
+			}
+		}
+	
+		List<LinkGroup>	links= linkgroupservice.findByMain(main);
+		
+			
+	
+		
+		model.addAttribute("sessionid", sessionId);
+		model.addAttribute("CreateUser", new CreateUser());
+		model.addAttribute("nextpage", true);
+		
+		model.addAttribute("main", main);
+
+		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
+		model.addAttribute("user", user);
+		model.addAttribute("authCount", authCount);
+//		model.addAttribute("champion", main.getChampion().getName());
+//		model.addAttribute("championid", main.getChampion().getId());
+		model.addAttribute("mainsid", id);
+		model.addAttribute("linksgroups",links);
+		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
+			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} 
+		else
+		{
+			model.addAttribute("mainbuild","empty");
+		}
+
+		return "knowledge_links";
 	}
 	@RequestMapping("/{id}/TipsAndTricks/{page}")
 	public String knowledgeTips(@PathVariable(value = "id") String id, @PathVariable(value = "page") int page,
@@ -717,7 +778,7 @@ public class KnowledgeController {
 //		model.addAttribute("champion", main.getChampion().getName());
 //		model.addAttribute("championid", main.getChampion().getId());
 		model.addAttribute("mainsid", id);
-		model.addAttribute("Subsctrictions", Subsctriction);
+		model.addAttribute("SubsctrictionsData", Subsctriction);
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
 			model.addAttribute("mainbuild", knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
 		} 
@@ -728,7 +789,7 @@ public class KnowledgeController {
 
 		return "knowledge_substriction";
 	}
-	@RequestMapping("/{id}/Subsctriction/{substriction}")
+	@RequestMapping("/{id}/Substriction/{substriction}")
 	public String knowledgeSubstriction(@PathVariable(value = "id") String id, @PathVariable(value = "substriction") int substriction,
 			 Model model, HttpServletRequest ServletRequest) {
 
@@ -808,13 +869,27 @@ public class KnowledgeController {
 		model.addAttribute("Subsctriction", new Subsctriction());
 		return "new_substriction";
 	}
+	
 	@PostMapping("/newsbsctriction")
 	public String newSubstriction(Model model, Subsctriction Subsctriction, @RequestParam("mainid") int id)
 	{
 	
 		Subsctriction.setMain(mainsservice.findMain(id));
+		Subsctriction.setDate(new Timestamp(System.currentTimeMillis()));
 		SubstrictionService.addSubsctriction(Subsctriction);
 		return "redirect:/main/" + Subsctriction.getMain().getName();
+		
+	}
+	@PostMapping("/newlink")
+	public String newLink(Model model, Link link, @RequestParam("groupid") int id)
+	{
+	
+		LinkGroup lg=linkgroupservice.findAll(id);
+		List<Link> linkList=lg.getLink();
+		linkservice.addLink(link);
+		linkList.add(link);
+		linkgroupservice.addLinkGroup(lg);
+		return "redirect:/main/" + lg.getMain().getName();
 		
 	}
 }

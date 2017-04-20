@@ -73,13 +73,13 @@
 							<ul id="content" style="margin-top: 0px;">
 							<!--   -->
 							
-								<li th:if="${substriction != null}">
+								<li th:if="${subsctriction != null}">
 							<div class="col-md-12 col-md-offset-0 space" style="text-align:center;">
-								<h1 th:text="${substriction.header}"></h1>
-								<h2 th:text="${substriction.date}"></h2>
+								<h1 th:text="${subsctriction.header}"></h1>
+								<h2 th:text="${subsctriction.date}"></h2>
 							</div>
 								
-										<div  th:each="substrictionitem : ${substriction.substrictionitem}" class="col-md-8 col-md-offset-4 space">
+										<div  th:each="substrictionitem : ${subsctriction.substrictionitem}" class="col-md-8 col-md-offset-4 space">
 
 
 
@@ -92,7 +92,7 @@
 										</div>
 										<div class="col-md-10 col-md-offset-2 space" style="text-align:left;">
 								<h2 th:id="text"></h2>
-								<div id="textContent" style="display:none;" th:text="${knowledge.content}"></div>
+								<div id="textContent" style="display:none;" th:text="${subsctriction.content}"></div>
 							</div>
 									
 								</li>
