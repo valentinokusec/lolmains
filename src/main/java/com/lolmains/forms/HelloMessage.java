@@ -9,7 +9,14 @@ public class HelloMessage {
     public HelloMessage() {
     }
 
-    public HelloMessage(String name) {
+    public HelloMessage(String name, String user, int id) {
+		super();
+		this.name = name;
+		this.user = user;
+		this.id = id;
+	}
+
+	public HelloMessage(String name) {
         this.name = name;
     }
 

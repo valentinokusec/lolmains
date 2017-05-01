@@ -2,6 +2,9 @@ package com.lolmains.facade;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -146,14 +149,25 @@ public class CreateFacadeImpl implements CreateFacade {
 		ArrayList<User> userList=new ArrayList<User>();
 		ArrayList<com.lolmains.domains.Summoner> memberList=new ArrayList<com.lolmains.domains.Summoner>();
 		userList.add(user);
-		MainsProperties prop=new MainsProperties();
-		prop.setBodycolor("#f1f1f1");
-		prop.setCardcolor("#ffffff");
-		mainpropertyservice.addMainsProperties(prop);
-		main.setMainsproperties(prop);
+//		MainsProperties prop=new MainsProperties();
+//		prop.setBodycolor("#f1f1f1");
+//		prop.setCardcolor("#ffffff");
+//		mainpropertyservice.addMainsProperties(prop);
+//		main.setMainsproperties(prop);
+		
+		
 		memberList.add(user.getSummoner());
 		main.setAdmins(userList);
 		main.setSummoner(memberList);
+		
+		ClassLoader classLoader = getClass().getClassLoader();
+		Path newFilePath = Paths.get("src/main/resources/static/css/"+main.getName()+".css");
+	    try {
+			Files.createFile(newFilePath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		mainsservice.addMain(main);
 		List<Mains> mainList=summ.getMain();

@@ -1,9 +1,6 @@
 
-console.log($("#properties").text());
-var data=JSON.parse($("#properties").text());
-console.log(data.bodycolor);
 
-$("body").css("background",data.bodycolor);
-$(".content_dis").css("background",data.bodycolor);
+var name=$("#main_name").text());
+
 
 document.title = $('#main_name').text();

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Card Expansion Effect - Demo 1</title>
+<meta name="description"
+	content="Card Expansion Effect with SVG clipPath" />
+<meta name="keywords"
+	content="clipPath, svg, effect, layout, expansion, images, grid, polygon" />
+<meta name="author" content="Claudio Calautti for Codrops" />
+<link rel="shortcut icon" href="favicon.ico" />
+<!-- <link rel="stylesheet" type="text/css" href="../css/normalize.css" /> -->
+<!-- <link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="../css/demo.css" />
+
+<link rel="stylesheet" type="text/css" href="../css/tabs.css" />
+<link rel="stylesheet" type="text/css" href="../css/tabstyles.css" />
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<link rel="stylesheet" type="text/css" href="../css/main_kindred.css" /> -->
+<!--[if IE]>
+	  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+<script>
+	if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+		var root = document.getElementsByTagName('html')[0];
+		root.setAttribute('class', 'ff');
+	};
+</script>
+</head>
+<body class="demo-1">
+<div type="hidden" th:text="${areaContent}" class="areaContent"></div>
+	<div class="container">
+		<div th:include="fragments/header::head"></div>
+
+		<div class="content editcontent">
+
+			<h2 class="col-md-11 col-md-offset-1">
+				<strong>Edit</strong>
+			</h2>
+			<form th:action="@{/edittemplate}" method="post" class="col-md-11 col-md-offset-1"
+				th:object="${ChangeCss}">
+					<input type="hidden" id="mainName" name="mainName"
+								th:value="${main.name}"></input>
+				<div class="row">
+					<div>
+						<h1 class="col-md-11 col-md-offset-1">Site template</h1>
+					<textarea class='autoExpand col-md-6 col-md-offset-1' id="css" name="css" rows='3' data-min-rows='3' ></textarea>
+					</div>
+
+				</div>
+				
+
+				<div class="row">
+					<div class="col-md-5 col-md-offset-2">
+						<button tyoe="submit">Save Changes</button>
+					</div>
+				</div>
+			</form>
+
+
+
+		</div>
+	</div>
+
+<script src="../js/classie.js"></script>
+	<script src="../js/jquery-3.1.1.min.js"></script>
+	<script src="../js/autosize.js"></script>
+	<script src="../js/modernizr.custom.js"></script>
+	<script src="../js/cbpFWTabs.js"></script>
+	<script src="../js/edittemplate.js"></script>
+	<script src="../js/jscolor.js"></script>
+
+	<script>
+	/* <![CDATA[ */
+	console.log($(".areaContent").text());
+	var contet=$(".areaContent").text();
+	contet = contet.replace('[', '');
+	contet = contet.replace(']', '');
+	var res = contet.split(",");
+	
+	console.log(res);
+	var string="";
+	for (i = 0; i < res.length; i++) { 
+	   console.log(res[i]);
+	   string=string+res[i] +"\n";
+	  
+	}
+	 $(".autoExpand").val(string);
+	$(document)
+    .one('focus.autoExpand', 'textarea.autoExpand', function(){
+        var savedValue = this.value;
+        this.value = '';
+        this.baseScrollHeight = this.scrollHeight;
+        this.value = savedValue;
+    })
+    .on('input.autoExpand', 'textarea.autoExpand', function(){
+        var minRows = this.getAttribute('data-min-rows')|0, rows;
+        this.rows = minRows;
+        rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
+        this.rows = minRows + rows;
+    });
+	/* ]]> */
+	</script>
+</body>
+
+</html>

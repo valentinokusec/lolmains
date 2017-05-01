@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" class="no-js">
 
@@ -27,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="/css/dialog-sandra.css" />
 <link rel="stylesheet" type="text/css" href="/css/cs-select.css" />
 <link rel="stylesheet" type="text/css" href="/css/cs-skin-slide.css" />
+<link rel="stylesheet" type="text/css" th:href="'http://localhost:8082/getmaincss/'+${main.name}+''" />
 <link th:if="${main.name!='Support' and main.name!='Adc' and main.name!='Jungler' and main.name!='Mid' and main.name!='Top'}" rel="shortcut icon" th:href="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/} + ${main.champion.image}" />
 
 

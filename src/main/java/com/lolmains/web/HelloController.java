@@ -1,35 +1,58 @@
 package com.lolmains.web;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lolmains.domains.BestOf;
-import com.lolmains.domains.Build;
-import com.lolmains.domains.Champion;
 import com.lolmains.domains.Comment;
 import com.lolmains.domains.CommentLikes;
 import com.lolmains.domains.CreateMessage;
-import com.lolmains.domains.Mains;
-import com.lolmains.domains.MainsProperties;
-import com.lolmains.domains.Masteries;
-import com.lolmains.domains.Runes;
-import com.lolmains.domains.Summoner;
-import com.lolmains.domains.Summoners;
 import com.lolmains.domains.Discussion;
 import com.lolmains.domains.DiscussionLikes;
 import com.lolmains.domains.Guide;
 import com.lolmains.domains.Item;
 import com.lolmains.domains.Knowledge;
-import com.lolmains.domains.LeagueChampion;
-import com.lolmains.domains.LeagueRunes;
-import com.lolmains.domains.LeagueSummoners;
+import com.lolmains.domains.Mains;
+import com.lolmains.domains.Summoner;
 import com.lolmains.domains.User;
-import com.lolmains.domains.UserRole;
-import com.lolmains.domains.Video;
-import com.lolmains.domains.VideoLikes;
 import com.lolmains.facade.CreateFacade;
 import com.lolmains.facade.EditFacade;
+import com.lolmains.forms.ChangeCss;
 import com.lolmains.forms.CreateGuide;
 import com.lolmains.forms.CreateKnowledge;
 import com.lolmains.forms.CreateMain;
@@ -38,13 +61,6 @@ import com.lolmains.forms.CreateTopic;
 import com.lolmains.forms.CreateUser;
 import com.lolmains.forms.CreateVideo;
 import com.lolmains.forms.DeleteTopic;
-import com.lolmains.forms.EditTemplate;
-import com.lolmains.forms.GetContent;
-import com.lolmains.forms.GetCount;
-import com.lolmains.forms.Greeting;
-import com.lolmains.forms.HelloMessage;
-import com.lolmains.forms.SearchData;
-import com.lolmains.forms.SidebarData;
 import com.lolmains.forms.VerifyUser;
 import com.lolmains.services.BestOfService;
 import com.lolmains.services.BuildService;
@@ -52,12 +68,6 @@ import com.lolmains.services.ChampionService;
 import com.lolmains.services.CommentLikesService;
 import com.lolmains.services.CommentService;
 import com.lolmains.services.DiscussionLikesService;
-import com.lolmains.services.MainsService;
-import com.lolmains.services.MasteriesService;
-import com.lolmains.services.NotificationService;
-import com.lolmains.services.RunesService;
-import com.lolmains.services.SummonerService;
-import com.lolmains.services.SummonersService;
 import com.lolmains.services.DiscussionService;
 import com.lolmains.services.GuideService;
 import com.lolmains.services.ItemService;
@@ -67,47 +77,16 @@ import com.lolmains.services.LeagueRunesService;
 import com.lolmains.services.LeagueSummonersService;
 import com.lolmains.services.MailService;
 import com.lolmains.services.MainPropertiesService;
+import com.lolmains.services.MainsService;
+import com.lolmains.services.MasteriesService;
+import com.lolmains.services.NotificationService;
+import com.lolmains.services.RunesService;
+import com.lolmains.services.SummonerService;
+import com.lolmains.services.SummonersService;
 import com.lolmains.services.UserService;
 import com.lolmains.util.Util;
 import com.robrua.orianna.api.core.RiotAPI;
 import com.robrua.orianna.type.core.common.Region;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-
-import java.util.List;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-
-import org.json.JSONArray;
-
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class HelloController {
@@ -263,33 +242,16 @@ public class HelloController {
 	}
 
 	@RequestMapping("/edittemplate/{id}")
-	public String edittemplate(Model model, @PathVariable(value = "id") int id) {
+	public String edittemplate(Model model, @PathVariable(value = "id") String id) {
 
 		int authCount = 0;
-		Mains main = mainsservice.findMain(id);
+		Mains main = mainsservice.findByName(id);
 		int members = main.getSummoner().size();
-		double kills = 0;
-		double assists = 0;
-		double deaths = 0;
-		int tier = 0;
-		double winrate = 0;
-		int games = 0;
+	
 
-		for (com.lolmains.domains.Summoner summoner : main.getSummoner()) {
-			kills += summoner.getChampion().get(0).getKills();
-			deaths += summoner.getChampion().get(0).getDeaths();
-			assists += summoner.getChampion().get(0).getAssists();
-			tier += summoner.getTierNumber();
-			games += summoner.getChampion().get(0).getGames();
-			winrate += summoner.getChampion().get(0).getWinrate();
-		}
+	
 
-		kills /= members;
-		assists /= members;
-		deaths /= members;
-		tier /= members;
-		winrate /= members;
-		games /= members;
+	
 
 		User user = null;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -303,88 +265,30 @@ public class HelloController {
 				}
 			}
 		}
-		JSONArray extraData = new JSONArray();
-
-		Page<Discussion> list = discussionservice.findAllByMain(new PageRequest(0, 10), main);
-		ArrayList<Discussion> sortedList = Util.sortDiscussions(list);
-		ObjectMapper mapper = new ObjectMapper();
-		List<Item> itemList = itemservice.getAllItems();
-		String jsonInString = "";
-		String items = "";
+		List<String> list = null;
+		Path path = Paths.get("src/main/resources/static/css/"+main.getName()+".css");
 		try {
-			jsonInString = mapper.writeValueAsString(list);
-			items = mapper.writeValueAsString(itemList);
-		} catch (JsonProcessingException e) {
+			list=Files.readAllLines(path, StandardCharsets.UTF_8);
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		for (Discussion dis : list) {
-			JSONObject data = new JSONObject();
-			DiscussionLikes dl = discussionlikesservice.findByUserAndDiscussion(user, dis);
-			if (dl == null) {
-				data.put("state", "none");
-			} else {
-				data.put("id", dl.isState());
-			}
-			String time = "";
-
-			int count = commentservice.countIdfindByDiscussionId(dis.getId());
-			Timestamp date = dis.getDate();
-			int day = date.getDate();
-			int hour = date.getHours();
-			int minute = date.getMinutes();
-			Timestamp cData = new Timestamp(System.currentTimeMillis());
-			if (day - cData.getDate() == 1) {
-				time = "1 day ago";
-			} else if (day - cData.getDate() == 0) {
-				if (hour - cData.getHours() == 0) {
-
-					time = cData.getMinutes() - minute + " minutes ago";
-
-				} else if (hour - cData.getHours() == 1) {
-					if (cData.getMinutes() < minute) {
-						time = minute + cData.getMinutes() + 60 + " minutes ago";
-					} else {
-						time = minute + cData.getMinutes() + " minutes ago";
-					}
-				}
-			} else {
-				time = cData.getDate() - day + " days ago";
-			}
-			data.put("id", dis.getId());
-			data.put("time", time);
-			data.put("count", count);
-			extraData.put(data);
-		}
-		if (sortedList.size() == 10) {
-			model.addAttribute("more", true);
-		} else {
-			model.addAttribute("more", false);
-		}
+		model.addAttribute("areaContent", list);
 
 		model.addAttribute("CreateTopic", new CreateTopic());
 		model.addAttribute("CreateUser", new CreateUser());
-		model.addAttribute("CreateVideo", new CreateVideo());
+		model.addAttribute("ChangeCss", new ChangeCss());
 		model.addAttribute("main", main);
-		model.addAttribute("extraData", extraData);
+		
 		model.addAttribute("members", members);
-		model.addAttribute("kills", kills);
-		model.addAttribute("deaths", deaths);
-		model.addAttribute("assists", assists);
-
-		model.addAttribute("winrate", winrate);
-		model.addAttribute("tier", tier);
-		model.addAttribute("games", games);
+	
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
 		model.addAttribute("users", main.getSummoner());
 		model.addAttribute("guides", main.getGuide());
-		EditTemplate edit= new EditTemplate();
-		edit.setMainname(main.getName());
-		model.addAttribute("EditTemplate", edit);
+	
 
-		return "edittemplate";
+		return "changecss";
 	}
 
 	@RequestMapping("/login")
@@ -481,23 +385,54 @@ public class HelloController {
 		return "verify";
 
 	}
+	@RequestMapping(value = "/getmaincss/{id}")
+	  public void showImage(@PathVariable(value = "id") String name, HttpServletResponse response,HttpServletRequest request) 
+	          throws ServletException, IOException{
 
+		
+	    
+		Path path = Paths.get("src/main/resources/static/css/"+name+".css");
+	    byte[] data = Files.readAllBytes(path);
+	    response.setContentType("text/css");
+	    response.getOutputStream().write(data);
+
+
+	    response.getOutputStream().close();
+	}
 	@PostMapping("/edittemplate")
-	public String edittemplate(@ModelAttribute EditTemplate EditTemplate, Model model) {
+	public String edittemplate(@ModelAttribute ChangeCss ChangeCss, Model model) {
 
-		Mains main=mainsservice.findByName(EditTemplate.getMainname());
-		MainsProperties property=main.getMainsproperties();
+		Mains main=mainsservice.findByName(ChangeCss.getMainName());
 		
-		property.setBodycolor("#"+EditTemplate.getColor());
-		property.setCardcolor("#"+EditTemplate.getColorcard());
+		String[] ary = ChangeCss.getCss().split("\\\\r\\\\");
+//		File f1 = new File("src/main/resources/static/css/"+main.getName()+".css");
+//		f1.getName();
 		
-		mainpropertyservice.addMainsProperties(property);
-		main.setMainsproperties(property);
-		mainsservice.addMain(main);
-		
+		try {
+			File fout = new File("src/main/resources/static/css/"+main.getName()+".css");
+			FileOutputStream fos = new FileOutputStream(fout);
+		 
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+		 
+			
+				bw.write(ChangeCss.getCss());
+				bw.newLine();
+			
+		 
+			bw.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 
-		return "redirect:main/" + EditTemplate.getMainname();
+		return "redirect:main/" + ChangeCss.getMainName();
 
 	}
 
