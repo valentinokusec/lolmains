@@ -28,13 +28,15 @@ public class Video {
 	@ManyToOne
 	public Mains main;
 	@Column(name="likes")
-	public int likes;
+	public int likes=0;
 	@Column(name="type")
 	public int type;
 	@Column(name="header")
 	public String header;
 	@Column(name="content")
 	public String content;
+	@Column(name="featured")
+	public boolean featured;
 	@Column(name="url")
 	public String url;
 	@JoinColumn(name = "user")
@@ -102,6 +104,12 @@ public class Video {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public boolean isFeatured() {
+		return featured;
+	}
+	public void setFeatured(boolean featured) {
+		this.featured = featured;
 	}
 
 

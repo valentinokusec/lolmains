@@ -6,6 +6,20 @@
 var sessionId=$("#session_id").text();
 var searchid;
 var load = 0;
+console.log($("#state").text());
+if ($("#state").text() == "true") {
+	console.log("dd");
+	$(".main_like_button").attr("disabled", "disabled");
+	$(".main_like").css("color", "#ff3d81");
+
+	 document.getElementByClass('main_like_button').disabled = 'disabled';
+
+} else
+	($("#state").text() == 	"false")
+{
+	$(".main_like_button").attr("disabled", false);
+	
+}
 function openVideo(id) {
 	
 	console.log(id);
@@ -98,7 +112,7 @@ function sendLike(id) {
 	
 	console.log($(".like_"+id).text());
 	var likes = $(".like_"+id).text();
-	
+
 	console.log(likes);
 	stompClient.send("/app/mainsocket/1", {}, JSON.stringify({
 		'count' : likes,
@@ -115,6 +129,14 @@ function connect() {
 	stompClient.connect({}, function(frame) {
 
 		console.log('Connected: ' + frame);
+		stompClient.subscribe('/topic/video/1', function(greeting) {
+			setLikeVideo(JSON.parse(greeting.body).content, JSON
+					.parse(greeting.body).id,
+					JSON.parse(greeting.body).type, JSON
+							.parse(greeting.body).commentId, JSON
+							.parse(greeting.body).notificationcounter,
+					JSON.parse(greeting.body).notification);
+		});
 		stompClient.subscribe('/topic/main/1', function(greeting) {
 			setLike(JSON.parse(greeting.body).content, JSON
 					.parse(greeting.body).id);
@@ -137,6 +159,21 @@ function connect() {
 function setLike(message, id,type,commentId) {
 	console.log(message);
 	$(".like_"+id).text(message);
+}
+function setLikeVideo(message, id, type, commentId, notificationcounter,
+		notification) {
+
+	notifications = JSON.parse(notification);
+
+	stompClient.send("/app/notification/" + notifications.touser.id, {}, JSON
+			.stringify({
+				'touser' : notifications.touser,
+				'content' : notifications.content,
+				'fromuser' : notifications.fromuser
+			}));
+	console.log(message);
+	$(".like_main_"+id).text(message);
+	 document.getElementByClass('main_like_button').disabled = 'disabled';
 }
 function addMore(message, id) {
 
@@ -457,14 +494,18 @@ if ($('#auth').text() == "true") {
 function sendLike(id,type) {
 	
 	console.log(id);
-	var likes = $(".like_"+id).text();
+	var likes = $(".like_main_"+id).text();
+	$(".main_like_button").attr("disabled", "disabled");
+	$(".main_like").css("color", "#ff3d81");
 
+	
 	console.log(likes);
-	stompClient.send("/app/setlikediscussion/1", {}, JSON.stringify({
+	stompClient.send("/app/setlikevideo/1", {}, JSON.stringify({
 		'count' : likes,
 		'id' : id,
 		'type' : type
 	}));
+	
 }
 [].slice.call(document.querySelectorAll('select.cs-select')).forEach(
 		function(el) {

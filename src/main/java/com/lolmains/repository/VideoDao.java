@@ -22,5 +22,6 @@ public interface VideoDao extends  JpaRepository< Video ,Integer>{
 	public List<Video> findAllByMainOrderByLikesDesc(Mains main);
 	public List<Video> findTop1ByOrderByLikesDesc(Mains main);
 	public List<Video> findTop1ByOrderByLikesDesc();
+	public List<Video> findTop1ByOrderByFeatured(boolean feat);
 	
 }

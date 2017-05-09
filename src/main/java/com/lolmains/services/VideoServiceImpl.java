@@ -101,6 +101,12 @@ public class VideoServiceImpl implements VideoService {
 		return videodao.findAllByMainOrderByLikesDesc(main);
 	}
 
+	@Override
+	public List<Video> findTop1ByOrderByFeatured(boolean feat) {
+		// TODO Auto-generated method stub
+		return videodao.findTop1ByOrderByFeatured( feat);
+	}
+
 	
 
 

@@ -73,7 +73,7 @@ public class Summoner {
 	@Column(name="notificationcount")
 	private int notificationcount;
 	@JoinColumn(name = "knowledge")
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
 	private List<MailingList> mailingList;
 	public int getId() {
 		return id;

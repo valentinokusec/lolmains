@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,12 +28,13 @@ import com.lolmains.domains.Mains;
 import com.lolmains.domains.Notification;
 import com.lolmains.domains.Summoner;
 import com.lolmains.domains.User;
+import com.lolmains.domains.Video;
+import com.lolmains.domains.VideoLikes;
 import com.lolmains.forms.GetContent;
 import com.lolmains.forms.GetCount;
 import com.lolmains.forms.Greeting;
 import com.lolmains.forms.HelloMessage;
 import com.lolmains.forms.ItemPojo;
-import com.lolmains.forms.NotificationFrom;
 import com.lolmains.forms.SearchData;
 import com.lolmains.forms.Stats;
 import com.lolmains.repository.CommentLikesDao;
@@ -58,12 +58,19 @@ import com.lolmains.services.SummonerService;
 import com.lolmains.services.SummonersService;
 import com.lolmains.services.UserService;
 import com.lolmains.services.VideoLikesService;
+import com.lolmains.services.VideoService;
 
 @Controller
 public class SocketController {
 
 	@Autowired
 	MainsService mainsservice;
+	
+	@Autowired
+	VideoService videoservice;
+	
+	@Autowired
+	VideoLikesService videlikesservice;
 
 	@Autowired
 	ChampionSpellService spellservice;
@@ -240,7 +247,49 @@ public class SocketController {
 		summonerservice.addSummoners(owner);
 		return new Greeting(count + "", message.getId(), dl.isState(), 0, count, 0, id, counter, not.toString());
 	}
+	@MessageMapping("/setlikevideo/{id}")
+	@SendTo("/topic/video/{id}")
+	public Greeting connectToVideo(@DestinationVariable String id, GetCount message) throws Exception {
 
+		VideoLikes dl = new VideoLikes();
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userservice.findByUserName("tino");
+		Video topic = videoservice.findVideo(message.getId());
+
+		Notification not = new Notification();
+		not.setFromuser(user.getSummoner());
+		
+		not.setTouser(topic.getUser());
+
+		dl.setVideo(topic);
+		dl.setUser(user.getSummoner());
+		int count;
+	//	if (message.getType() == 1) {
+			count = message.getCount() + 1;
+			dl.setState(true);
+			not.setContent("Upvoted your video");
+//		} else {
+//			count = message.getCount() + 1;
+//			dl.setState(false);
+//			not.setContent("Upvoted your video");
+//		}
+		videlikesservice.createVideoLikes(dl);
+		topic.setLikes(count);
+		videoservice.createVideo(topic);
+		notificationservice.addNotification(not);
+
+		Summoner owner = topic.getUser();
+		List<Notification> listNot = owner.getNotification();
+		listNot.add(not);
+		int counter = owner.getNotificationcount();
+		counter++;
+		owner.setNotificationcount(counter);
+		owner.setNotification(listNot);
+
+		summonerservice.addSummoners(owner);
+		return new Greeting(count + "", message.getId(), dl.isState(), 0, count, 0, id, counter, not.toString());
+	}
 	@MessageMapping("/setlikediscussiontopic/{id}")
 	@SendTo("/topic/topiclikes/{id}")
 	public Greeting setlikediscussiontopic(@DestinationVariable String id, GetCount message) throws Exception {

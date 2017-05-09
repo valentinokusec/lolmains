@@ -28,4 +28,5 @@ public interface VideoService {
 	public Page<Video> findAllByMain(Pageable pageable,  Mains main);
 	public int countByMain(Mains main);
 	public List<Video> findAllByMainOrderByLikesDesc(Mains main);
+	public List<Video> findTop1ByOrderByFeatured(boolean feat);
 } 

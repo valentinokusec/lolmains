@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,27 +23,40 @@ public class VideoLikes {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="id")
 	private int id;
-	@Column(name="username")
-	private String userName;
-	@Column(name="videoId")
-	private int videoId;
+	@JoinColumn(name = "user")
+	@ManyToOne
+	public Summoner user;
+	@JoinColumn(name = "video")
+	@ManyToOne
+	public Video video;
+	
+	@Column(name="state")
+	private boolean state;
+	
+	
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getUserName() {
-		return userName;
+	public Summoner getUser() {
+		return user;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUser(Summoner user) {
+		this.user = user;
 	}
-	public int getVideoId() {
-		return videoId;
+	public Video getVideo() {
+		return video;
 	}
-	public void setVideoId(int videoId) {
-		this.videoId = videoId;
+	public void setVideo(Video video) {
+		this.video = video;
+	}
+	public boolean isState() {
+		return state;
+	}
+	public void setState(boolean state) {
+		this.state = state;
 	}
 
 	

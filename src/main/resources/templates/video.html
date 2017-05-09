@@ -46,6 +46,7 @@
 		<div th:include="fragments/header::head"></div>
 		<div class="details"></div>
 		<div id="data" type="hidden" th:text="${topics_data}"></div>
+		<div style="display: none" id="state" th:text="${state}"></div>
 		<div id="edata" type="hidden" style="display: none"
 			th:text="${extraData}"></div>
 
@@ -97,13 +98,16 @@
 								<div class="col-md-1 col-md-offset-0"
 									style="text-align: left; padding: 0px;">
 									<div class="like_count">
-										<p th:class="@{like_}+${main_video.id}" th:text="${main_video.likes}"></p>
+										<p th:class="@{like_main_}+${main_video.id}" th:text="${main_video.likes}"></p>
 									</div>
 								</div>
 								<div class="col-md-2 col-md-offset-0"
 									style="text-align: left; padding: 0px;">
-									<i style="float: right; color: #ff3d81;" class="fa fa-heart"
+									<button class="main_like_button" th:id="${main_video.id}"
+										onclick="sendLike(this.id)">
+									<i style="float: right; " class="fa fa-heart main_like"
 										aria-hidden="true"></i>
+										</button>
 								</div>
 							</div>
 							<div style="text-align: left; padding: 0px;"
@@ -114,7 +118,7 @@
 						</div>
 					</div>
 				<div class="col-md-11 col-md-offset-1 space_top">
-				<h1 style="margin-left:50px" >New</h1>
+				<h1 th:if="${first!= true}" style="margin-left:50px" >New</h1>
 				<div class="videos_list">
 					<div th:each="video : ${videos}"
 						class="video col-md-2 col-md-offset-0">
@@ -321,7 +325,7 @@
 	</div>
 	</div>
 
-
+<div style="display: none" id="user_id" th:text="${user.id}" th:if="${user!=null}"></div>
 	<script src="/js/classie.js"></script>
 
 	<script src="/js/selectFx.js"></script>
@@ -341,7 +345,7 @@
 	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
 	<script src="/js/discussionSocket.js"></script>
 	<script src="/js/tooltip.js"></script>
-	<script src="/js/changeCss.js"></script>
+	<script src="/js/notification.js"></script>
 	<script>
 		/* <![CDATA[ */
 		(function() {

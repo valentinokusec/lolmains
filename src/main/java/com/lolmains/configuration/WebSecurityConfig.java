@@ -63,6 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	            .antMatchers("/discussions/**", "/login").permitAll()
 	            .antMatchers("/gs-guide-websocket/**", "/login").permitAll()
 	            .antMatchers("/setlikediscussiontopic/**", "/login").permitAll()
+	            .antMatchers("/setlikevideo/**", "/login").permitAll()
 	            .antMatchers("/topiclikes/**", "/login").permitAll()
 	            .antMatchers("/topic/**", "/login").permitAll()
 	            
