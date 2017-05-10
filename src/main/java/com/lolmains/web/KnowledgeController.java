@@ -293,7 +293,7 @@ public class KnowledgeController {
 		}
 
 		Knowledge knowledge = knowledgeservice.findAllByMainAndTypeAndHeader(main, 1, type);
-
+		Page<Knowledge> knowledgeList = knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1);
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
 		model.addAttribute("nextpage", true);
@@ -306,6 +306,8 @@ public class KnowledgeController {
 		// model.addAttribute("championid", main.getChampion().getId());
 		model.addAttribute("mainsid", id);
 		model.addAttribute("knowledge", knowledge);
+		model.addAttribute("knowledgeList", knowledgeList);
+		
 		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
 			model.addAttribute("mainbuild",
 					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());

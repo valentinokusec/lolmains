@@ -106,6 +106,43 @@
 								</li>
 								
 							</ul>
+							<h1 class="col-md-6 col-md-offset-6">History</h1>
+							<ul id="history" th:each="knowledge : ${knowledgeList}" style="margin-top: 0px;">
+							<!--   -->
+							
+								<li th:if="${knowledge != null}">
+							<div class="col-md-12 col-md-offset-0" style="text-align:center;">
+								<p th:text="${#dates.format(knowledge.date, 'dd-MMM-yyyy')}"></p>
+							</div>
+								
+										<div class="col-md-8 col-md-offset-4 ">
+
+
+
+											<!-- <i class="fa fa-comment fa-2x icon_fa" aria-hidden="true"></i> -->
+										
+													
+													
+															<table style="margin-top: 10px; margin-bottom: 0px;" class="item_table">
+
+
+
+															<td  th:each="item : ${knowledge.build}"><img 	class="tooltip_guide item left_td_img"
+																	th:id="${item.itemId}"
+																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${item.itemId} + @{.png}"></img>
+																</td>
+
+															</table>
+				
+										</div>
+										<div class="col-md-10 col-md-offset-2 space" style="text-align:left;">
+								<h2 th:id="text"></h2>
+								<div id="textContent" style="display:none;" th:text="${knowledge.content}"></div>
+							</div>
+									
+								</li>
+								
+							</ul>
 							<div class="share">
 
 								<!-- 	<div sec:authorize="isAuthenticated()"> -->
@@ -131,9 +168,7 @@
 									</form>
 								</div>
 									<div th:if="${authCount ==3}">
-								<button style="position: relative;  left: -100px;; color:white !important;" class="share-toggle-button" data-dialog="delete_dialog" id="delete_b">
-						<i class="share-icon fa fa-trash"></i> Delete
-					</button>
+							
 								</div>
 								<div th:if="${authCount ==3}">
 									<a style="position: relative;  left: 0px; color:white !important;     bottom: 50px;" class="share-toggle-button"

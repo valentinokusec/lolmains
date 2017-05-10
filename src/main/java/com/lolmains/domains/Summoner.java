@@ -74,6 +74,7 @@ public class Summoner {
 	private int notificationcount;
 	@JoinColumn(name = "knowledge")
 	@OneToMany(fetch=FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<MailingList> mailingList;
 	public int getId() {
 		return id;
