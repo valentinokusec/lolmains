@@ -97,6 +97,9 @@
 
 											<h1 th:text="${substrictionitem.header}"></h1>
 												<h1 th:text="${substrictionitem.content}"></h1>
+												<h1 th:text="${substrictionitem.header}"></h1>
+												<a th:text="${substrictionitem.url}"></a>
+												
 
 										</div>
 									</div>
@@ -137,13 +140,16 @@
 									</button>
 								</div>
 								<div th:if="${authCount ==3}">
-									<a
+									<button
+									data-dialog="send_dialog"
+										id="send_b"
 										style="position: relative; left: 0px; color: white !important; bottom: 50px;"
 										class="share-toggle-button"
-										th:href="@{/newknowledge/} + ${main.id}"> <i
-										class="share-icon fa fa-plus"></i>
-									</a>
+										> <i
+										class="share-icon ">Send</i>
+									</button>
 								</div>
+								
 
 								<!-- 	</div> -->
 
@@ -258,6 +264,41 @@
 			</div>
 
 		</div>
+			<div id="send_dialog" class="dialog">
+			<div class="dialog__overlay"></div>
+			<div class="dialog__content">
+				<h2>
+					<strong>Are you sure</strong>
+				</h2>
+				<form th:action="@{/knowledge/sendmail}" method="post"
+					th:object="${DeleteTopic}" style="padding-left: 0px !important;">
+
+
+					<table style="margin: auto;">
+
+
+						<input id="maind" name="mainid" type="hidden"
+							th:value="${main.id}"></input>
+						<input th:if="${knowledge!=null}" id="topicid" name="topicid"
+							type="hidden" th:value="${knowledge.id}"></input>
+
+
+
+						<tr>
+							<td><button type="submit">
+									Confirm
+									<div class="ripples buttonRipples">
+										<span class="ripplesCircle"></span>
+									</div>
+								</button></td>
+						</tr>
+					</table>
+				</form>
+				<div>
+					<button class="action" data-dialog-close="data-dialog-close"></button>
+				</div>
+			</div>
+		</div>
 		<div id="delete_dialog" class="dialog">
 			<div class="dialog__overlay"></div>
 			<div class="dialog__content">
@@ -331,7 +372,7 @@
 	<script src="/js/discussionSocket.js"></script>
 	<script src="/js/tooltip.js"></script>
 	<script src="/js/notification.js"></script>
-	<script src="/js/changeCss.js"></script>
+	
 	<script>
 		(function() {
 			$("#text").append($("#textContent").text());
@@ -340,8 +381,14 @@
 						.getElementById("delete_dialog"), deletedlg = new DialogFx(
 						deletedialog);
 
-				deletetrigger.addEventListener('click', deletedlg.toggle
-						.bind(deletedlg));
+			
+				var sendtrigger = document.getElementById("send_b"), senddialog = document
+				.getElementById("send_dialog"), senddlg = new DialogFx(
+						senddialog);
+				sendtrigger.addEventListener('click', senddlg.toggle
+						.bind(senddlg));
+		deletetrigger.addEventListener('click', deletedlg.toggle
+				.bind(deletedlg));
 			} else {
 
 				var logintrigger = document.getElementById("login_b"), logindialog = document

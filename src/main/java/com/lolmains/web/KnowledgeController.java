@@ -1,65 +1,8 @@
 package com.lolmains.web;
 
-import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lolmains.domains.Champion;
-import com.lolmains.domains.Comment;
-import com.lolmains.domains.Mains;
-import com.lolmains.domains.Subsctriction;
-import com.lolmains.domains.Summoner;
-import com.lolmains.domains.TierList;
-import com.lolmains.domains.Discussion;
-import com.lolmains.domains.DiscussionLikes;
-import com.lolmains.domains.Knowledge;
-import com.lolmains.domains.LeagueChampion;
-import com.lolmains.domains.Link;
-import com.lolmains.domains.LinkGroup;
-import com.lolmains.domains.MailingList;
-import com.lolmains.domains.User;
-import com.lolmains.domains.UserRole;
-import com.lolmains.domains.Video;
-import com.lolmains.forms.CreateKnowledge;
-import com.lolmains.forms.CreateMain;
-import com.lolmains.forms.CreateTierList;
-import com.lolmains.forms.CreateTopic;
-import com.lolmains.forms.CreateUser;
-import com.lolmains.forms.CreateVideo;
-import com.lolmains.forms.DeleteTopic;
-import com.lolmains.forms.Greeting;
-import com.lolmains.forms.HelloMessage;
-import com.lolmains.services.ChampionService;
-import com.lolmains.services.CommentService;
-import com.lolmains.services.MainsService;
-import com.lolmains.services.SummonerService;
-import com.lolmains.services.TierListService;
-import com.lolmains.services.DiscussionService;
-import com.lolmains.services.ItemService;
-import com.lolmains.services.KnowledgeService;
-import com.lolmains.services.LeagueChampionService;
-import com.lolmains.services.LeagueRunesService;
-import com.lolmains.services.LeagueSummonersService;
-import com.lolmains.services.LinkGroupService;
-import com.lolmains.services.LinkService;
-import com.lolmains.services.MailingListService;
-import com.lolmains.services.UserService;
-import com.lolmains.services.VideoService;
-import com.robrua.orianna.api.core.RiotAPI;
-import com.robrua.orianna.type.core.common.Region;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -68,9 +11,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -78,6 +20,35 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lolmains.domains.CreateMessage;
+import com.lolmains.domains.Knowledge;
+import com.lolmains.domains.LeagueChampion;
+import com.lolmains.domains.Link;
+import com.lolmains.domains.LinkGroup;
+import com.lolmains.domains.MailingList;
+import com.lolmains.domains.Mains;
+import com.lolmains.domains.Subsctriction;
+import com.lolmains.domains.Summoner;
+import com.lolmains.domains.TierList;
+import com.lolmains.domains.User;
+import com.lolmains.forms.CreateTierList;
+import com.lolmains.forms.CreateUser;
+import com.lolmains.forms.DeleteTopic;
+import com.lolmains.services.CommentService;
+import com.lolmains.services.DiscussionService;
+import com.lolmains.services.KnowledgeService;
+import com.lolmains.services.LeagueChampionService;
+import com.lolmains.services.LinkGroupService;
+import com.lolmains.services.LinkService;
+import com.lolmains.services.MailService;
+import com.lolmains.services.MailingListService;
+import com.lolmains.services.MainsService;
+import com.lolmains.services.SummonerService;
+import com.lolmains.services.TierListService;
+import com.lolmains.services.UserService;
+import com.lolmains.services.VideoService;
 
 @Controller
 @RequestMapping("/knowledge")
@@ -117,6 +88,9 @@ public class KnowledgeController {
 
 	@Autowired
 	LeagueChampionService leaguechampionservice;
+	
+	@Autowired
+	MailService mailservice;
 
 	@Autowired
 	LinkGroupService linkgroupservice;
@@ -875,6 +849,23 @@ public class KnowledgeController {
 		mailingListUser.add(email);
 		summoner.setMailingList(mailingListUser);
 		summonerservice.addSummoners(summoner);
+	
+		return "redirect:/main/" + main.getName();
+
+	}
+	@PostMapping("/sendmail")
+	public String sendMails(Model model, MailingList email, @RequestParam("mainid") int id) {
+		
+	
+		Mains main = mainsservice.findMain(id);
+		List<MailingList> mailingListt= main.getMailingList();
+		for (MailingList mailingList : mailingListt) {
+		
+			CreateMessage cm= new CreateMessage();
+			cm.setEmail(	mailingList.getEmail());
+			cm.setMessage("dd");
+			mailservice.sendMail(cm);
+		}
 	
 		return "redirect:/main/" + main.getName();
 

@@ -34,6 +34,9 @@ public class SubsctrictionItem {
 	@Column(columnDefinition = "VARCHAR(255)", name = "content")
 	public String content;
 
+	@Column(columnDefinition = "VARCHAR(255)", name = "url")
+	public String url;
+	
 	public int getId() {
 		return id;
 	}
@@ -56,6 +59,14 @@ public class SubsctrictionItem {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 }

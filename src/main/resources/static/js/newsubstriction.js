@@ -629,7 +629,9 @@ $(".newdataset").click(
 							+"</table></td>"
 					+"</tr>" +
 							"	<input type='hidden' class='content" + dataset+"' value='0'"
-					+"id='substrictionitem[" + dataset+"].content' name='substrictionitem[" + dataset+"].content' />");
+					+"id='substrictionitem[" + dataset+"].content' name='substrictionitem[" + dataset+"].content' />"
+					+"	<input type='hidden' class='content" + dataset+"' value='0' placeholder='url(optional)'"
+					+"id='substrictionitem[" + dataset+"].url' name='substrictionitem[" + dataset+"].url' />);
 			
 		});
 // [].slice.call(document.querySelectorAll('.tabs')).forEach(function(el) {
