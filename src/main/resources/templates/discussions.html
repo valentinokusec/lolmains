@@ -56,12 +56,15 @@
 <body class="demo-1">
 	<div class="container">
 		<div th:include="fragments/header::head"></div>
+		
 		<div class="details"></div>
 		<div id="data" type="hidden" th:text="${topics_data}"></div>
 		<div id="edata" type="hidden" style="display:none" th:text="${extraData}"></div>
-		
+		<img class="banner_main" th:src="${main.banner}" />
 		<div class="content_discussions">
+		<div class="backgroun_color"></div>
 			<!-- trianglify pattern container -->
+			<div class="background_content">
 	<div class="left_nav">
 	<h2>Type</h2>
 	<ul>
@@ -103,7 +106,7 @@
 							
 								<li style="text-align: left;">
 									<div class="row" th:each="topic : ${topics}">
-										<div class="col-md-10 col-md-offset-2">
+										<div class="col-md-12 col-md-offset-0">
 
 
 
@@ -412,6 +415,7 @@
 			<div class="item_name"></div>
 			<div class="item_description"></div>
 			<div class="item_stats"></div>
+		</div>
 		</div>
 	</div>
 	<!-- /container -->
