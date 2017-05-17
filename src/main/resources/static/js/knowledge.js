@@ -131,7 +131,7 @@ function getAllData(data, id,type) {
 							'data' : data
 						}));
 			}
-		 else if (id < 12) {
+		 else if (id ==99) {
 
 				console.log($("#championid").text());
 				searchid = 5;
@@ -140,10 +140,24 @@ function getAllData(data, id,type) {
 							'data' : $("#championid").text()
 						}));
 			}
-		else {
+		else if(id < 39){
 			console.log(id);
 			searchid = 4;
 			stompClient.send("/app/getguiderunesdata/1", {}, JSON.stringify({
+				'data' : data
+			}));
+		}
+		else if(id < 85){
+			console.log(id);
+			searchid = 4;
+			stompClient.send("/app/getguiderunesdata/1", {}, JSON.stringify({
+				'data' : data
+			}));
+		}
+		else if(id < 87){
+			console.log(id);
+			searchid = 4;
+			stompClient.send("/app/getguidesummonersdata/1", {}, JSON.stringify({
 				'data' : data
 			}));
 		}
@@ -822,7 +836,8 @@ function itemClick(id) {
 			}
 		else
 			{
-			getAllData("", 11, 3);
+			
+			getAllData("", 99, 3);
 			searchid = id.substring(5, 6);
 			}
 	
@@ -836,7 +851,29 @@ function itemClick(id) {
 	$("#img_" + listid + last_item_id).addClass("active");
 
 }
+$('.add_mastery').click(
+		function() {
+			var id = this.id;
 
+			var idd = id.replace('add_', '');
+			console.log(idd);
+			var value = $("#param" + idd).attr("value");
+			console.log(value);
+			if (idd == "81" || idd == "82" || idd == "83" || idd == "66"
+					|| idd == "67" || idd == "68" || idd == "51" || idd == "52"
+					|| idd == "53") {
+				$("#param84").attr("value", $("#img_add_" + idd).attr("src"));
+			}
+			if (value == 0) {
+				$("#param" + idd).attr("value", 1);
+
+			} else {
+
+				$("#param" + idd).attr("value", 0);
+			}
+			$("#img_add_" + idd).toggleClass("mastery_shade");
+
+		});
 
 
 /* ]]> */

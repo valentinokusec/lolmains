@@ -64,6 +64,8 @@ import com.lolmains.services.UserService;
 import com.robrua.orianna.api.core.RiotAPI;
 import com.robrua.orianna.type.core.common.Region;
 
+import jnr.ffi.types.sa_family_t;
+
 @Service
 public class CreateFacadeImpl implements CreateFacade {
 
@@ -512,6 +514,13 @@ public class CreateFacadeImpl implements CreateFacade {
 		if (CreateKnowledge.getType()==10) {
 			LinkGroup lg= linkgroupservice.addLinkGroup(new LinkGroup(CreateKnowledge.getLinkGroup(),main));
 			knowledge.setLinkGroup(lg);	
+		}
+		if (CreateKnowledge.getType()==11) {
+			Summoners summ= new Summoners();
+			summ.setSummoner1(leaguesummonersservice.findBySummonersid(CreateKnowledge.getParam85()));
+			summ.setSummoner2(leaguesummonersservice.findBySummonersid(CreateKnowledge.getParam86()));
+			summonersservice.addSummoners(summ);
+			knowledge.setSummoners(summ);	
 		}
 		knowledge.setDate(new Timestamp(System.currentTimeMillis()));
 		knowledge.setMathup(leaguechampionservice.findByChampionid(CreateKnowledge.getParam10()));

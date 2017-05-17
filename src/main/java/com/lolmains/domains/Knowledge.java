@@ -73,6 +73,15 @@ public class Knowledge {
 	@JoinColumn(name = "spells")
 	@OneToMany(fetch=FetchType.EAGER)
 	private List<ChampionSpells> spells;
+	@JoinColumn(name = "runesid")
+	@OneToOne
+	private Runes runes;
+	@JoinColumn(name = "masteriesid")
+	@OneToOne
+	private Masteries masteriesid;
+	@JoinColumn(name = "summonersid")
+	@OneToOne
+	private Summoners summoners;
 	
 	
 	public Item getItem() {
@@ -188,6 +197,24 @@ public class Knowledge {
 	}
 	public void setLinkGroup(LinkGroup linkGroup) {
 		this.linkGroup = linkGroup;
+	}
+	public Runes getRunes() {
+		return runes;
+	}
+	public void setRunes(Runes runes) {
+		this.runes = runes;
+	}
+	public Masteries getMasteriesid() {
+		return masteriesid;
+	}
+	public void setMasteriesid(Masteries masteriesid) {
+		this.masteriesid = masteriesid;
+	}
+	public Summoners getSummoners() {
+		return summoners;
+	}
+	public void setSummoners(Summoners summoners) {
+		this.summoners = summoners;
 	}
 
 	

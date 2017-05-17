@@ -291,7 +291,147 @@ public class KnowledgeController {
 
 		return "knowledge_build";
 	}
+	@RequestMapping("/{id}/Summoners/{type}")
+	public String knowledgeSummoners(@PathVariable(value = "id") String id, @PathVariable(value = "type") String type,
+			Model model, HttpServletRequest ServletRequest) {
 
+		int authCount = 0;
+		Mains main = mainsservice.findByName(id);
+
+		String sessionId = ServletRequest.getSession().getId();
+
+		User user = null;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!auth.getName().contentEquals("anonymousUser")) {
+			user = userservice.findByUserName(auth.getName());
+			authCount = 1;
+			if (main.getSummoner().contains(user.getSummoner())) {
+				authCount = 2;
+				if (main.getAdmins().contains(user)) {
+					authCount = 3;
+				}
+			}
+		}
+
+		Knowledge knowledge = knowledgeservice.findAllByMainAndTypeAndHeader(main, 11, type);
+		Page<Knowledge> knowledgeList = knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 11);
+		model.addAttribute("sessionid", sessionId);
+		model.addAttribute("CreateUser", new CreateUser());
+		model.addAttribute("nextpage", true);
+
+		model.addAttribute("main", main);
+		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 11));
+		model.addAttribute("user", user);
+		model.addAttribute("authCount", authCount);
+		// model.addAttribute("champion", main.getChampion().getName());
+		// model.addAttribute("championid", main.getChampion().getId());
+		model.addAttribute("mainsid", id);
+		model.addAttribute("knowledge", knowledge);
+		model.addAttribute("knowledgeList", knowledgeList);
+		
+		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
+		}
+
+		return "knowledge_summoners";
+	}
+	@RequestMapping("/{id}/Masteries/{type}")
+	public String knowledgeMasteries(@PathVariable(value = "id") String id, @PathVariable(value = "type") String type,
+			Model model, HttpServletRequest ServletRequest) {
+
+		int authCount = 0;
+		Mains main = mainsservice.findByName(id);
+
+		String sessionId = ServletRequest.getSession().getId();
+
+		User user = null;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!auth.getName().contentEquals("anonymousUser")) {
+			user = userservice.findByUserName(auth.getName());
+			authCount = 1;
+			if (main.getSummoner().contains(user.getSummoner())) {
+				authCount = 2;
+				if (main.getAdmins().contains(user)) {
+					authCount = 3;
+				}
+			}
+		}
+
+		Knowledge knowledge = knowledgeservice.findAllByMainAndTypeAndHeader(main, 1, type);
+		Page<Knowledge> knowledgeList = knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1);
+		model.addAttribute("sessionid", sessionId);
+		model.addAttribute("CreateUser", new CreateUser());
+		model.addAttribute("nextpage", true);
+
+		model.addAttribute("main", main);
+		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
+		model.addAttribute("user", user);
+		model.addAttribute("authCount", authCount);
+		// model.addAttribute("champion", main.getChampion().getName());
+		// model.addAttribute("championid", main.getChampion().getId());
+		model.addAttribute("mainsid", id);
+		model.addAttribute("knowledge", knowledge);
+		model.addAttribute("knowledgeList", knowledgeList);
+		
+		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
+		}
+
+		return "knowledge_mastereries";
+	}
+	@RequestMapping("/{id}/Runes/{type}")
+	public String knowledgeRunes(@PathVariable(value = "id") String id, @PathVariable(value = "type") String type,
+			Model model, HttpServletRequest ServletRequest) {
+
+		int authCount = 0;
+		Mains main = mainsservice.findByName(id);
+
+		String sessionId = ServletRequest.getSession().getId();
+
+		User user = null;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!auth.getName().contentEquals("anonymousUser")) {
+			user = userservice.findByUserName(auth.getName());
+			authCount = 1;
+			if (main.getSummoner().contains(user.getSummoner())) {
+				authCount = 2;
+				if (main.getAdmins().contains(user)) {
+					authCount = 3;
+				}
+			}
+		}
+
+		Knowledge knowledge = knowledgeservice.findAllByMainAndTypeAndHeader(main, 1, type);
+		Page<Knowledge> knowledgeList = knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1);
+		model.addAttribute("sessionid", sessionId);
+		model.addAttribute("CreateUser", new CreateUser());
+		model.addAttribute("nextpage", true);
+
+		model.addAttribute("main", main);
+		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
+		model.addAttribute("user", user);
+		model.addAttribute("authCount", authCount);
+		// model.addAttribute("champion", main.getChampion().getName());
+		// model.addAttribute("championid", main.getChampion().getId());
+		model.addAttribute("mainsid", id);
+		model.addAttribute("knowledge", knowledge);
+		model.addAttribute("knowledgeList", knowledgeList);
+		
+		if (!knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).isEmpty()) {
+			model.addAttribute("mainbuild",
+					knowledgeservice.findAllTop1ByMainAndTypeAndHeader(main, 1).iterator().next().getHeader());
+		} else {
+			model.addAttribute("mainbuild", "empty");
+		}
+
+		return "knowledge_runes";
+	}
 	@RequestMapping("/{id}/Items/{page}")
 	public String knowledgeItems(@PathVariable(value = "id") String id, @PathVariable(value = "page") int page,
 			Model model, HttpServletRequest ServletRequest) {

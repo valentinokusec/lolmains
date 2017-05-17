@@ -27,6 +27,10 @@ public class CreateKnowledge {
 	
 	private int param11;
 	
+	private int param85;
+	
+	private int param86;
+	
 	private String linkGroup;
 	
 	private String header;
@@ -132,6 +136,18 @@ public class CreateKnowledge {
 	}
 	public void setLinkGroup(String linkGroup) {
 		this.linkGroup = linkGroup;
+	}
+	public int getParam85() {
+		return param85;
+	}
+	public void setParam85(int param85) {
+		this.param85 = param85;
+	}
+	public int getParam86() {
+		return param86;
+	}
+	public void setParam86(int param86) {
+		this.param86 = param86;
 	}
 
 	

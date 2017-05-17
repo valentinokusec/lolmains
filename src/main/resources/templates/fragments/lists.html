@@ -56,6 +56,24 @@
 					</ul>
 
 				</li>
+				<li>
+					<button id="open_build">Masteries</button>
+					<ul class="build_list">
+						<li th:each="build : ${build_list}"><a
+							th:text="${build.header}"
+							th:href="@{/knowledge/}+${main.name}+@{/Masteries/}+${build.header}"></a></li>
+					</ul>
+
+				</li>
+				<li>
+					<button id="open_build">Runes</button>
+					<ul class="build_list">
+						<li th:each="build : ${build_list}"><a
+							th:text="${build.header}"
+							th:href="@{/knowledge/}+${main.name}+@{/Runes/}+${build.header}"></a></li>
+					</ul>
+
+				</li>
 				<!-- 	<li>
 	<a th:href="@{/knowledge/}+${main.name}+@{/1/Abilities}">Abilities</a>
 	</li> -->
