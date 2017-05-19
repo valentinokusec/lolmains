@@ -57,20 +57,29 @@
 
 				</li>
 				<li>
-					<button id="open_build">Masteries</button>
-					<ul class="build_list">
-						<li th:each="build : ${build_list}"><a
+					<button id="open_masteries">Masteries</button>
+					<ul class="masteries_list">
+						<li th:each="build : ${masteries_list}"><a
 							th:text="${build.header}"
 							th:href="@{/knowledge/}+${main.name}+@{/Masteries/}+${build.header}"></a></li>
 					</ul>
 
 				</li>
 				<li>
-					<button id="open_build">Runes</button>
-					<ul class="build_list">
-						<li th:each="build : ${build_list}"><a
+					<button id="open_runes">Runes</button>
+					<ul class="runes_list">
+						<li th:each="build : ${runes_list}"><a
 							th:text="${build.header}"
 							th:href="@{/knowledge/}+${main.name}+@{/Runes/}+${build.header}"></a></li>
+					</ul>
+
+				</li>
+					<li>
+					<button id="open_summoners">Summoners</button>
+					<ul class="summoners_list">
+						<li th:each="build : ${summoners_list}"><a
+							th:text="${build.header}"
+							th:href="@{/knowledge/}+${main.name}+@{/Summoners/}+${build.header}"></a></li>
 					</ul>
 
 				</li>

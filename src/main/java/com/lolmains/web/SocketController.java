@@ -22,6 +22,7 @@ import com.lolmains.domains.Discussion;
 import com.lolmains.domains.DiscussionLikes;
 import com.lolmains.domains.Item;
 import com.lolmains.domains.LeagueChampion;
+import com.lolmains.domains.LeagueMasteries;
 import com.lolmains.domains.LeagueRunes;
 import com.lolmains.domains.LeagueSummoners;
 import com.lolmains.domains.Mains;
@@ -48,6 +49,7 @@ import com.lolmains.services.DiscussionService;
 import com.lolmains.services.GuideService;
 import com.lolmains.services.ItemService;
 import com.lolmains.services.LeagueChampionService;
+import com.lolmains.services.LeagueMasteriesService;
 import com.lolmains.services.LeagueRunesService;
 import com.lolmains.services.LeagueSummonersService;
 import com.lolmains.services.MainsService;
@@ -113,6 +115,9 @@ public class SocketController {
 
 	@Autowired
 	LeagueRunesService leaguerunesservice;
+	
+	@Autowired
+	LeagueMasteriesService leaguemasteriesservice;
 
 	@Autowired
 	ChampionSpellService championspellservice;
@@ -483,7 +488,12 @@ public class SocketController {
 
 		return leaguerunesservice.findByNameIgnoreCaseContaining(message.getData());
 	}
+	@MessageMapping("/getguidemasteriesdata/{id}")
+	@SendTo("/topic/getguidedata/{id}")
+	public List<LeagueMasteries> allGuideMasteries(@DestinationVariable String id, SearchData message) throws Exception {
 
+		return leaguemasteriesservice.findByNameIgnoreCaseContaining(message.getData());
+	}
 	@MessageMapping("/getguidesummonersdata/{id}")
 	@SendTo("/topic/getguidedata/{id}")
 	public List<LeagueSummoners> allGuidesummoners(@DestinationVariable String id, SearchData message)
@@ -563,7 +573,12 @@ public class SocketController {
 
 		return leaguerunesservice.findByRuneid(Integer.parseInt(message.getData()));
 	}
+	@MessageMapping("/gettooltimasteriesdata/{id}")
+	@SendTo("/topic/gettooltipdata/{id}")
+	public LeagueMasteries gettooltipmasteriesdata(@DestinationVariable String id, SearchData message) throws Exception {
 
+		return leaguemasteriesservice.findLeagueMasteries(Integer.parseInt(message.getData()));
+	}
 	@MessageMapping("/gettooltipuserdata/{id}")
 	@SendTo("/topic/gettooltipdata/{id}")
 	public User gettooltipuserdata(@DestinationVariable String id, SearchData message) throws Exception {

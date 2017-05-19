@@ -361,10 +361,31 @@
  	<script src="/js/discussionSocket.js"></script> 
 	 <script src="/js/tooltip.js"></script>
 	 	<script src="/js/notification.js"></script>
-  <script src="/js/changeCss.js"></script> 
 	<script>
 		(function() {
 			$("#text").append($("#textContent").text());
+		
+			new gnMenu(document.getElementById('gn-menu'));
+			$('#open_build').click(
+					function() {
+						console.log("d");
+					$(".build_list").slideToggle("fast");	
+					});
+			$('#open_masteries').click(
+					function() {
+						console.log("d");
+					$(".masteries_list").slideToggle("fast");	
+					});
+			$('#open_runes').click(
+					function() {
+						console.log("d");
+					$(".runes_list").slideToggle("fast");	
+					});
+			$('#open_summoners').click(
+					function() {
+						console.log("d");
+					$(".summoners_list").slideToggle("fast");	
+					});
 			if ($('#auth').text() == "true") {
 				var deletetrigger = document.getElementById("delete_b"), deletedialog= document
 				.getElementById("delete_dialog"), deletedlg= new DialogFx(
@@ -391,13 +412,6 @@
 						.bind(registerdlg));
 
 			}
-			new gnMenu(document.getElementById('gn-menu'));
-			$('#open_build').click(
-					function() {
-						console.log("d");
-					$(".build_list").slideToggle("fast");	
-					});
-		
 		})();
 	</script>
 </body>

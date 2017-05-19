@@ -65,6 +65,11 @@ $('.tooltip_guide').hover(function() {
 		getToolTipData("spell", this.id);
 
 	}
+	else if ($(this).hasClass('masteries')) {
+
+		getToolTipData("masteries", this.id);
+
+	}
 	
 }, function() {
 	//$(".details").hide();
@@ -135,6 +140,11 @@ function hoverTooltip(id) {
 		getToolTipData("rune", id.id);
 
 	}
+	 else if ($(id).hasClass('masteries')) {
+
+			getToolTipData("masteries", id.id);
+
+		}
 
 }
 function getToolTipData(type, data) {
@@ -178,6 +188,14 @@ function getToolTipData(type, data) {
 
 		console.log(data);
 		stompClient.send("/app/gettooltispelldata/" + sessionId, {}, JSON
+				.stringify({
+					'data' : data
+				}));
+	}
+	else if (type == "masteries") {
+
+		console.log(data);
+		stompClient.send("/app/gettooltimasteriesdata/" + sessionId, {}, JSON
 				.stringify({
 					'data' : data
 				}));
@@ -329,6 +347,38 @@ function getToolTip(message) {
 		$(".details").css("top", top + "px");
 
 	} 
+	else if (message.type == 4) {
+		$(".details").text("");
+		$(".details")
+				.append(
+						"	<div style='height:70px;'><img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/spell/"
+								+ message.image + "'></img></div>");
+
+		$(".details").append("<h2 class='name animeate_details'>" + message.name + "</h2>");
+		$(".details").append(
+				"<h3 class='name animeate_details'>" + message.description + "</h3>");
+
+		$(".details").append("<div class='data animeate_details'>" +
+
+		"</div>");
+
+		var diff = 0;
+		var height = $(".details").css("height").replace("px", "");
+		if (main_height > height) {
+
+			diff = +main_height - height;
+		} else {
+			console.log(height);
+			// diff=+height-main_height;
+		}
+
+		console.log(diff);
+		var left = +position.left - 90;
+		var top = +position.top - 360 + diff;
+		$(".details").css("left", left + "px");
+		$(".details").css("top", top + "px");
+
+	}
 	else if (message.type == 5) {
 		$(".details").text("");
 		$(".details")

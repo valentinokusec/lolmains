@@ -140,10 +140,41 @@ a:hover
 	padding: 0px;
 }
 
+#open_masteries {
+	font-weight: bold;
+	padding: 0px;
+}
+#open_runes {
+	font-weight: bold;
+	padding: 0px;
+}
+#open_summoners {
+	font-weight: bold;
+	padding: 0px;
+}
 .build_list {
 	display: none;
+	
 }
-
+.runes_list {
+	display: none;
+}
+.masteries
+{
+	    position: absolute;
+    left: -300px;
+}
+.runes
+{
+	position: absolute;
+    left: -200px;
+}
+.masteries_list {
+	display: none;
+}
+.summoners_list {
+	display: none;
+}
 .dis_area_img img {
 	top: 0px !important
 }
@@ -244,11 +275,14 @@ input {
 	width: 80px;
 }
 
+.0mastery_shade {
+	-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+	filter: grayscale(100%);
+}
 .mastery_shade {
 	-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
 	filter: grayscale(100%);
 }
-
 .showtd td {
 	display: table-cell !important;
 	max-height: 500px !important;

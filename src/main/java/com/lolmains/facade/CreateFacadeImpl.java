@@ -64,7 +64,7 @@ import com.lolmains.services.UserService;
 import com.robrua.orianna.api.core.RiotAPI;
 import com.robrua.orianna.type.core.common.Region;
 
-import jnr.ffi.types.sa_family_t;
+
 
 @Service
 public class CreateFacadeImpl implements CreateFacade {
@@ -523,16 +523,71 @@ public class CreateFacadeImpl implements CreateFacade {
 			knowledge.setSummoners(summ);	
 		}
 		knowledge.setDate(new Timestamp(System.currentTimeMillis()));
-		knowledge.setMathup(leaguechampionservice.findByChampionid(CreateKnowledge.getParam10()));
-		CreateKnowledge.getBuildlist().remove(CreateKnowledge.getBuildlist().size()-1);
-		List<Item> blist= new ArrayList<Item>();
+		knowledge.setMathup(leaguechampionservice.findByChampionid(CreateKnowledge.getParam6()));
+		
+		if(CreateKnowledge.getType()==1)
+		{
 		for(Integer item:CreateKnowledge.getBuildlist())
 		{
-			
+			CreateKnowledge.getBuildlist().remove(CreateKnowledge.getBuildlist().size()-1);
+			List<Item> blist= new ArrayList<Item>();
 			blist.add(itemservice.findByItemId(item));
+			knowledge.setBuild(blist);
 		
 		}
-		knowledge.setBuild(blist);
+		}
+		if(CreateKnowledge.getType()==6)
+		{
+			Masteries masteries=new Masteries("", CreateKnowledge.getParam39(), CreateKnowledge.getParam40(), CreateKnowledge.getParam41(), CreateKnowledge.getParam42(), CreateKnowledge.getParam43(), CreateKnowledge.getParam44(), CreateKnowledge.getParam45(), CreateKnowledge.getParam46(), CreateKnowledge.getParam47(), CreateKnowledge.getParam48(), CreateKnowledge.getParam49(), CreateKnowledge.getParam50(), CreateKnowledge.getParam51(), CreateKnowledge.getParam52(), CreateKnowledge.getParam53(), CreateKnowledge.getParam54(), CreateKnowledge.getParam55(), CreateKnowledge.getParam56(), CreateKnowledge.getParam57(), CreateKnowledge.getParam58(), CreateKnowledge.getParam59(), CreateKnowledge.getParam60(), CreateKnowledge.getParam61(), CreateKnowledge.getParam62(), CreateKnowledge.getParam63(), CreateKnowledge.getParam64(), CreateKnowledge.getParam65(), CreateKnowledge.getParam66(), CreateKnowledge.getParam67(), CreateKnowledge.getParam68(), CreateKnowledge.getParam69(), CreateKnowledge.getParam70(), CreateKnowledge.getParam71(), CreateKnowledge.getParam72(), CreateKnowledge.getParam73(), CreateKnowledge.getParam74(), CreateKnowledge.getParam75(), CreateKnowledge.getParam76(), CreateKnowledge.getParam77(), CreateKnowledge.getParam78(), CreateKnowledge.getParam79(), CreateKnowledge.getParam80(), CreateKnowledge.getParam81(), CreateKnowledge.getParam82(), CreateKnowledge.getParam83());
+			masteries.setKeystone(CreateKnowledge.getParam84());
+			
+			masteriesservice.addMasteries(masteries);
+			knowledge.setMasteriesid(masteries);
+		}
+		if(CreateKnowledge.getType()==7)
+		{
+		LeagueRunes lr1 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam9());
+		LeagueRunes lr2 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam10());
+		LeagueRunes lr3 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam11());
+		LeagueRunes lr4 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam12());
+		LeagueRunes lr5 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam13());
+		LeagueRunes lr6 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam14());
+		LeagueRunes lr7 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam15());
+		LeagueRunes lr8 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam16());
+		LeagueRunes lr9 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam17());
+		
+		LeagueRunes lr10 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam18());
+		LeagueRunes lr11 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam19());
+		LeagueRunes lr12 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam20());
+		LeagueRunes lr13 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam21());
+		LeagueRunes lr14 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam22());
+		LeagueRunes lr15 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam23());
+		LeagueRunes lr16 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam24());
+		LeagueRunes lr17 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam25());
+		LeagueRunes lr18 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam26());
+
+		LeagueRunes lr19 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam27());
+		LeagueRunes lr20 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam28());
+		LeagueRunes lr21 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam29());
+		LeagueRunes lr22 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam30());
+		LeagueRunes lr23 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam31());
+		LeagueRunes lr24 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam32());
+		LeagueRunes lr25 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam33());
+		LeagueRunes lr26 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam34());
+		LeagueRunes lr27 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam35());
+		
+		LeagueRunes lr28 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam36());
+		LeagueRunes lr29 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam37());
+		LeagueRunes lr30 = leaguerunesservice.findByRuneid(CreateKnowledge.getParam38());
+		
+		Runes rune = new Runes("", lr1, lr2, lr3, lr4, lr5, lr6, lr7, lr8, lr9, lr10, lr11, lr12, lr13,
+				lr14, lr15, lr16, lr17, lr18, lr19, lr20, lr21, lr22, lr23, lr24, lr25, lr26, lr27, lr28, lr29, lr30);
+		
+		runesservice.addRunes(rune);
+		
+		knowledge.setRunes(rune);
+	}
+	
 		knowledge.setItem(itemservice.findByItemId(CreateKnowledge.getParam8()));
 		User user=userservice.findByUserName(name);
 		List<ChampionSpells> spells=new ArrayList<ChampionSpells>();

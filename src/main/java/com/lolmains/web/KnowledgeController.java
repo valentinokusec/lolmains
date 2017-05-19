@@ -274,6 +274,9 @@ public class KnowledgeController {
 
 		model.addAttribute("main", main);
 		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
+		model.addAttribute("summoners_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 11));
+		model.addAttribute("runes_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 7));
+		model.addAttribute("masteries_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 6));
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
 		// model.addAttribute("champion", main.getChampion().getName());
@@ -320,7 +323,7 @@ public class KnowledgeController {
 		model.addAttribute("nextpage", true);
 
 		model.addAttribute("main", main);
-		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 11));
+		model.addAttribute("summoners_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 11));
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
 		// model.addAttribute("champion", main.getChampion().getName());
@@ -360,8 +363,8 @@ public class KnowledgeController {
 			}
 		}
 
-		Knowledge knowledge = knowledgeservice.findAllByMainAndTypeAndHeader(main, 1, type);
-		Page<Knowledge> knowledgeList = knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1);
+		Knowledge knowledge = knowledgeservice.findAllByMainAndTypeAndHeader(main, 6, type);
+		Page<Knowledge> knowledgeList = knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 6);
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
 		model.addAttribute("nextpage", true);
@@ -383,7 +386,7 @@ public class KnowledgeController {
 			model.addAttribute("mainbuild", "empty");
 		}
 
-		return "knowledge_mastereries";
+		return "knowledge_masteries";
 	}
 	@RequestMapping("/{id}/Runes/{type}")
 	public String knowledgeRunes(@PathVariable(value = "id") String id, @PathVariable(value = "type") String type,
@@ -407,14 +410,16 @@ public class KnowledgeController {
 			}
 		}
 
-		Knowledge knowledge = knowledgeservice.findAllByMainAndTypeAndHeader(main, 1, type);
-		Page<Knowledge> knowledgeList = knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1);
+		Knowledge knowledge = knowledgeservice.findAllByMainAndTypeAndHeader(main, 7, type);
+		Page<Knowledge> knowledgeList = knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 7);
 		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("CreateUser", new CreateUser());
 		model.addAttribute("nextpage", true);
 
 		model.addAttribute("main", main);
 		model.addAttribute("build_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 1));
+		model.addAttribute("summoners_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 11));
+		model.addAttribute("runes_list", knowledgeservice.findAllByMainAndType(new PageRequest(0, 10), main, 7));
 		model.addAttribute("user", user);
 		model.addAttribute("authCount", authCount);
 		// model.addAttribute("champion", main.getChampion().getName());

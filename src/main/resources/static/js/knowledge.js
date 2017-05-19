@@ -106,7 +106,7 @@ function getAllData(data, id,type) {
 		}
 
 	} else {console.log(id);
-		if (id < 7) {
+		if (id < 6) {
 			searchid = 0;
 			stompClient.send("/app/getguideitemdata/1", {}, JSON.stringify({
 				'data' : data
@@ -124,7 +124,7 @@ function getAllData(data, id,type) {
 					'data' : data
 				}));
 			}
-		 else if (id == 10) {
+		 else if (id == 6) {
 				searchid = 2;
 				stompClient.send("/app/getguidechampiondata/1", {}, JSON
 						.stringify({
@@ -401,7 +401,7 @@ function getAll(message) {
 	else if (message[0].type == 3){
 		$(".items_list").text("");
 		for (i = 0; i < message.length; i++) {
-			console.log("champion");
+			console.log("runes");
 
 			$(".items_list")
 					.append(
@@ -426,7 +426,7 @@ function getAll(message) {
 									+ "http://ddragon.leagueoflegends.com/cdn/7.2.1/img/rune/"+message[i].image
 									+ "</div>"
 									+ "		<div class='description_id' >"
-									+ message[i].itemId
+									+ message[i].runeid
 									+ "</div>"
 									+ "	</div>"
 									+ "</div>" + "</div>");
