@@ -15,7 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
+import static java.lang.Math.toIntExact;
 import org.hibernate.exception.ConstraintViolationException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,7 +69,7 @@ public class LeagueMasteriesServiceImpl implements LeagueMasteriesService {
 		List<com.robrua.orianna.type.core.staticdata.Mastery> itemList=RiotAPI.getMasteries();
 		for (com.robrua.orianna.type.core.staticdata.Mastery rune:itemList) {
 			try {
-				LeagueMasteries ls=new LeagueMasteries(4, rune.getID(), rune.getDescription().get(0), rune.getName(),rune.getImage().getFull());
+				LeagueMasteries ls=new LeagueMasteries(4, toIntExact(rune.getID()), rune.getDescription().get(0), rune.getName(),rune.getImage().getFull());
 				leaguemasteriesdao.save(ls);
 			} catch (Exception e) {
 				System.out.println(rune.getID());
@@ -93,7 +93,7 @@ public class LeagueMasteriesServiceImpl implements LeagueMasteriesService {
 	@Override
 	public LeagueMasteries findLeagueMasteries(int id) {
 		// TODO Auto-generated method stub
-		return leaguemasteriesdao.getOne(id);
+		return leaguemasteriesdao.findOne(id);
 	}
 
 

@@ -9,13 +9,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Entity
+@Transactional
 @Table(name="leaguemasteries")
 public class LeagueMasteries {
 	
 	@Id
 	@Column(name="id")
-	private Long id;
+	private int id;
 	@Column(name="type")
 	private int type;
 	@Column(name="description")
@@ -61,13 +64,13 @@ public class LeagueMasteries {
 		this.type = type;
 	}
 	
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	public LeagueMasteries(int type, long l, String description, String name, String image) {
+	public LeagueMasteries(int type, int l, String description, String name, String image) {
 		super();
 		this.type = type;
 		this.id = l;

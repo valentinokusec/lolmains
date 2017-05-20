@@ -8,6 +8,17 @@ a:hover
 {
 	color:white;
 }
+.banner_icon
+{
+	width: 50px !important;
+    height: 50px !important;
+
+}
+.profile_info
+{
+	float:right !important;
+	margin-right:20px;
+}
 .banner_main
 {
 	width: 100%;
@@ -274,10 +285,18 @@ input {
 .league {
 	width: 80px;
 }
-
+.mastery_icon
+{
+	    width: 50px;
+    height: 50px;
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    margin: 10px;
+}
 .0mastery_shade {
-	-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
-	filter: grayscale(100%);
+	-webkit-filter: grayscale(100%) !important; /* Safari 6.0 - 9.0 */
+	filter: grayscale(100%) !important;
 }
 .mastery_shade {
 	-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
@@ -307,8 +326,12 @@ input {
 
 .tabs span {
 	margin-left: 5px;
+	
 }
-
+.tabs
+{
+	height:100%;
+}
 .paneld {
 	height: 0px;
 }
@@ -587,6 +610,8 @@ input[type="password"] {
 
 section {
 	padding: 50px;
+	height:100%;
+	
 }
 
 .banner h1 {

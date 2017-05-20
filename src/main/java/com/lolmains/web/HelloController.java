@@ -322,13 +322,15 @@ public class HelloController {
 		return "new_discussion";
 	}
 	@RequestMapping("/newknowledge/{id}")
-	public String newknowledge(Model model, @PathVariable(value = "id") int id) {
+	public String newknowledge(Model model, @PathVariable(value = "id") int id, HttpServletRequest ServletRequest) {
 
+		String sessionId = ServletRequest.getSession().getId();
 		Mains main = mainsservice.findMain(id);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String name = auth.getName();
 		User user = userservice.findByUserName(name);
 		model.addAttribute("user", user);
+		model.addAttribute("sessionid", sessionId);
 		model.addAttribute("main", main);
 		model.addAttribute("CreateUser", new CreateUser());
 		if (main.getChampion()==null) {

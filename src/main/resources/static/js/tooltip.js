@@ -2,19 +2,21 @@
 
 var socket=null;
 var stompClient;
+var sessionId = $("#session_id").text();
 connectTooltip()
+
 function connectTooltip() {
-	
+	console.log(sessionId);
 	var socket = new SockJS('/gs-guide-websocket');
 
 	stompClient = Stomp.over(socket);
-	stompClient.debug = null
+	//stompClient.debug = null
 	stompClient.connect({}, function(frame) {
 
 		console.log('Connected: ' + frame);
 		stompClient.subscribe('/topic/gettooltipdata/' + sessionId, function(
 				greeting) {
-
+			console.log("dd");
 			getToolTip(JSON.parse(greeting.body));
 		});
 	
@@ -22,9 +24,9 @@ function connectTooltip() {
 }
 
 
-var sessionId = $("#session_id").text();
 
-console.log(sessionId);
+
+
 
 var champion = $("#champion").text();
 var userid = $("#user_id").text();
@@ -65,7 +67,7 @@ $('.tooltip_guide').hover(function() {
 		getToolTipData("spell", this.id);
 
 	}
-	else if ($(this).hasClass('masteries')) {
+	else if ($(this).hasClass('masteries_tooltip')) {
 
 		getToolTipData("masteries", this.id);
 
@@ -195,6 +197,7 @@ function getToolTipData(type, data) {
 	else if (type == "masteries") {
 
 		console.log(data);
+		console.log(sessionId);
 		stompClient.send("/app/gettooltimasteriesdata/" + sessionId, {}, JSON
 				.stringify({
 					'data' : data
@@ -351,7 +354,7 @@ function getToolTip(message) {
 		$(".details").text("");
 		$(".details")
 				.append(
-						"	<div style='height:70px;'><img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/spell/"
+						"	<div style='height:70px;'><img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/mastery/"
 								+ message.image + "'></img></div>");
 
 		$(".details").append("<h2 class='name animeate_details'>" + message.name + "</h2>");

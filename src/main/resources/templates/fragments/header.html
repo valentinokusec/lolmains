@@ -116,13 +116,28 @@
 							</div>
 
 						</nav></li>
-					<li><a href="/">Lol<span>Mains</span></a></li>
-					<li><a th:href="@{/main/} + ${main.name}"
+					
+					<li>	<div th:switch="${main.name}" style="float: left;">
+								<li th:case="'Support'" class=" img_sect"><img
+									src="/img/support.jpg" class='banner_icon profile '></img></li>
+								<div th:case="'Top'" class=" img_sect"><img
+									src="/img/top.jpg" class='banner_icon profile '></img></div>
+								<li th:case="'Mid'" class=" img_sect"><img
+									src="/img/mid.jpg" class='banner_icon profile '></img></li>
+								<li th:case="'Adc'" class=" img_sect"><img
+									src="/img/adc.jpg" class='banner_icon profile '></img></li>
+								<li th:case="'Jungle'" class=" img_sect"><img
+									src="/img/jungle.png" class='banner_icon profile '></img></li>
+								<li th:case="*" class=" img_sect"><img
+									th:src="@{http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/} + ${main.champion.image}"
+									class='banner_icon profile '></img></li>
+							</div><a style="float: right;" th:href="@{/main/} + ${main.name}"
 						th:text="${main.name}"></a></li>
-					<li></li>
+					
 					<li class="last_li" style="float: right;">
 
 						<div sec:authorize="isAuthenticated()">
+						
 							<div th:if="${user.summoner.verified == true}">
 
 								<!-- <li th:if="${authCount ==3}"><a
@@ -161,7 +176,13 @@
 							</div>
 						</div>
 					</li>
-
+<li sec:authorize="isAuthenticated()" class="profile_info">	
+									<img th:id="${user.summoner.id}"
+											th:src="@{http://ddragon.leagueoflegends.com/cdn/6.22.1/img/profileicon/}+${user.summoner.image} + @{.png}"
+											class="banner_icon  tooltip_guide profile "></img>
+											<p style="float: left;" th:text="${user.summoner.name}"></p>
+							
+							</li>
 					<li style="float: right;">
 						<div class="" style="float: right;">
 							<div sec:authorize="isAuthenticated()">

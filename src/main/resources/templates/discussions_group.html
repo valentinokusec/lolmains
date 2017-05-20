@@ -56,20 +56,20 @@
 <body class="demo-1">
 	<div class="container">
 		<div th:include="fragments/header::head"></div>
+		
 		<div class="details"></div>
 		<div id="data" type="hidden" th:text="${topics_data}"></div>
 		<div id="edata" type="hidden" style="display:none" th:text="${extraData}"></div>
-		
+		<img class="banner_main" th:src="${main.banner}" />
 		<div class="content_discussions">
+		<div class="backgroun_color"></div>
 			<!-- trianglify pattern container -->
+			<div class="background_content">
 	<div class="left_nav">
 	<h2>Type</h2>
 	<ul>
 	<li>
 	<a th:href="@{/discussions/}+${main.name}+@{/1/All}">All</a>
-	</li>
-	<li>
-	<a th:href="@{/discussions/}+${main.name}+@{/TierList}">TierList</a>
 	</li>
 	<li>
 	<a th:href="@{/discussions/}+${main.name}+@{/1/General}">General</a>
@@ -84,12 +84,11 @@
 	<a th:href="@{/discussions/}+${main.name}+@{/1/Item}">Item</a>
 	</li>
 	<li>
-	<a th:href="@{/discussions/}+${main.name}+@{/1/MathUp}">Champion</a>
+	<a th:href="@{/discussions/}+${main.name}+@{/1/MathUp}">MathUp</a>
 	</li>
 	<li>
 	<a th:href="@{/discussions/}+${main.name}+@{/1/Video}">Video</a>
 	</li>
-	
 	<!-- <li>
 	<a th:href="@{/discussions/}+${main.name}+@{/1/PathNotes}">Path Notes</a>
 	</li> -->
@@ -107,7 +106,7 @@
 							
 								<li style="text-align: left;">
 									<div class="row" th:each="topic : ${topics}">
-										<div class="col-md-10 col-md-offset-2">
+										<div class="col-md-12 col-md-offset-0">
 
 
 
@@ -152,43 +151,18 @@
 													</td>
 													<td th:class="@{left_td}+' td_color'+ ${topic.type}">
 														<div th:if="${topic.type ==1}"
-															th:id="@{topic_}+${topic.id}"></div>
+															><i
+											class="fa fa-commenting fa-3x icons" aria-hidden="true"></i></div>
 														<div th:if="${topic.type ==2}">
 															<table style="margin-top: 10px; margin-bottom: 0px;">
 
 
 
-																<td><img 	th:class="'tooltip_guide item left_td_img td_img_'+ ${topic.type}"
-																	th:id="${topic.item1id.itemId}"
-																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${topic.item1id.itemId} + @{.png}"></img>
+																<td  th:each="item : ${topic.build}"><img 	class="tooltip_guide item left_td_img"
+																	th:id="${item.itemId}"
+																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${item.itemId} + @{.png}"></img>
 																</td>
-																<td><img alt=""
-																	th:class="'tooltip_guide item left_td_img td_img_'+ ${topic.type}"
-																	th:id="${topic.item2id.itemId}"
-																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${topic.item2id.itemId} + @{.png}"></img>
-																</td>
-																<td><img alt=""
-																	th:class="'tooltip_guide item left_td_img td_img_'+ ${topic.type}"
-																	th:id="${topic.item3id.itemId}"
-																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${topic.item3id.itemId} + @{.png}"></img>
-																</td>
-																<tr></tr>
-
-																<td><img alt=""
-																	th:class="'tooltip_guide item left_td_img td_img_'+ ${topic.type}"
-																	th:id="${topic.item4id.itemId}"
-																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${topic.item4id.itemId} + @{.png}"></img>
-																</td>
-																<td><img alt=""
-																	th:class="'tooltip_guide item left_td_img td_img_'+ ${topic.type}"
-																	th:id="${topic.item5id.itemId}"
-																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${topic.item5id.itemId} + @{.png}"></img>
-																</td>
-																<td><img alt=""
-																	th:class="'tooltip_guide item left_td_img td_img_'+ ${topic.type}"
-																	th:id="${topic.item6id.itemId}"
-																	th:src="@{http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/}+${topic.item6id.itemId} + @{.png}"></img>
-																</td>
+															
 
 															</table>
 
@@ -288,7 +262,18 @@
 								
 							</ul>
 								<div th:include="fragments/pagination::discussions"></div>
-							<div class="share" sec:authorize="isAuthenticated()">
+						
+						</section>
+					
+					<!-- 	<section id="section-linemove-7">
+							<p>6</p>
+						</section> -->
+					</div>
+					<!-- /content -->
+				</div>
+				<!-- /tabs -->
+		
+	<div class="share" sec:authorize="isAuthenticated()">
 								<div th:if="${user.summoner.verified == false}">
 									<a style='color: white; !important'   class="share-toggle-button"
 										th:href="@{/verify/} + ${user.id}"> Verify Me </a>
@@ -322,15 +307,6 @@
 									</div>
 								</div>
 							</div>
-						</section>
-					
-					
-					</div>
-					<!-- /content -->
-				</div>
-				<!-- /tabs -->
-		
-
 		</div>
 		
 	
@@ -439,6 +415,7 @@
 			<div class="item_name"></div>
 			<div class="item_description"></div>
 			<div class="item_stats"></div>
+		</div>
 		</div>
 	</div>
 	<!-- /container -->

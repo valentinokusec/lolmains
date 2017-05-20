@@ -577,7 +577,7 @@ public class SocketController {
 	@SendTo("/topic/gettooltipdata/{id}")
 	public LeagueMasteries gettooltipmasteriesdata(@DestinationVariable String id, SearchData message) throws Exception {
 
-		return leaguemasteriesservice.findLeagueMasteries(Integer.parseInt(message.getData()));
+		return leaguemasteriesservice.findLeagueMasteries(Integer.parseInt(message.getData().replace("add_", "")));
 	}
 	@MessageMapping("/gettooltipuserdata/{id}")
 	@SendTo("/topic/gettooltipdata/{id}")

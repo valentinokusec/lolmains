@@ -184,113 +184,14 @@ function connectKnowledge() {
 
 			getAll(JSON.parse(greeting.body));
 		});
-		stompClient.subscribe('/topic/gettooltipdata/1', function(greeting) {
-
-			getToolTip(JSON.parse(greeting.body));
-		});
+	
 		stompClient.subscribe('/topic/getguidedata/1', function(greeting) {
 
 			getAll(JSON.parse(greeting.body));
 		});
 	});
 }
-function getToolTip(message) {
-	console.log(message);
-		if (message.type == 0) 
-		{
-			$(".details").text("");
-			$(".details").append("	<img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/item/"+message.imageId+"'></img>");
-			
-			$(".details").append("<h2 class='name'>"+message.name+"</h2>" );
-			$(".details").append("<h3 class='name'>"+message.description+"</h3>" );
-					
-					
-			$(".details").append("<div class='data'>" +
-					"<p>Games</p>" +
-//					"<p>Winrate</p>" +
-//					"<p>Points:</p>" +
-					"</div>" );
-													
-			
-			$(".details").show();
-		}
-		else if (message.type == 1) 
-		{
-			$(".details").text("");
-			$(".details").append("	<img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/champion/"+message.image+"'></img>");
-			
-			$(".details").append("<h2 class='name'>"+message.name+"</h2>" );
-			$(".details").append("<h3 class='name'>"+message.description+"</h3>" );
-					
-					
-			$(".details").append("<div class='data'>" +
-					"<p>Games</p>" +
-//					"<p>Winrate</p>" +
-//					"<p>Points:</p>" +
-					"</div>" );
-													
-			
-			$(".details").show();
-		}
-		else if (message.type == 2) 
-		{
-			$(".details").text("");
-			$(".details").append("	<img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/spell/"+message.image+"'></img>");
-			
-			$(".details").append("<h2 class='name'>"+message.name+"</h2>" );
-			$(".details").append("<h3 class='name'>"+message.description+"</h3>" );
-					
-					
-			$(".details").append("<div class='data'>" +
-					"<p>Games</p>" +
-//					"<p>Winrate</p>" +
-//					"<p>Points:</p>" +
-					"</div>" );
-													
-			
-			$(".details").show();
-		}
-		else if (message.type == 3) 
-		{
-			console.log("dd");
-			$(".details").text("");
-			$(".details").append("	<img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/rune/"+message.image+"'></img>");
-			
-			$(".details").append("<h2 class='name'>"+message.name+"</h2>" );
-			$(".details").append("<h3 class='name'>"+message.description+"</h3>" );
-					
-					
-			$(".details").append("<div class='data'>" +
-					"<p>Games</p>" +
-//					"<p>Winrate</p>" +
-//					"<p>Points:</p>" +
-					"</div>" );
-													
-			
-			$(".details").show();
-		}
-		else
-			{
-			$(".details").text("");
-			$(".details").append("	<img  class='details_img' src='http://ddragon.leagueoflegends.com/cdn/7.1.1/img/profileicon/"+message.summoner.image+".png'></img>");
-			
-			$(".details").append("<h2 class='name'>"+message.summoner.name+"</h2>" );
-			$(".details").append("<p class='kda'>"+message.summoner.kills+"/"+message.summoner.deaths+"/"+message.summoner.assists+"</p>" );
-					
-					
-			$(".details").append("<div class='data'>" +
-					"<p>Games:"+message.summoner.games+"</p>" +
-					
-					"<p>Winrate: "+message.summoner.winrate+"</p>" +
-					
-					"</div>" );
-													
-			$(".details").append("	<img  style='margin-top:0px;' class='details_img tier' src='/img/tiers/"+message.summoner.tier+".png'></img>");
-			
-			$(".details").append("<h2 class='name'>"+message.summoner.tier+"</h2>" );
-			$(".details").show();
-			}
-	}
+
 function addMore(message, id) {
 
 	console.log(message);
